@@ -8,7 +8,7 @@ public class HMSMain {
 	private static void printHMSWelcomeTitle() {
 	    System.out.println();
 	    System.out.println("╔═════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-	    System.out.println("║                                                                                                     ║");
+	    System.out.println("║     -------                                                                                                ║");
 	    System.out.println("║  ____   ____      ______  _______            ______              _____        _____        _____    ║");
 	    System.out.println("║ |    | |    |    |      \\/       \\       ___|\\     \\         ___|\\    \\   ___|\\    \\   ___|\\    \\   ║");
 	    System.out.println("║ |    | |    |   /          /\\     \\     |    |\\     \\       /    /\\    \\ |    |\\    \\ |    |\\    \\  ║");
