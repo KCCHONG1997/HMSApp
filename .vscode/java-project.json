@@ -1,0 +1,7 @@
+{
+    "projectType": "general",
+    "sourceDirectories": [
+        "src/HMSApp"
+    ],
+    "outputDirectory": "bin"
+}
