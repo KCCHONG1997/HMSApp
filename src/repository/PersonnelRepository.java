@@ -1,12 +1,8 @@
 package repository;
 
-import java.util.HashMap;
-import model.Admin;
-import model.Doctor;
-import model.Patient;
-import model.Pharmacist;
-
 import java.io.*;
+import java.util.HashMap;
+import model.*;
 
 public class PersonnelRepository {
     private static final String folder = "data";
@@ -16,10 +12,8 @@ public class PersonnelRepository {
     public static HashMap<String, Patient> PATIENTS = new HashMap<>();
     public static HashMap<String, Pharmacist> PHARMACISTS = new HashMap<>();
     public static HashMap<String, Admin> ADMINS = new HashMap<>();
-    
-    /**
-     * Method to save all personnel files into the data store
-     */
+
+    // Method to save all personnel files into the data store
     public static void saveAllPersonnelFiles() {
         persistData(PersonnelFileType.DOCTORS);
         persistData(PersonnelFileType.PATIENTS);
@@ -27,28 +21,32 @@ public class PersonnelRepository {
         persistData(PersonnelFileType.ADMINS);
     }
 
-    /**
-     * Method to persist a particular file type into the data store
-     * @param fileType type of file to be saved
-     */
+    // Method to persist a particular file type into the data store
     public static void persistData(PersonnelFileType fileType) {
         writeSerializedObject(fileType);
     }
 
-    /**
-     * Method to read data from file based on the file type
-     * @param fileType type of file to be read
-     */
+    // Method to read data from file based on the file type
     public static void readData(PersonnelFileType fileType) {
         readSerializedObject(fileType);
     }
 
+    // Reads the serialized object from a file and loads it into the appropriate collection
     private static boolean readSerializedObject(PersonnelFileType fileType) {
         String fileExtension = ".dat";
-        String filePath = "./src/repository/" + folder + "/" + fileType.fileName + fileExtension;
+        String directoryPath = "./src/repository/" + folder;
+        String filePath = directoryPath + "/" + fileType.fileName + fileExtension;
 
-        try (FileInputStream fileInputStream = new FileInputStream(filePath);
-             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+        try {
+            // Ensure the data directory exists
+            File directory = new File(directoryPath);
+            if (!directory.exists()) {
+                directory.mkdirs();  // Create the directory if it doesn't exist
+            }
+
+            // Now proceed to read the file
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
             Object object = objectInputStream.readObject();
 
@@ -74,6 +72,9 @@ public class PersonnelRepository {
                     break;
             }
 
+            objectInputStream.close();
+            fileInputStream.close();
+
         } catch (EOFException e) {
             System.out.println("No data found, initializing empty personnel records.");
             initializeEmptyCollections(fileType);
@@ -84,12 +85,22 @@ public class PersonnelRepository {
         return true;
     }
 
+    // Writes the serialized object to a file based on fileType
     private static boolean writeSerializedObject(PersonnelFileType fileType) {
         String fileExtension = ".dat";
-        String filePath = "./src/repository/" + folder + "/" + fileType.fileName + fileExtension;
+        String directoryPath = "./src/repository/" + folder;
+        String filePath = directoryPath + "/" + fileType.fileName + fileExtension;
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath);
-             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+        try {
+            // Ensure the data directory exists
+            File directory = new File(directoryPath);
+            if (!directory.exists()) {
+                directory.mkdirs();  // Create the directory if it doesn't exist
+            }
+
+            // Now proceed to write the file
+            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
             switch (fileType) {
                 case DOCTORS:
@@ -108,13 +119,17 @@ public class PersonnelRepository {
                     break;
             }
 
+            objectOutputStream.close();
+            fileOutputStream.close();
+            return true;
+
         } catch (IOException e) {
             System.out.println("Error saving personnel data: " + e.getMessage());
             return false;
         }
-        return true;
     }
 
+    // Initializes empty collections for a particular file type
     private static void initializeEmptyCollections(PersonnelFileType fileType) {
         switch (fileType) {
             case DOCTORS:
@@ -134,6 +149,7 @@ public class PersonnelRepository {
         }
     }
 
+    // Clears all personnel data
     public static boolean clearPersonnelDatabase() {
         DOCTORS.clear();
         PATIENTS.clear();

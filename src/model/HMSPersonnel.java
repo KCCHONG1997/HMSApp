@@ -1,18 +1,21 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class HMSPersonnel {
-    private String UID;              // Unique Hospital ID
+public class HMSPersonnel implements Serializable {
+    private static final long serialVersionUID = 1L;  // Optional but recommended for Serializable classes
+    
+    private String UID;
     private String fullName;
-    private String idCard;           // User's government ID
+    private String idCard;
     private String username;
     private String email;
     private String phoneNo;
-    private String passwordHash;     // Initial password is "password"
-    private LocalDateTime DoB;       // Date of Birth
+    private String passwordHash;
+    private LocalDateTime DoB;
     private String gender;
-    private String role;             // Role-specific access
+    private String role;
 
     // Constructor
     public HMSPersonnel(String UID, String fullName, String idCard, String username, String email, String phoneNo,
