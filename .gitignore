@@ -1,2 +1,6 @@
+# Ignore everything
+*
 
-bin/HMSApp/HMSMain.class
+# Do not Ignore these
+!.gitignore
+!/src
