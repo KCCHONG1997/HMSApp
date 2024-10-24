@@ -19,7 +19,6 @@ public class Doctor extends HMSPersonnel {
         this.yearsOfExperiences = yearsOfExperiences;
     }
 
-    // Getters and Setters
     public String getSpecialty() {
         return specialty;
     }
