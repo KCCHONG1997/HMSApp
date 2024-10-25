@@ -1,45 +1,47 @@
 package HMSApp;
 
+
 import java.time.LocalDateTime;
 import model.*;
 import repository.*;
 import controller.HMSPersonnelController;  // Import the controller
-
+ 
 public class HMSMain {
     public static void main(String[] args) {
-        printHMSWelcomeTitle();
-        loadRepository();
+        printHMSWelcomeTi
 
-        // Create a new Doctor object
-        Doctor newDoctor = new Doctor(
-                "D003",                         // UID
-                "Dr. KCKC",                     // Full Name
-                "123456789",                     // ID Card
-                "johndoe",                       // Username
-                "johndoe@example.com",           // Email
-                "123-456-7890",                  // Phone Number
-                "hashed_password",               // Password Hash
-                LocalDateTime.of(1980, 1, 1, 0, 0),  // Date of Birth
-                "Male",                          // Gender
-                "Doctor",                        // Role
-                "Cardiology",                    // Specialty
-                "MED12345",                      // Medical License Number
-                LocalDateTime.now(),             // Date Joined
-                10                               // Years of Experience
-        );
+        loadRepository
+    
+              // Create a new Doctor object
+               Doctor 
+                         "D003",   
+                         "Dr. KCKC",                     //
+                         "123456789",        
+                         "johndoe",         
+                         "johndoe@example.com", 
+                         "123-456-7890",           
+                         "hashed_pas
+                          L
+                       
+                                "Doctor",  
+                          
+                       
+                                LocalDateT
+                          
+                     );
+                    
+                          
+                
+                        // Step 3: Retrieve and d
+                        di
+                     dis
+                    }
+                    
+             
+         
+     
 
-//        HMSPersonnelController.addPersonnel(newDoctor);
-
-        // Step 3: Retrieve and display doctor information using the helper method
-        displayDoctorInformation("D001");
-        displayDoctorInformation("D003");
-    }
-
-    // Temporary Helper method to retrieve and display doctor information
-    private static void displayDoctorInformation(String uid) {
-        Doctor retrievedDoctor = (Doctor) HMSPersonnelController.getPersonnelByUID(uid, PersonnelFileType.DOCTORS);
-
-        if (retrievedDoctor != null) {
+           if (retrievedDoctor != null) {
             System.out.println("Doctor UID: " + retrievedDoctor.getUID());
             System.out.println("Doctor Name: " + retrievedDoctor.getFullName());
             System.out.println("Specialty: " + retrievedDoctor.getSpecialty());
@@ -59,8 +61,7 @@ public class HMSMain {
     }
 
     private static void printHMSWelcomeTitle() {
-        System.out.println();
-        System.out.println("╔═════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+         System.out.println("╔═════════════════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                                                                            ║");
         System.out.println("║  ____   ____      ______  _______            ______              _____        _____        _____    ║");
         System.out.println("║ |    | |    |    |      \\/       \\       ___|\\     \\         ___|\\    \\   ___|\\    \\   ___|\\    \\   ║");
