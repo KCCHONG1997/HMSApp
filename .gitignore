@@ -4,3 +4,4 @@
 # Do not Ignore these
 !.gitignore
 !/src
+bin/*
