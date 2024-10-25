@@ -12,6 +12,7 @@ public class DoctorUI extends MainUI {
     
 	@Override
     protected void printChoice() {
+		System.out.printf("Welcome! Dr. --- %s ---\n", doctor.getFullName());
 		printBreadCrumbs("HMS App UI > Doctor Dashboard");
         System.out.println("Doctor Menu:");
         System.out.println("1. View Patient Medical Records");
@@ -30,7 +31,7 @@ public class DoctorUI extends MainUI {
 	}
     public void showDoctorDashboard() {
     	
-    	System.out.printf("Welcome! Dr. --- %s ---", doctor.getFullName());
+    	
         Scanner sc = new Scanner(System.in);
         int choice = 0;
         do {
