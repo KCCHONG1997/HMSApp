@@ -1,8 +1,35 @@
 package HMSApp;
-
+import view.*;
+import java.util.Scanner;
 public class HMSMain {
 	public static void main(String[] args) {
-		printHMSWelcomeTitle();
+		Scanner sc = new Scanner(System.in);
+		while(true) {
+			printHMSWelcomeTitle();
+			System.out.println("Please enter your role: ");
+			System.out.println("1. Patient");
+			System.out.println("2. Doctor");
+			System.out.println("3. Pharmacist");
+			System.out.println("4. Administrator");
+			int role = sc.nextInt();
+			switch(role) {
+			case 1:
+				LoginUI.patientLogin();
+				break;
+			case 2:
+				LoginUI.doctorLogin();
+				break;
+			case 3:
+				LoginUI.pharmacistLogin();
+				break;
+			case 4:
+				LoginUI.administratorLogin();
+				break;
+			default:
+				System.out.println("Invalid choice!");
+				break;
+			}
+		}
 	}
 	
 	private static void printHMSWelcomeTitle() {
