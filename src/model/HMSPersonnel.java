@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class HMSPersonnel implements Serializable {
+public class HMSPersonnel {
     private static final long serialVersionUID = 1L;  // Optional but recommended for Serializable classes
     
     private String UID;
