@@ -9,7 +9,8 @@ public class Doctor extends HMSPersonnel {
     private int yearsOfExperiences;
 
     // Constructor
-    public Doctor(String UID, String fullName, String idCard, String username, String email, String phoneNo,
+    public Doctor(String UID, 
+    			String fullName, String idCard, String username, String email, String phoneNo,
                   String passwordHash, LocalDateTime DoB, String gender, String role,
                   String specialty, String medicalLicenseNumber, LocalDateTime dateJoin, int yearsOfExperiences) {
         super(UID, fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, role);
