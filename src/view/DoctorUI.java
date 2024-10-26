@@ -26,12 +26,9 @@ public class DoctorUI extends MainUI {
     }
     
 	public void start() {
-		printChoice();
 		showDoctorDashboard();
 	}
     public void showDoctorDashboard() {
-    	
-    	
         Scanner sc = new Scanner(System.in);
         int choice = 0;
         do {

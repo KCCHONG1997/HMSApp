@@ -19,15 +19,21 @@ public class LoginUI extends MainUI {
         System.out.println("5. Back to Main Menu");
 	}
 	
-	@Override
-	public void start(){
-		Scanner sc = new Scanner(System.in);
+    @Override
+    public void start(){
+        Scanner sc = new Scanner(System.in);
 
         while (true) {
-           printChoice();
-
-            int role = sc.nextInt();
-            sc.nextLine();  // Clear the newline character
+            printChoice();
+            int role = -1;
+            try {
+                role = sc.nextInt();
+                sc.nextLine();  // Clear the newline character
+            } catch(Exception e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine(); // Clear the scanner input buffer
+                continue;
+            }
 
             switch (role) {
                 case 1:
@@ -44,13 +50,13 @@ public class LoginUI extends MainUI {
                     break;
                 case 5:
                     System.out.println("Returning to main menu...");
-                    return; // Exit loginUI and return to the main menu
+                    return; // Exit LoginUI and return to the main menu
                 default:
                     System.out.println("Invalid choice! Please select a valid option.");
                     break;
             }
         }
-	}
+    }
 
 //    // Login for Patient
 //    public void patientLogin(Scanner sc) {
@@ -81,7 +87,6 @@ public class LoginUI extends MainUI {
             Doctor retrievedDoctor = (Doctor) personnel; // Cast to Doctor
             DoctorUI docUI = new DoctorUI(retrievedDoctor);
             docUI.start();
-//            DoctorUI.showDoctorDashboard(retrievedDoctor);
         } else {
             System.out.println("Login failed. Invalid username or password.");
         }
