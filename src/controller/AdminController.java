@@ -2,7 +2,7 @@ package controller;
 
 import java.util.Map;
 
-import model.HMSPersonnel;
+import model.*;
 import repository.PersonnelFileType;
 import repository.PersonnelRepository;
 
@@ -23,8 +23,7 @@ public class AdminController extends HMSPersonnelController {
 	    }
 	    
 	    
-	@Override
-	 public static void listAllPersonnel(PersonnelFileType type) {
+	public static void listAllPersonnel(PersonnelFileType type) {
         Map<String, ? extends HMSPersonnel> personnelMap = null;
 
         switch (type) {
@@ -39,11 +38,15 @@ public class AdminController extends HMSPersonnelController {
                 return;
         }
 
-        if (personnelMap != null && !personnelMap.isEmpty()) {
+        if (personnelMap != null && !personnelMap.isEmpty() &&   personnelMap == PersonnelRepository.DOCTORS ) {
             System.out.println("Listing all personnel of type: " + type);
             for (HMSPersonnel personnel : personnelMap.values()) {
-                System.out.println("UID: " + personnel.getUID() + ", Name: " + personnel.getFullName());
-                System.out.println("UID: " + personnel.getUID() + ", Name: " + personnel.getFullName());
+            	Doctor doctor = (Doctor) personnel;
+            	Doctor doctors = doctor;
+                System.out.println("UID: " + doctors.getUID() + ", Name: " + doctors.getFullName());
+                System.out.println("Speciality: " + doctors.getSpecialty());
+                System.out.println("Speciality: " + doctors.getSpecialty());
+                System.out.println("Speciality: " + doctors.getSpecialty());
             }
         } else {
             System.out.println("No personnel found for type: " + type);
