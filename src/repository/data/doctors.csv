@@ -1,0 +1,3 @@
+D002,Dr. Test Dummy2,1234567890,testdummy,dummy@example.com,123-456-7890,dummy_password_hash,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:27:14.815317200,15
+D001,Dr. Test Dummy,1234567890,testdummy,dummy@example.com,123-456-7890,dummy_password_hash,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:52:17.373800300,15
+Test01,Dr. Test01,1234567890,test123,dummy@example.com,123-456-7890,test123,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:28:09.003530400,15

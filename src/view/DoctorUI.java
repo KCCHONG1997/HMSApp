@@ -1,5 +1,4 @@
 package view;
-
 import java.util.Scanner;
 import HMSApp.HMSMain;
 import model.Doctor;
