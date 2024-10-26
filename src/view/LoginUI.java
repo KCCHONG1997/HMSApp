@@ -109,22 +109,20 @@ public class LoginUI extends MainUI {
 //        }
 //    }
 
-//    // Login for Administrator
-//    public void administratorLogin(Scanner sc) {
-//        String username = enterUsername(sc);
-//        String passwordHash = enterPassword(sc);
-//
-//        HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.ADMINS);
-//
-//        if (personnel != null && personnel instanceof Admin) {
-//            Admin retrievedAdmin = (Admin) personnel; // Cast to Admin
-//            //TODO
-//            System.out.println("Login Successful!");
-////            AdminUI.showAdminDashboard(retrievedAdmin);
-//        } else {
-//            System.out.println("Login failed. Invalid username or password.");
-//        }
-//    }
+//    Login for Administrator
+public void administratorLogin(Scanner sc) {
+   String username = enterUsername(sc);
+   String passwordHash = enterPassword(sc);
+   HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.ADMINS);
+
+   if (personnel != null && personnel instanceof Admin) {
+	   	Admin retrievedAdmin = (Admin) personnel;     if (personnel != null && personnel instanceof Doctor) {
+        AdminUI admUI = new AdminUI(retrievedAdmin);
+       admUI.start();
+        } else {
+            System.out.println("Login failed. Invalid username or password.");
+        }
+    }
 
     // Utility methods for username and password input
     public static String enterUsername(Scanner sc) {
