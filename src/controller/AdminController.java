@@ -23,35 +23,27 @@ public class AdminController extends HMSPersonnelController {
 	    }
 	    
 	    
-	public static void listAllPersonnel(PersonnelFileType type) {
-        Map<String, ? extends HMSPersonnel> personnelMap = null;
+	public static void listAllDoctors() {
+		PersonnelRepository.loadAllPersonnelFiles();
+        Map<String, Doctor> doctorsMap = PersonnelRepository.DOCTORS;
 
-        switch (type) {
-            case DOCTORS:
-                personnelMap = PersonnelRepository.DOCTORS;
-                break;
-            case PHARMACISTS:
-                personnelMap = PersonnelRepository.PHARMACISTS;
-                break;
-            default:
-                System.out.println("Error: Unsupported personnel type.");
-                return;
-        }
+        // Check if there are any doctors in the map
+        if (doctorsMap != null && !doctorsMap.isEmpty()) {
+            System.out.println("Listing all doctors:");
 
-        if (personnelMap != null && !personnelMap.isEmpty() &&   personnelMap == PersonnelRepository.DOCTORS ) {
-            System.out.println("Listing all personnel of type: " + type);
-            for (HMSPersonnel personnel : personnelMap.values()) {
-            	Doctor doctor = (Doctor) personnel;
-            	Doctor doctors = doctor;
-                System.out.println("UID: " + doctors.getUID() + ", Name: " + doctors.getFullName());
-                System.out.println("Speciality: " + doctors.getSpecialty());
-                System.out.println("Speciality: " + doctors.getSpecialty());
-                System.out.println("Speciality: " + doctors.getSpecialty());
+            for (Doctor doctor : doctorsMap.values()) {
+                System.out.println("UID: " + doctor.getUID());
+                System.out.println("Name: " + doctor.getFullName());
+                System.out.println("Specialty: " + doctor.getSpecialty());
+                System.out.println("Medical License Number: " + doctor.getMedicalLicenseNumber());
+                System.out.println("Years of Experience: " + doctor.getYearsOfExperiences());
+                System.out.println("---------------------------------");
             }
         } else {
-            System.out.println("No personnel found for type: " + type);
+            System.out.println("No doctors found.");
         }
     }
+
 	public static void printBreadCrumbs(String breadcrumb) {
 	        String spaces = String.format("%" + (105 - breadcrumb.length()) + "s", "");
 	        System.out.println(
@@ -77,6 +69,11 @@ public class AdminController extends HMSPersonnelController {
 	   
 	public static void handleInvalidInput() {
 	        System.out.println("Invalid input. Please try again.");
+	    }
+	
+	 public static void main(String[] args) {
+	        
+	        listAllDoctors();
 	    }
 	    
 	}

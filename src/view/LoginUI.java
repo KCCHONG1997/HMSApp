@@ -123,6 +123,7 @@ public void administratorLogin(Scanner sc) {
             System.out.println("Login failed. Invalid username or password.");
         }
     }
+}
 
     // Utility methods for username and password input
     public static String enterUsername(Scanner sc) {

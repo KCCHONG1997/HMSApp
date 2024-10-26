@@ -168,4 +168,8 @@ public class HMSPersonnelController {
             System.out.println("No personnel found for type: " + type);
         }
     }
+    
+    public static void main(String[] args) {
+    	listAllPersonnel(PersonnelFileType.DOCTORS);
+    }
 }
