@@ -1,10 +1,18 @@
 package view;
-
 import java.util.Scanner;
 import HMSApp.HMSMain;
+import model.Doctor;
 
-public class DoctorUI {
-    public static void printMenu() {
+public class DoctorUI extends MainUI {
+	private Doctor doctor;
+    public DoctorUI(Doctor doctor) {
+        this.doctor = doctor;
+    }
+    
+	@Override
+    protected void printChoice() {
+		System.out.printf("Welcome! Dr. --- %s ---\n", doctor.getFullName());
+		printBreadCrumbs("HMS App UI > Doctor Dashboard");
         System.out.println("Doctor Menu:");
         System.out.println("1. View Patient Medical Records");
         System.out.println("2. Update Patient Medical Records");
@@ -16,11 +24,14 @@ public class DoctorUI {
         System.out.println("8. Logout");
     }
     
-    public static void main(String[] args) {
+	public void start() {
+		showDoctorDashboard();
+	}
+    public void showDoctorDashboard() {
         Scanner sc = new Scanner(System.in);
         int choice = 0;
         do {
-            printMenu();
+        	printChoice();
             choice = sc.nextInt();
             switch(choice) {
                 case 1: 
