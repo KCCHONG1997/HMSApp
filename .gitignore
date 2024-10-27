@@ -1,7 +1,8 @@
-# Ignore everything
-*
-
-# Do not Ignore these
-!.gitignore
-!/src
 bin/*
+.project
+.settings/
+.classpath
+*.class
+
+.DS_Store
+Thumbs.db
