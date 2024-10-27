@@ -142,11 +142,11 @@ public class PersonnelRepository {
                     LocalDateTime.parse(fields[7]), // DoB (LocalDateTime)
                     fields[8],               // gender
                     fields[9],               // role (e.g., Patient)
-                    fields[10],              // patientId
-                    fields[11],              // bloodType
-                    fields[12],              // insuranceInfo
-                    fields[13],              // allergies
-                    LocalDateTime.parse(fields[14])  // dateOfAdmission (LocalDateTime)
+
+                    fields[10],              // bloodType
+                    fields[11],              // insuranceInfo
+                    fields[12],              // allergies
+                    LocalDateTime.parse(fields[13])  // dateOfAdmission (LocalDateTime)
                 ));
             } else if (type == Pharmacist.class) {
                 return type.cast(new Pharmacist(

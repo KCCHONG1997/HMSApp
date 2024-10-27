@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDateTime;
 
 public class Patient extends HMSPersonnel {
-    private String patientId;
+
     private String bloodType;
     private String insuranceInfo;
     private String allergies;
@@ -12,9 +12,9 @@ public class Patient extends HMSPersonnel {
     // Constructor
     public Patient(String UID, String fullName, String idCard, String username, String email, String phoneNo,
                    String passwordHash, LocalDateTime DoB, String gender, String role,
-                   String patientId, String bloodType, String insuranceInfo, String allergies, LocalDateTime dateOfAdmission) {
+                   String bloodType, String insuranceInfo, String allergies, LocalDateTime dateOfAdmission) {
         super(UID, fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, role);
-        this.patientId = patientId;
+
         this.bloodType = bloodType;
         this.insuranceInfo = insuranceInfo;
         this.allergies = allergies;
@@ -22,14 +22,6 @@ public class Patient extends HMSPersonnel {
     }
 
     // Getters and Setters
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
     public String getBloodType() {
         return bloodType;
     }

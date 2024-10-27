@@ -7,18 +7,20 @@ public class MedicalRecord extends HMSRecords {
     private String diagnosis;
     private String treatmentPlan;
     private String MRID;
-    private List<Medication> medicationList;
+    private List<PrescriptionItem> prescription;
 
-    // Constructor
-    public MedicalRecord(String recordID, Doctor createdBy, LocalDateTime createdDate, LocalDateTime updatedDate,
-                         RecordStatusType recordStatus, String description, Patient patient,
-                         String diagnosis, String treatmentPlan, String MRID, List<Medication> medicationList) {
+    public MedicalRecord(String recordID, Doctor createdBy,
+                         LocalDateTime createdDate, LocalDateTime updatedDate,
+                         RecordStatusType recordStatus, String description,
+                         Patient patient, String diagnosis, String treatmentPlan,
+                         String MRID, List<PrescriptionItem> prescription) {
         super(recordID, createdBy, createdDate, updatedDate, recordStatus, description, patient);
         this.diagnosis = diagnosis;
         this.treatmentPlan = treatmentPlan;
         this.MRID = MRID;
-        this.medicationList = medicationList;
+        this.prescription = prescription;
     }
+
 
     // Getters and Setters
     public String getDiagnosis() {
@@ -45,11 +47,11 @@ public class MedicalRecord extends HMSRecords {
         this.MRID = MRID;
     }
 
-    public List<Medication> getMedicationList() {
-        return medicationList;
+    public List<PrescriptionItem> getPrescription() {
+        return prescription;
     }
 
-    public void setMedicationList(List<Medication> medicationList) {
-        this.medicationList = medicationList;
+    public void setPrescription(List<PrescriptionItem> prescription) {
+        this.prescription = prescription;
     }
 }
