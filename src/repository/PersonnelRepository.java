@@ -38,7 +38,7 @@ public class PersonnelRepository {
     }
 
     // Convert personnel object to a CSV line
-    private static String personnelToCSV(HMSPersonnel personnel) {
+    /*private static String personnelToCSV(HMSPersonnel personnel) {
         return String.join(",",
             personnel.getUID(),
             personnel.getFullName(),
@@ -54,9 +54,48 @@ public class PersonnelRepository {
             personnel instanceof Doctor ? ((Doctor) personnel).getSpecialty() : "",
             personnel instanceof Doctor ? ((Doctor) personnel).getMedicalLicenseNumber() : "",
             personnel instanceof Doctor ? ((Doctor) personnel).getDateJoin().toString() : "",
-            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : ""
+            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : "",
+            
+            personnel instanceof Pharmacist ? ((Pharmacist) personnel).getPharmacistLicenseNumber() : "",
+            personnel instanceof Pharmacist ? String.valueOf(((Pharmacist) personnel).getDateOfEmployment()) : ""
+            
+            
         );
+    }*/
+    
+    private static String personnelToCSV(HMSPersonnel personnel) {
+        StringBuilder csvBuilder = new StringBuilder();
+
+        // Common fields for all personnel
+        csvBuilder.append(personnel.getUID()).append(",")
+                  .append(personnel.getFullName()).append(",")
+                  .append(personnel.getIdCard()).append(",")
+                  .append(personnel.getUsername()).append(",")
+                  .append(personnel.getEmail()).append(",")
+                  .append(personnel.getPhoneNo()).append(",")
+                  .append(personnel.getPasswordHash()).append(",")
+                  .append(personnel.getDoB().toString()).append(",")
+                  .append(personnel.getGender()).append(",")
+                  .append(personnel.getRole()).append(",");
+
+        // Additional fields for Doctor
+        if (personnel instanceof Doctor) {
+            Doctor doctor = (Doctor) personnel;
+            csvBuilder.append(doctor.getSpecialty()).append(",")
+                      .append(doctor.getMedicalLicenseNumber()).append(",")
+                      .append(doctor.getDateJoin().toString()).append(",")
+                      .append(doctor.getYearsOfExperiences());
+        } 
+        // Additional fields for Pharmacist
+        else if (personnel instanceof Pharmacist) {
+            Pharmacist pharmacist = (Pharmacist) personnel;
+            csvBuilder.append(pharmacist.getPharmacistLicenseNumber()).append(",")
+                      .append(pharmacist.getDateOfEmployment().toString());
+        }
+
+        return csvBuilder.toString();
     }
+
 
     // Load personnel data from CSV files
     public static void loadAllPersonnelFiles() {
