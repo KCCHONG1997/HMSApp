@@ -3,6 +3,9 @@ package repository;
 import java.io.*;
 import java.util.HashMap;
 import model.Medicine;
+import enums.ReplenishStatus;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MedicineRepository {
 
@@ -32,8 +35,11 @@ public class MedicineRepository {
             medicine.getMedicineID(),
             medicine.getName(),
             medicine.getManufacturer(),
-            medicine.getExpiryDate().toString(),  // Assuming expiry date is a LocalDate
-            String.valueOf(medicine.getInventoryStock())  // Inventory stock
+            medicine.getExpiryDate().toString(),
+            String.valueOf(medicine.getInventoryStock()),
+            String.valueOf(medicine.getLowStockLevel()),
+            medicine.getReplenishStatus().toString(),
+            medicine.getApprovedDate().toString()
         );
     }
 
@@ -80,17 +86,37 @@ public class MedicineRepository {
     private static Medicine csvToMedicine(String csv) {
         String[] fields = csv.split(",");
 
+        if (fields.length < 8) {  // Ensure there are enough fields
+            System.out.println("Warning: Not enough fields in CSV line: " + csv);
+            return null;
+        }
+
         try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            
             return new Medicine(
                 fields[0],   // medicineID
                 fields[1],   // name
                 fields[2],   // manufacturer
-                java.time.LocalDate.parse(fields[3]),  // expiryDate
-                Integer.parseInt(fields[4])  // inventoryStock
+                LocalDateTime.parse(fields[3], formatter),  // expiryDate
+                Integer.parseInt(fields[4]),  // inventoryStock
+                Integer.parseInt(fields[5]),  // lowStockLevel
+                safeValueOf(fields[6]), // replenish status
+                LocalDateTime.parse(fields[7], formatter)  // approvedDate
             );
         } catch (Exception e) {
             System.out.println("Error parsing medicine data: " + e.getMessage());
             return null;
+        }
+    }
+
+    // Safe parsing for ReplenishStatus
+    private static ReplenishStatus safeValueOf(String status) {
+        try {
+            return ReplenishStatus.valueOf(status.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid replenish status: " + status);
+            return null; // or handle it as needed
         }
     }
 
