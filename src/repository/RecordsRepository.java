@@ -3,6 +3,8 @@ package repository;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+
+import enums.AppointmentStatus;
 import model.*;
 
 public class RecordsRepository {
@@ -155,7 +157,10 @@ public class RecordsRepository {
                     RecordStatusType.valueOf(fields[4]),             // recordStatus
                     fields[5],                                       // description
                     PersonnelRepository.PATIENTS.get(fields[6]),     // patient (Patient object by UID)
-                    LocalDateTime.parse(fields[7])                   // appointmentTime
+                    LocalDateTime.parse(fields[7]),                   // appointmentTime
+                    fields[8],										 // location
+                    AppointmentStatus.valueOf(fields[9])         // appointmentStatus
+                    
                 ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
