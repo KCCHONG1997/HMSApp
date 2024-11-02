@@ -2,10 +2,14 @@ package controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import enums.ReplenishStatus;
+import model.HMSPersonnel;
 import model.Medicine;
 import repository.MedicineRepository;
+import repository.PersonnelFileType;
+import repository.PersonnelRepository;
 
 public class MedicineController {
 
@@ -73,12 +77,33 @@ public class MedicineController {
         }
         return medicine;
     }
+    
+    //String medicineID, String name, String manufacturer, LocalDateTime expiryDate, int inventoryStock, int lowStockLevel, ReplenishStatus status, LocalDateTime approvedDate
+    public static void listAllMedicine() {
+        // Ensure medicines are loaded before listing
+        if (MedicineRepository.MEDICINES.isEmpty()) {
+            System.out.println("No medicines available.");
+            return;
+        }
 
+        System.out.println("Listing all medicines:");
+        for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
+        	System.out.println("UID: " + medicine.getMedicineID());
+            System.out.println("Name: " + medicine.getName());
+            System.out.println("Manufacturer: " + medicine.getManufacturer());
+            System.out.println("Expiry Date: " + medicine.getExpiryDate());
+            System.out.println("Inventory Stock: " + medicine.getInventoryStock());
+            System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
+            System.out.println("Replenish Status: " + medicine.getReplenishStatus());
+            System.out.println("Approved Date: " + medicine.getApprovedDate());
+        }
+    }
+
+    
+    
     public static void main(String[] args) {
     	MedicineRepository.loadAllMedicines(); 
-    	Medicine m = getMedicineByUID("123456888");
-    	m.setName("Shaby");
-    	updateMedicine("123456888",m);
+    	listAllMedicine();
     	
     }
 }

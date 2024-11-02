@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import enums.ReplenishStatus;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -12,13 +15,13 @@ import java.time.format.DateTimeParseException;
 
 import helper.Helper; // Ensure this import exists
 import model.*; // Make sure these models are correctly imported
+import repository.MedicineRepository;
 import repository.PersonnelFileType;
 import repository.PersonnelRepository;
 
 public class AdminController extends HMSPersonnelController {
     
 	public static void viewAndManageStaff() {
-	    printBreadCrumbs("HMS App UI > Admin Dashboard > View and Manage Hospital Staff");
 	    System.out.println("1. View Staff By Role");
 	    System.out.println("2. View Staff By Gender");
 	    System.out.println("3. View Staff By Age");
@@ -43,32 +46,22 @@ public class AdminController extends HMSPersonnelController {
 	            listPersonnelByAge();
 	            break;
 	        case 4:
-	            HMSPersonnel personnel = addPersonnel("Doctor");
-	            Doctor doctor = (Doctor) personnel;
-	            HMSPersonnelController.addPersonnel(doctor);
+	        	addPersonnel("Doctor");
 	            break;
 	        case 5:
-	            HMSPersonnel personnelPharmacist = addPersonnel("Pharmacist");
-	            Pharmacist pharmacist = (Pharmacist) personnelPharmacist;
-	            HMSPersonnelController.addPersonnel(pharmacist);
+	        	addPersonnel("Pharmacist");
 	            break;
 	        case 6:
-	            HMSPersonnel personnelToUpdate = updatePersonnel("Doctor");
-	            Doctor doctorToUpdate = (Doctor) personnelToUpdate;
-	            HMSPersonnelController.updatePersonnel(doctorToUpdate.getUID(), doctorToUpdate);
+	            updatePersonnel("Doctor");
 	            break;
 	        case 7:
-	            HMSPersonnel personnelPharmacistUpdate = updatePersonnel("Pharmacist");
-	            Pharmacist pharmacistToUpdate = (Pharmacist) personnelPharmacistUpdate;
-	            HMSPersonnelController.updatePersonnel(pharmacistToUpdate.getUID(), pharmacistToUpdate);
+	            updatePersonnel("Pharmacist");
 	            break;
 	        case 8:
-	            String uidDoctor = Helper.readString();
-	            HMSPersonnelController.removePersonnel(uidDoctor, PersonnelFileType.DOCTORS);
+	        	removePersonnel("Doctor");
 	            break;
 	        case 9:
-	            String uidPharmacist = Helper.readString();
-	            HMSPersonnelController.removePersonnel(uidPharmacist, PersonnelFileType.PHARMACISTS);
+	        	removePersonnel("Pharmacist");
 	            break;
 	        default:
 	            System.out.println("Error: Invalid choice. Please select a valid option.");
@@ -76,7 +69,98 @@ public class AdminController extends HMSPersonnelController {
 	    }
 	}
     
-    public static HMSPersonnel updatePersonnel(String role) {
+	public static void viewAndManageMedicationInventory() {
+		System.out.println("1. View All Medicine");
+	    System.out.println("2. Add Medicine");
+	    System.out.println("3. Update Medicine");
+	    System.out.println("4. Remove Medicine");
+	    int choice = Helper.readInt();
+	    switch(choice) {
+	    	case 1: MedicineController.listAllMedicine();
+	    	break;
+	    	case 2: addMedicine();
+	    	break;
+	    	case 3: updateMedicine();
+	    	break;
+	    	case 4: removeMedicine();
+	    	break;
+	    	default: System.out.println("Error: Invalid choice. Please select a valid option.");
+	    	break;
+	    }
+	}
+	
+	public static void addMedicine() {
+		 System.out.print("Enter Medicine ID: ");
+		 String medicineID = Helper.readString();	    
+		 System.out.print("Enter Medicine Name: ");
+		 String name = Helper.readString();		    
+		 System.out.print("Enter Manufacturer: ");
+		 String manufacturer = Helper.readString();
+		 System.out.print("Enter Expiry Date (YYYY-MM-DDTHH:MM:): ");
+		 LocalDateTime expiryDate = readDate();
+		 System.out.print("Enter Inventory Stock: ");
+		 int inventoryStock = Helper.readInt();		    
+		 System.out.print("Enter Low Stock Level: ");
+		 int lowStockLevel = Helper.readInt();  
+		 System.out.print("Enter Replenish Status (e.g., IN_STOCK, LOW_STOCK): ");
+		 ReplenishStatus status = ReplenishStatus.valueOf(Helper.readString().trim().toUpperCase());
+		 System.out.print("Enter Approved Date (YYYY-MM-DDTHH:MM): ");
+		 LocalDateTime approvedDate = readDate();
+		 Medicine medicine = new Medicine(medicineID, name, manufacturer, expiryDate, 
+		                                      inventoryStock, lowStockLevel, status, approvedDate);
+		 MedicineController.addMedicine(medicine);
+	}
+	
+	public static void updateMedicine() {
+		 System.out.print("Enter Medicine ID: ");
+		 String medicineID = Helper.readString();
+		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);	    
+		 System.out.print("Enter New Manufacturer: ");
+		 String manufacturer = Helper.readString();
+		 medicine.setManufacturer(manufacturer);
+		 System.out.print("Enter New Expiry Date (YYYY-MM-DD HH:MM:): ");
+		 LocalDateTime expiryDate = readDate();
+		 medicine.setExpiryDate(expiryDate);
+		 System.out.print("Enter New Inventory Stock: ");
+		 int inventoryStock = Helper.readInt();
+		 medicine.setInventoryStock(inventoryStock);
+		 System.out.print("Enter New Low Stock Level: ");
+		 int lowStockLevel = Helper.readInt();
+		 medicine.setLowStockLevel(lowStockLevel);
+		 MedicineController.updateMedicine(medicineID, medicine);		
+	}
+	
+	public static void removeMedicine() {
+		 System.out.print("Enter Medicine ID: ");
+		 String medicineID = Helper.readString();	
+		 MedicineController.removeMedicine(medicineID);
+	}
+	
+	public static void approveReplenishRequest() {
+		 System.out.print("Enter Medicine ID: ");
+		 String medicineID = Helper.readString();
+		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);	    
+		 System.out.print("Enter New Manufacturer: ");
+		 String manufacturer = Helper.readString();
+		 medicine.setManufacturer(manufacturer);
+		 System.out.print("Enter New Expiry Date (YYYY-MM-DD HH:MM:): ");
+		 LocalDateTime expiryDate = readDate();
+		 medicine.setExpiryDate(expiryDate);
+		 System.out.print("Enter New Inventory Stock: ");
+		 int inventoryStock = Helper.readInt();
+		 medicine.setInventoryStock(inventoryStock);
+		 System.out.print("Enter New Low Stock Level: ");
+		 int lowStockLevel = Helper.readInt();
+		 medicine.setLowStockLevel(lowStockLevel);
+		 medicine.setReplenishStatus(ReplenishStatus.APPROVED);
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		 LocalDateTime currentDateTime = LocalDateTime.now();
+	     String formattedDateTime = currentDateTime.format(formatter);
+	     LocalDateTime approvedDate = LocalDateTime.parse(formattedDateTime);
+		 medicine.setApprovedDate(approvedDate);
+		 MedicineController.updateMedicine(medicineID, medicine);	
+	}
+    public static void updatePersonnel(String role) {
     	System.out.println("Enter UID: " );
     	String UID = Helper.readString();
         System.out.println("Enter New Username: " );
@@ -97,7 +181,7 @@ public class AdminController extends HMSPersonnelController {
              Doctor doctor = (Doctor) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.DOCTORS);
              if (doctor == null) {
             	 System.out.println("Doctor does not exist!");
-            	 return doctor;
+            	 return ;
              }
              doctor.setUsername(username);
              doctor.setEmail(email);
@@ -106,7 +190,7 @@ public class AdminController extends HMSPersonnelController {
              doctor.setSpecialty(specialty);
              doctor.setMedicalLicenseNumber(medicalLicenseNumber);
              doctor.setYearsOfExperiences(yearsOfExperiences);
-             return doctor;
+             HMSPersonnelController.updatePersonnel(doctor.getUID(), doctor);
         }      
         
         else {
@@ -115,17 +199,17 @@ public class AdminController extends HMSPersonnelController {
             Pharmacist pharmacist = (Pharmacist) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.PHARMACISTS);
             if (pharmacist == null) {
            	 System.out.println("Pharmacist does not exist!");
-           	 return pharmacist;
+           	 return;
             }
             pharmacist.setUsername(username);
             pharmacist.setEmail(email);
             pharmacist.setPhoneNo(phoneNo);
             pharmacist.setPasswordHash(hashedPassword);
             pharmacist.setPharmacistLicenseNumber(pharmacistLicenseNumber);
-            return pharmacist;
+            HMSPersonnelController.updatePersonnel(pharmacist.getUID(), pharmacist);
         }
     }
-    public static HMSPersonnel addPersonnel(String role) {
+    public static void addPersonnel(String role) {
     	System.out.println("Enter UID: " );
     	String UID = Helper.readString();
         System.out.println("Enter Full Name: " );
@@ -152,7 +236,7 @@ public class AdminController extends HMSPersonnelController {
              System.out.println("Enter Years of Experiences: " );
              int yearsOfExperiences = Helper.readInt();
              Doctor doctor = new Doctor(UID,fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender, "Doctor", specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
-             return doctor;
+             HMSPersonnelController.addPersonnel(doctor);
         }      
         
         else {
@@ -161,10 +245,19 @@ public class AdminController extends HMSPersonnelController {
         	System.out.println("Enter Date Of Employment: " );
         	LocalDateTime dateOfEmployment = readDate();
         	Pharmacist pharmacist = new Pharmacist(UID,fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender, "Pharmacist",pharmacistLicenseNumber , dateOfEmployment);
-            return pharmacist;
+        	HMSPersonnelController.addPersonnel(pharmacist);
         }
     }
-    
+    public static void removePersonnel(String role) {
+    	if(role == "Doctor") {
+    		String uidDoctor = Helper.readString();
+            HMSPersonnelController.removePersonnel(uidDoctor, PersonnelFileType.DOCTORS);
+    	}
+    	else {
+    		String uidPharmacist = Helper.readString();
+            HMSPersonnelController.removePersonnel(uidPharmacist, PersonnelFileType.PHARMACISTS);
+    	}
+    }  
     public static LocalDateTime readDate() {
     	LocalDateTime date = null;
         boolean valid = false;
@@ -281,18 +374,11 @@ public class AdminController extends HMSPersonnelController {
     }
 
 
-    public static void printBreadCrumbs(String breadcrumb) {
-        String spaces = String.format("%" + (105 - breadcrumb.length()) + "s", "");
-        System.out.println(
-                "╔══════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║ " + breadcrumb + spaces + "║");
-        System.out.println(
-                "╚══════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
-    }
     
     public static void main(String[] args) {
         PersonnelRepository.loadAllPersonnelFiles();
-        viewAndManageStaff();
+        MedicineRepository.loadAllMedicines();
+        addMedicine();
     }
 }
 
