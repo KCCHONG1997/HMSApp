@@ -6,6 +6,11 @@ public class Medicine {
     private String manufacturer;
     private LocalDateTime expiryDate;
     private int inventoryStock;
+
+
+    private LocalDateTime  replenishDate;
+    
+    
     public String getMedicineName() {
         return medicineName;
     }

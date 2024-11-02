@@ -2,42 +2,30 @@ package model;
 
 import java.time.LocalDateTime;
 
+import controller.RecordsController;
+import repository.RecordFileType;
+
 public abstract class HMSRecords {
-    protected String recordID;
-    private Doctor createdBy;
+    private String recordID;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private RecordStatusType recordStatus;
-    private String description;
-    private Patient patient;
 
-    // Constructor
-    public HMSRecords(String recordID, Doctor createdBy, LocalDateTime createdDate, LocalDateTime updatedDate,
-                      RecordStatusType recordStatus, String description, Patient patient) {
-        this.recordID = recordID;
-        this.createdBy = createdBy;
+    public HMSRecords(LocalDateTime createdDate, LocalDateTime updatedDate, RecordStatusType recordStatus) {
+        RecordsController rc = new RecordsController();
+    	this.recordID = rc.generateRecordID(RecordFileType.MEDICAL_RECORDS);
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.recordStatus = recordStatus;
-        this.description = description;
-        this.patient = patient;
     }
 
-    // Getters and Setters
+
     public String getRecordID() {
         return recordID;
     }
 
     public void setRecordID(String recordID) {
         this.recordID = recordID;
-    }
-
-    public Doctor getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Doctor createdBy) {
-        this.createdBy = createdBy;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -64,19 +52,6 @@ public abstract class HMSRecords {
         this.recordStatus = recordStatus;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
 }
+
+    // Constructor
