@@ -9,6 +9,8 @@ public class Medicine {
 
 
     private LocalDateTime  replenishDate;
+    
+    
     public String getMedicineName() {
         return medicineName;
     }
