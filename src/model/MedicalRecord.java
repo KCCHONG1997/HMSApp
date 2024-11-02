@@ -3,6 +3,9 @@ package model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import controller.RecordsController;
+import repository.RecordFileType;
+
 public class MedicalRecord extends HMSRecords {
     private String bloodType;
     private ArrayList <DiagnosisRecord> Diagnosis;
@@ -50,7 +53,7 @@ public class MedicalRecord extends HMSRecords {
                          LocalDateTime createdDate, LocalDateTime updatedDate,
                          RecordStatusType recordStatus,String patientID,String doctorID,
                          String bloodType,ArrayList<model.DiagnosisRecord> diagnosis) {
-        super(recordID, createdDate, updatedDate, recordStatus);
+        super(RecordsController.generateRecordID(RecordFileType.MEDICAL_RECORDS), createdDate, updatedDate, recordStatus);
         this.patientID = patientID;
         this.doctorID = doctorID;
         this.bloodType = bloodType;
