@@ -1,26 +1,22 @@
 package repository;
 
-import model.Medicine;
-import model.PrescribedMedication;
-import model.Prescription;
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import enums.PrescriptionStatus;
+import model.Prescription;
+import model.PrescribedMedication;
 
 public class PrescriptionRepository {
     private static final String folder = "data";
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-    // Static data collection for Prescription records, where key is the prescription ID
+    // Static data collection for Prescription records  //key : prescriptionID
     public static HashMap<String, Prescription> prescriptionMap = new HashMap<>();
 
     /**
-     * Save Prescription records to a CSV file
+     * Save Prescription records map to a CSV file
      */
     public static void savePrescriptionsToCSV(String fileName, HashMap<String, Prescription> prescriptionMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
@@ -28,7 +24,7 @@ public class PrescriptionRepository {
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();
+            directory.mkdirs();  // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -48,42 +44,26 @@ public class PrescriptionRepository {
     // Convert a Prescription object to a CSV line
     private static String prescriptionToCSV(String prescriptionID, Prescription prescription) {
         StringBuilder medicationsCSV = new StringBuilder();
-        prescription.getMedications().forEach(med -> 
-            medicationsCSV.append(med.getMedication().getMedicineName())
-                          .append("#")
-                          .append(med.getMedicineQuantity())
-                          .append("#")
-                          .append(med.getPrescriptionStartDate().format(DATE_TIME_FORMATTER))
-                          .append("#")
-                          .append(med.getPrescriptionEndDate().format(DATE_TIME_FORMATTER))
-                          .append("#")
-                          .append(med.getPrescriptionStatus())
-                          .append("#")
-                          .append(med.getDosage())
-                          .append("&")
-        );
-
-        if (medicationsCSV.length() > 0) {
-            medicationsCSV.setLength(medicationsCSV.length() - 1); // Remove trailing "&"
+        for (PrescribedMedication medication : prescription.getMedications()) {
+            medicationsCSV.append(medication.toString()).append(";"); // Assuming PrescribedMedication has a meaningful toString
         }
-
         return String.join(",",
-                prescriptionID,
-                prescription.getPrescriptionDate().format(DATE_TIME_FORMATTER),
-                medicationsCSV.toString()
+                prescriptionID,                                 // Prescription ID
+                prescription.getPrescriptionDate().toString(),  // Prescription date
+                medicationsCSV.toString()                      // Medications (semicolon-separated)
         );
     }
 
     /**
      * Load prescriptions from a CSV file or create an empty file if it doesn't exist
      */
-    public static void loadPrescriptionsFromCSV(String fileName) {
+    private static void loadPrescriptionsFromCSV(String fileName, HashMap<String, Prescription> prescriptionMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();
+            directory.mkdirs();  // Create the directory if it doesn't exist
         }
 
         File file = new File(filePath);
@@ -95,7 +75,7 @@ public class PrescriptionRepository {
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;
+            return;  // No data to load, as the file was just created
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -123,25 +103,8 @@ public class PrescriptionRepository {
     private static Prescription csvToPrescription(String csv) {
         String[] fields = csv.split(",");
         try {
-            String prescriptionID = fields[0];
-            LocalDateTime prescriptionDate = LocalDateTime.parse(fields[1], DATE_TIME_FORMATTER);
-
-            String[] medicationsData = fields[2].split("&");
-            List<PrescribedMedication> medications = new ArrayList<>();
-            for (String medData : medicationsData) {
-                String[] medFields = medData.split("#");
-                if (medFields.length == 6) {
-                    String medicineName = medFields[0];
-                    int quantity = Integer.parseInt(medFields[1]);
-                    LocalDateTime startDate = LocalDateTime.parse(medFields[2], DATE_TIME_FORMATTER);
-                    LocalDateTime endDate = LocalDateTime.parse(medFields[3], DATE_TIME_FORMATTER);
-                    PrescriptionStatus status = PrescriptionStatus.valueOf(medFields[4]);
-                    String dosage = medFields[5];
-
-                    Medicine medicine = new Medicine(medicineName, "UnknownID", "UnknownManufacturer", LocalDateTime.now().plusYears(1), 0);
-                    medications.add(new PrescribedMedication(medicine, quantity, startDate, endDate, status, dosage));
-                }
-            }
+            List<PrescribedMedication> medications = parseMedications(fields[2]);
+            LocalDateTime prescriptionDate = LocalDateTime.parse(fields[1]);
             return new Prescription(medications, prescriptionDate);
         } catch (Exception e) {
             System.out.println("Error parsing prescription data: " + e.getMessage());
@@ -149,6 +112,17 @@ public class PrescriptionRepository {
         return null;
     }
 
+    // Parse medications from CSV format (semicolon-separated list)
+    private static List<PrescribedMedication> parseMedications(String medicationsCSV) {
+
+    	
+    	
+    	//NOT IMPLEMENTED YET
+    	
+    	
+    	
+        return new ArrayList<>(); // Placeholder, modify as per PrescribedMedication details
+    }
 
     /**
      * Clear all prescription data and save empty files
