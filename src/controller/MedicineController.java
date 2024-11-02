@@ -1,5 +1,8 @@
 package controller;
 
+import java.time.LocalDateTime;
+
+import enums.ReplenishStatus;
 import model.Medicine;
 import repository.MedicineRepository;
 
@@ -71,7 +74,8 @@ public class MedicineController {
     }
 
     public static void main(String[] args) {
-        // Example usage of MedicineController
-        // Add, update, remove, and retrieve medicines here as needed.
+    	MedicineRepository.loadAllMedicines(); 
+    	Medicine m = getMedicineByUID("12345");
+    	System.out.println(m.getName());
     }
 }

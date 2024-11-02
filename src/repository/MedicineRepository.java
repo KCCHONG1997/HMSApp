@@ -84,16 +84,14 @@ public class MedicineRepository {
 
     // Convert a CSV line to a Medicine object
     private static Medicine csvToMedicine(String csv) {
-        String[] fields = csv.split(",");
-
-        if (fields.length < 8) {  // Ensure there are enough fields
+        String[] fields = csv.split(","); // Change to "\t" if your CSV uses tabs
+        if (fields.length < 8) {
             System.out.println("Warning: Not enough fields in CSV line: " + csv);
             return null;
         }
 
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-            
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME; // Use ISO format to handle nanoseconds
             return new Medicine(
                 fields[0],   // medicineID
                 fields[1],   // name
@@ -109,6 +107,7 @@ public class MedicineRepository {
             return null;
         }
     }
+
 
     // Safe parsing for ReplenishStatus
     private static ReplenishStatus safeValueOf(String status) {
