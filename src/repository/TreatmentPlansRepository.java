@@ -46,11 +46,13 @@ public class TreatmentPlansRepository {
         return String.join(",",
                 treatmentPlan.getDiagnosisID(),                           // Diagnosis ID
                 treatmentPlan.getTreatmentDate().toString(),  // Treatment date
-                treatmentPlan.getTreatmentDescription()       // Treatment description
+                "\"" + treatmentPlan.getTreatmentDescription()+"\""       // Treatment description
         );
     }
     // Convert a TreatmentPlan object to a CSV line (using only LocalDate)
-
+    public static void loadTreatmentPlanDB(){
+    	loadTreatmentPlansFromCSV("treatments_plans_records.csv",diagnosisToTreatmentPlansMap);
+    }
 
     /**
      * Load plans from a CSV file or create an empty file if it doesn't exist
@@ -101,9 +103,9 @@ public class TreatmentPlansRepository {
         String[] fields = csv.split(",");
         try {
             return new TreatmentPlans(
-                    fields[1],                                // diagnosisID
-                    LocalDateTime.parse(fields[2]),           // Treatment date
-                    fields[3]                                 //treatment Description
+                    fields[0],                                // diagnosisID
+                    LocalDateTime.parse(fields[1]),           // Treatment date
+                    fields[2].replace("\"","")                                 //treatment Description
             );
         } catch (Exception e) {
             System.out.println("Error parsing treatment plan data: " + e.getMessage());

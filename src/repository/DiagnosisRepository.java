@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import model.DiagnosisRecord;
+import model.TreatmentPlans;
 
 
 public class DiagnosisRepository {
@@ -15,7 +16,11 @@ public class DiagnosisRepository {
     /**
      * Save Diagnosis records map to a CSV file
      */
-
+    
+    private boolean checkDuplicateID(String id) {
+    	return patientDiagnosisRecords.get(id) != null;
+    	
+    }
     public static void saveDiagnosisRecordsToCSV(String fileName, HashMap<String, ArrayList<DiagnosisRecord>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
@@ -45,7 +50,7 @@ public class DiagnosisRepository {
                 record.getDiagnosisID(),                  // Diagnosis ID
                 record.getDiagnosisDate().toString(),     // Diagnosis date
                 record.getTreatmentPlans().toString(),    // Treatment plans
-                record.getDiagnosisDescription()          // Diagnosis description
+                "\"" + record.getDiagnosisDescription() + "\""         // Diagnosis description
         );
     }
 
@@ -93,20 +98,24 @@ public class DiagnosisRepository {
 
     // Convert a CSV line to a DiagnosisRecord object
     private static DiagnosisRecord csvToDiagnosisRecord(String csv) {
+        // Split by comma, ignoring commas within quotes
         String[] fields = csv.split(",");
         try {
-            return new DiagnosisRecord(
-                    fields[0],                             // Patient ID
-                    fields[1],                             // Diagnosis ID
-                    LocalDateTime.parse(fields[2]),        // Diagnosis date
-                    TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]), // Treatment plans (Assuming a valid method for getting treatment plan)
-                    fields[4]                              // Diagnosis description
-            );
+            String patientID = fields[0];
+            String diagnosisID = fields[1];
+            LocalDateTime diagnosisDate = LocalDateTime.parse(fields[2]);
+            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
+            
+            // Remove leading and trailing quotes from Diagnosis Description if present
+            String diagnosisDescription = fields[4].replace("\"", "");
+
+            return new DiagnosisRecord(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
         }
         return null;
     }
+
     /**
      * Clear all diagnosis record data and save empty files
      */
