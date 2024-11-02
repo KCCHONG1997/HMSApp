@@ -4,54 +4,80 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class MedicalRecord extends HMSRecords {
-    private String diagnosis;
-    private String treatmentPlan;
-    private String MRID;
-    private List<PrescriptionItem> prescription;
+    private String patientID;
+    private String bloodType;
+    private List<Diagnosis> diagnosis;
 
-    public MedicalRecord(String recordID, Doctor createdBy,
-                         LocalDateTime createdDate, LocalDateTime updatedDate,
-                         RecordStatusType recordStatus, String description,
-                         Patient patient, String diagnosis, String treatmentPlan,
-                         String MRID, List<PrescriptionItem> prescription) {
-        super(recordID, createdBy, createdDate, updatedDate, recordStatus, description, patient);
+    public MedicalRecord(String recordID,
+                         LocalDateTime createdDate, 
+                         LocalDateTime updatedDate,
+                         RecordStatusType recordStatus, 
+                         String patientID, 
+                         String bloodType,
+                         List<Diagnosis> diagnosis
+                         ) {
+        super(recordID, createdDate, updatedDate, recordStatus);
+        this.setPatientID(patientID);
+        this.setBloodType(bloodType);
         this.diagnosis = diagnosis;
-        this.treatmentPlan = treatmentPlan;
-        this.MRID = MRID;
-        this.prescription = prescription;
     }
+    
 
 
     // Getters and Setters
-    public String getDiagnosis() {
+    public List<Diagnosis> getDiagnosis() {
         return diagnosis;
     }
 
-    public void setDiagnosis(String diagnosis) {
+    public void setDiagnosis(List<Diagnosis> diagnosis) {
         this.diagnosis = diagnosis;
     }
 
-    public String getTreatmentPlan() {
-        return treatmentPlan;
-    }
 
-    public void setTreatmentPlan(String treatmentPlan) {
-        this.treatmentPlan = treatmentPlan;
-    }
 
-    public String getMRID() {
-        return MRID;
-    }
+	public String getPatientID() {
+		return patientID;
+	}
 
-    public void setMRID(String MRID) {
-        this.MRID = MRID;
-    }
 
-    public List<PrescriptionItem> getPrescription() {
-        return prescription;
-    }
 
-    public void setPrescription(List<PrescriptionItem> prescription) {
-        this.prescription = prescription;
-    }
+	public void setPatientID(String patientID) {
+		this.patientID = patientID;
+	}
+
+
+
+	public String getBloodType() {
+		return bloodType;
+	}
+
+
+
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
+	}
+
+//    public String getTreatmentPlan() {
+//        return treatmentPlan;
+//    }
+//
+//    public void setTreatmentPlan(String treatmentPlan) {
+//        this.treatmentPlan = treatmentPlan;
+//    }
+//
+//    public String getMRID() {
+//        return MRID;
+//    }
+//
+//    public void setMRID(String MRID) {
+//        this.MRID = MRID;
+//    }
+
+//    public List<PrescriptionItem> getPrescription() {
+//        return prescription;
+//    }
+//
+//    public void setPrescription(List<PrescriptionItem> prescription) {
+//        this.prescription = prescription;
+//    }
 }

@@ -6,7 +6,17 @@ public class Medicine {
     private String manufacturer;
     private LocalDateTime expiryDate;
     private int inventoryStock;
-    public String getMedicineName() {
+    
+    
+    public Medicine(String medicineName, String medicineID, String manufacturer, LocalDateTime expiryDate, int inventoryStock) {
+        this.medicineName = medicineName;
+        this.medicineID = medicineID;
+        this.manufacturer = manufacturer;
+        this.expiryDate = expiryDate;
+        this.inventoryStock = inventoryStock;
+    }
+    
+	public String getMedicineName() {
         return medicineName;
     }
     public void setMedicineName(String medicineName) {

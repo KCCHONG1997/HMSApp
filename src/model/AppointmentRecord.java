@@ -9,7 +9,7 @@ public class AppointmentRecord extends HMSRecords {
     public AppointmentRecord(String recordID, Doctor createdBy, LocalDateTime createdDate, LocalDateTime updatedDate,
                              RecordStatusType recordStatus, String description, Patient patient,
                              LocalDateTime appointmentTime) {
-        super(recordID, createdBy, createdDate, updatedDate, recordStatus, description, patient);
+        super(recordID, createdDate, updatedDate, recordStatus);
         this.appointmentTime = appointmentTime;
     }
 
