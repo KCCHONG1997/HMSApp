@@ -3,7 +3,6 @@ package repository;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-
 import enums.AppointmentStatus;
 import model.*;
 
@@ -149,6 +148,18 @@ public class RecordsRepository {
                     null                                             // medicationList (still needs handling)
                 ));
             } else if (type == AppointmentRecord.class) {
+                // Parse fields[10] into parts for AppointmentOutcomeRecord
+                String[] outcomeFields = fields[10].split(";");  // Assuming ";" as delimiter for `typeOfService`, `prescription`, `consultationNotes`
+                
+                // Create AppointmentOutcomeRecord using parsed data
+                AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord();
+                if (outcomeFields.length >= 3) {  // Ensure we have enough fields for typeOfService, prescription, consultationNotes
+                    outcomeRecord.setTypeOfService(outcomeFields[0]);            // Set typeOfService
+                    outcomeRecord.setPrescription(new Prescription(outcomeFields[1])); // Create Prescription from string
+                    outcomeRecord.setConsultationNotes(outcomeFields[2]);        // Set consultationNotes
+                }
+              
+                
                 return type.cast(new AppointmentRecord(
                     fields[0],                                       // recordID
                     PersonnelRepository.DOCTORS.get(fields[1]),      // createdBy (Doctor object by UID)
@@ -157,10 +168,10 @@ public class RecordsRepository {
                     RecordStatusType.valueOf(fields[4]),             // recordStatus
                     fields[5],                                       // description
                     PersonnelRepository.PATIENTS.get(fields[6]),     // patient (Patient object by UID)
-                    LocalDateTime.parse(fields[7]),                   // appointmentTime
-                    fields[8],										 // location
-                    AppointmentStatus.valueOf(fields[9])         // appointmentStatus
-                    
+                    LocalDateTime.parse(fields[7]),                  // appointmentTime
+                    fields[8],                                       // location
+                    AppointmentStatus.valueOf(fields[9]),            // appointmentStatus
+                    outcomeRecord                                    // appointmentOutcomeRecord
                 ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
@@ -193,3 +204,29 @@ public class RecordsRepository {
         return true;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

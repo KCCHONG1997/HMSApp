@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDateTime;
 
 public abstract class HMSRecords {
-    private String recordID;
+    protected String recordID;
     private Doctor createdBy;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
