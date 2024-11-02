@@ -2,29 +2,35 @@ package model;
 import java.time.LocalDateTime;
 import enums.PrescriptionStatus;
 public class PrescribedMedication {
-    private Medicine medicationName;
+    private String diagnosisID;
+    private String medicineID;
     private String medicineQuantity;
-    private LocalDateTime prescriptionStartDate;
-    private LocalDateTime prescriptionEndDate;
-    private PrescriptionStatus PresciptionStatus;
-    private Medicine medicine;
+    private int periodDays;
+    private PrescriptionStatus PrescriptionStatus;
     private String dosage;
 
-    public PrescribedMedication(Medicine medicationName, String medicineQuantity, LocalDateTime prescriptionStartDate, LocalDateTime prescriptionEndDate, PrescriptionStatus presciptionStatus, Medicine medicine, String dosage) {
-        this.medicationName = medicationName;
+    public PrescribedMedication(String diagnosisID, String medicineID, String medicineQuantity, int periodDays, enums.PrescriptionStatus prescriptionStatus, String dosage) {
+        this.diagnosisID = diagnosisID;
+        this.medicineID = medicineID;
         this.medicineQuantity = medicineQuantity;
-        this.prescriptionStartDate = prescriptionStartDate;
-        this.prescriptionEndDate = prescriptionEndDate;
-        PresciptionStatus = presciptionStatus;
-        this.medicine = medicine;
+        this.periodDays = periodDays;
+        PrescriptionStatus = prescriptionStatus;
         this.dosage = dosage;
     }
-    public Medicine getMedicationName() {
-        return medicationName;
+    public String getDiagnosisID() {
+        return diagnosisID;
     }
 
-    public void setMedicationName(Medicine medicationName) {
-        this.medicationName = medicationName;
+    public void setDiagnosisID(String diagnosisID) {
+        this.diagnosisID = diagnosisID;
+    }
+
+    public String getMedicineID() {
+        return medicineID;
+    }
+
+    public void setMedicineID(String medicineID) {
+        this.medicineID = medicineID;
     }
 
     public String getMedicineQuantity() {
@@ -35,36 +41,20 @@ public class PrescribedMedication {
         this.medicineQuantity = medicineQuantity;
     }
 
-    public LocalDateTime getPrescriptionStartDate() {
-        return prescriptionStartDate;
+    public int getPeriodDays() {
+        return periodDays;
     }
 
-    public void setPrescriptionStartDate(LocalDateTime prescriptionStartDate) {
-        this.prescriptionStartDate = prescriptionStartDate;
+    public void setPeriodDays(int periodDays) {
+        this.periodDays = periodDays;
     }
 
-    public LocalDateTime getPrescriptionEndDate() {
-        return prescriptionEndDate;
+    public enums.PrescriptionStatus getPrescriptionStatus() {
+        return PrescriptionStatus;
     }
 
-    public void setPrescriptionEndDate(LocalDateTime prescriptionEndDate) {
-        this.prescriptionEndDate = prescriptionEndDate;
-    }
-
-    public PrescriptionStatus getPresciptionStatus() {
-        return PresciptionStatus;
-    }
-
-    public void setPresciptionStatus(PrescriptionStatus presciptionStatus) {
-        PresciptionStatus = presciptionStatus;
-    }
-
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
+    public void setPrescriptionStatus(enums.PrescriptionStatus prescriptionStatus) {
+        PrescriptionStatus = prescriptionStatus;
     }
 
     public String getDosage() {
@@ -74,8 +64,5 @@ public class PrescribedMedication {
     public void setDosage(String dosage) {
         this.dosage = dosage;
     }
-
-
-
 
 }

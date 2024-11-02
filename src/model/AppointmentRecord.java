@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 
 public class AppointmentRecord extends HMSRecords {
     private LocalDateTime appointmentTime;
-
-
+    
     private String patientID;
 
     // Constructor

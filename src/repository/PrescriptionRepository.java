@@ -12,7 +12,7 @@ import model.PrescribedMedication;
 public class PrescriptionRepository {
     private static final String folder = "data";
 
-    // Static data collection for Prescription records  //key : prescriptionID
+    // Static data collection for Prescription records  //key : diagnosis ID
     public static HashMap<String, Prescription> prescriptionMap = new HashMap<>();
 
     /**
@@ -28,10 +28,10 @@ public class PrescriptionRepository {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String prescriptionID : prescriptionMap.keySet()) {
-                Prescription prescription = prescriptionMap.get(prescriptionID);
+            for (String diagnosisID : prescriptionMap.keySet()) {
+                Prescription prescription = prescriptionMap.get(diagnosisID);
                 if (prescription != null) {
-                    writer.write(prescriptionToCSV(prescriptionID, prescription));
+                    writer.write(prescriptionToCSV(diagnosisID, prescription));
                     writer.newLine();
                 }
             }
@@ -42,22 +42,22 @@ public class PrescriptionRepository {
     }
 
     // Convert a Prescription object to a CSV line
-    private static String prescriptionToCSV(String prescriptionID, Prescription prescription) {
-        StringBuilder medicationsCSV = new StringBuilder();
-        for (PrescribedMedication medication : prescription.getMedications()) {
-            medicationsCSV.append(medication.toString()).append(";"); // Assuming PrescribedMedication has a meaningful toString
-        }
+    private static String prescriptionToCSV(String diagnosisID, Prescription prescription) {
         return String.join(",",
-                prescriptionID,                                 // Prescription ID
-                prescription.getPrescriptionDate().toString(),  // Prescription date
-                medicationsCSV.toString()                      // Medications (semicolon-separated)
+                prescription.getDiagnosisID(),                 // Diagnosis ID
+                prescription.getPrescriptionDate().toString()           // Prescription date
         );
     }
+
+    public static void loadPrescriptionDB(){
+        loadPrescriptionsFromCSV("prescriptions_records.csv",  prescriptionMap);
+    }
+
 
     /**
      * Load prescriptions from a CSV file or create an empty file if it doesn't exist
      */
-    private static void loadPrescriptionsFromCSV(String fileName, HashMap<String, Prescription> prescriptionMap) {
+    private static void loadPrescriptionsFromCSV(String fileName, HashMap<String, Prescription> diagnosisPrescriptionMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -82,46 +82,37 @@ public class PrescriptionRepository {
             String line;
             while ((line = reader.readLine()) != null) {
                 Prescription prescription = csvToPrescription(line);
-                String prescriptionID = getPrescriptionIDFromCSV(line);
-                if (prescription != null && prescriptionID != null) {
-                    prescriptionMap.put(prescriptionID, prescription);
+                String diagnosisID = getDiagnosisIDFromCSV(line);
+                if (prescription != null && diagnosisID != null) {
+                    diagnosisPrescriptionMap.put(diagnosisID, prescription);
                 }
             }
-            System.out.println("Successfully loaded " + prescriptionMap.size() + " prescriptions from " + fileName);
+            System.out.println("Successfully loaded " + diagnosisPrescriptionMap.size() + " prescriptions from " + fileName);
         } catch (IOException e) {
             System.out.println("Error reading prescriptions: " + e.getMessage());
         }
     }
 
     // Helper to extract Prescription ID from CSV line
-    private static String getPrescriptionIDFromCSV(String csv) {
+    private static String getDiagnosisIDFromCSV(String csv) {
         String[] fields = csv.split(",");
         return fields[0];
     }
-
+    // Convert a CSV line to a Prescription object
     // Convert a CSV line to a Prescription object
     private static Prescription csvToPrescription(String csv) {
         String[] fields = csv.split(",");
         try {
-            List<PrescribedMedication> medications = parseMedications(fields[2]);
-            LocalDateTime prescriptionDate = LocalDateTime.parse(fields[1]);
-            return new Prescription(medications, prescriptionDate);
+            return new Prescription(
+                    fields[0],                              // diagnosisID
+                    LocalDateTime.parse(fields[1]),         // Prescription date
+                    PrescribedMedicationRepository.diagnosisToMedicationsMap.getOrDefault(fields[2], new ArrayList<>())
+
+            );
         } catch (Exception e) {
             System.out.println("Error parsing prescription data: " + e.getMessage());
         }
         return null;
-    }
-
-    // Parse medications from CSV format (semicolon-separated list)
-    private static List<PrescribedMedication> parseMedications(String medicationsCSV) {
-
-    	
-    	
-    	//NOT IMPLEMENTED YET
-    	
-    	
-    	
-        return new ArrayList<>(); // Placeholder, modify as per PrescribedMedication details
     }
 
     /**

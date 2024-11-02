@@ -14,16 +14,12 @@ public class RecordsController {
 	
 	
 	public String generateRecordID(RecordFileType RecType) {
-	    switch(RecType) {
-	    case MEDICAL_RECORDS:
-	    	return "MR-" + System.currentTimeMillis();
-	    case APPOINTMENT_RECORDS:
-	    	return "A-" + System.currentTimeMillis();
-	    case PAYMENT_RECORDS:
-	    	return "P-" + System.currentTimeMillis();
-	    default:
-	    	return "R-" + System.currentTimeMillis();
-	    }
+		return switch (RecType) {
+			case MEDICAL_RECORDS -> "MR-" + System.currentTimeMillis();
+			case APPOINTMENT_RECORDS -> "A-" + System.currentTimeMillis();
+			case PAYMENT_RECORDS -> "P-" + System.currentTimeMillis();
+			default -> "R-" + System.currentTimeMillis();
+		};
 	}
 	
 	public Boolean checkRecordsDuplication(String UID, RecordFileType recType) {
@@ -50,7 +46,7 @@ public class RecordsController {
             ArrayList<model.DiagnosisRecord> diagnosisList
 			) {
 		MedicalRecord mr = new MedicalRecord(
-				generateRecordID(),
+				generateRecordID(RecordFileType.MEDICAL_RECORDS),
 				createdDate,
 				updatedDate,
 				recordStatus,
