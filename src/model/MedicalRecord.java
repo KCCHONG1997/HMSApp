@@ -1,57 +1,62 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
 
 public class MedicalRecord extends HMSRecords {
-    private String diagnosis;
-    private String treatmentPlan;
-    private String MRID;
-    private List<PrescriptionItem> prescription;
+    private String bloodType;
+    private ArrayList <DiagnosisRecord> Diagnosis;
 
-    public MedicalRecord(String recordID, Doctor createdBy,
+
+    private String patientID;
+    private String doctorID;
+
+
+
+    public String getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
+
+    public ArrayList<model.DiagnosisRecord> getDiagnosis() {
+        return Diagnosis;
+    }
+
+    public void setDiagnosis(ArrayList<model.DiagnosisRecord> diagnosis) {
+        Diagnosis = diagnosis;
+    }
+
+    public String getPatientID() {
+        return patientID;
+    }
+
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
+    public String getDoctorID() {
+        return doctorID;
+    }
+
+    public void setDoctorID(String doctorID) {
+        this.doctorID = doctorID;
+    }
+
+
+
+    public MedicalRecord(String recordID,
                          LocalDateTime createdDate, LocalDateTime updatedDate,
-                         RecordStatusType recordStatus, String description,
-                         Patient patient, String diagnosis, String treatmentPlan,
-                         String MRID, List<PrescriptionItem> prescription) {
-        super(recordID, createdBy, createdDate, updatedDate, recordStatus, description, patient);
-        this.diagnosis = diagnosis;
-        this.treatmentPlan = treatmentPlan;
-        this.MRID = MRID;
-        this.prescription = prescription;
+                         RecordStatusType recordStatus,String patientID,String doctorID,
+                         String bloodType,ArrayList<model.DiagnosisRecord> diagnosis) {
+        super(recordID, createdDate, updatedDate, recordStatus);
+        this.patientID = patientID;
+        this.doctorID = doctorID;
+        this.bloodType = bloodType;
+        this.Diagnosis= diagnosis;
+
     }
 
 
-    // Getters and Setters
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
-    public String getTreatmentPlan() {
-        return treatmentPlan;
-    }
-
-    public void setTreatmentPlan(String treatmentPlan) {
-        this.treatmentPlan = treatmentPlan;
-    }
-
-    public String getMRID() {
-        return MRID;
-    }
-
-    public void setMRID(String MRID) {
-        this.MRID = MRID;
-    }
-
-    public List<PrescriptionItem> getPrescription() {
-        return prescription;
-    }
-
-    public void setPrescription(List<PrescriptionItem> prescription) {
-        this.prescription = prescription;
-    }
 }

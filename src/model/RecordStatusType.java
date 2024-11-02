@@ -22,4 +22,20 @@ public enum RecordStatusType {
                 return "Unknown";
         }
     }
+
+
+    public static RecordStatusType toEnumRecordStatusType(String status) {
+        switch (status) {
+            case "Active":
+                return ACTIVE;
+            case "Inactive":
+                return INACTIVE;
+            case "Archived":
+                return ARCHIVED;
+            case "Deleted":
+                return DELETED;
+            default:
+                return null;  // or throw an exception if you want to handle invalid inputs differently
+        }
+    }
 }
