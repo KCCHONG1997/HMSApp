@@ -1,21 +1,23 @@
 package model;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
+
 public class Prescription {
-    private List<PrescribedMedication> medications;
+    private String diagnosisID;
     private LocalDateTime prescriptionDate;
-
-    public Prescription(List<PrescribedMedication> medications, LocalDateTime prescriptionDate) {
-        this.medications = medications;
+    private ArrayList<PrescribedMedication> medications;
+    public Prescription(String diagnosisID, LocalDateTime prescriptionDate, ArrayList<PrescribedMedication> medications) {
+        this.diagnosisID = diagnosisID;
         this.prescriptionDate = prescriptionDate;
-    }
-
-    public List<PrescribedMedication> getMedications() {
-        return medications;
-    }
-
-    public void setMedications(List<PrescribedMedication> medications) {
         this.medications = medications;
+    }
+    public String getDiagnosisID() {
+        return diagnosisID;
+    }
+
+    public void setDiagnosisID(String diagnosisID) {
+        this.diagnosisID = diagnosisID;
     }
 
     public LocalDateTime getPrescriptionDate() {
@@ -25,4 +27,16 @@ public class Prescription {
     public void setPrescriptionDate(LocalDateTime prescriptionDate) {
         this.prescriptionDate = prescriptionDate;
     }
+
+    public ArrayList<PrescribedMedication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(ArrayList<PrescribedMedication> medications) {
+        this.medications = medications;
+    }
+
+
+
+
 }
