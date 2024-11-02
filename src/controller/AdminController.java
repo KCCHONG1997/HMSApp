@@ -17,51 +17,64 @@ import repository.PersonnelRepository;
 
 public class AdminController extends HMSPersonnelController {
     
-    public static void viewAndManageStaff() {
-        printBreadCrumbs("HMS App UI > Admin Dashboard > View and Manage Hospital Staff");
-        System.out.println("1. View Staff By Role");
-        System.out.println("2. View Staff By Gender");
-        System.out.println("3. View Staff By Age");
-        System.out.println("4. Add Doctor");
-        System.out.println("5. Add Pharmacist");
-        System.out.println("6. Update Doctor");
-        System.out.println("7. Update Pharmacist");
-        System.out.println("8. Remove Doctor");
-        System.out.println("9. Remove Pharmacist");
-        int choice = Helper.readInt();
-        
-        if (choice == 1) {
-        	listPersonnelByRole(PersonnelFileType.DOCTORS);
-        	listPersonnelByRole(PersonnelFileType.PHARMACISTS);
-        } else if (choice == 2) {
-        	listPersonnelByGender("Male");
-        	listPersonnelByGender("Female");
-        } else if (choice == 3) {
-        	listPersonnelByAge();
-        } else if (choice == 4) {
-        	HMSPersonnel personnel = addPersonnel("Doctor");
-        	Doctor doctor = (Doctor) personnel;
-        	HMSPersonnelController.addPersonnel(doctor);
-        } else if (choice == 5) {
-        	HMSPersonnel personnel = addPersonnel("Pharmacist");
-        	Pharmacist pharmacist = (Pharmacist) personnel;
-        	HMSPersonnelController.addPersonnel(pharmacist);
-        } else if (choice == 6) {
-        	HMSPersonnel personnel = updatePersonnel("Doctor");
-        	Doctor doctor = (Doctor) personnel;
-        	HMSPersonnelController.updatePersonnel(doctor.getUID(), doctor);
-        } else if (choice == 7) {
-        	HMSPersonnel personnel = addPersonnel("Pharmacist");
-        	Pharmacist pharmacist = (Pharmacist) personnel;
-        	HMSPersonnelController.updatePersonnel(pharmacist.getUID(),pharmacist);
-        } else if (choice == 8) {
-        	String uid = Helper.readString();
-        	HMSPersonnelController.removePersonnel(uid, PersonnelFileType.DOCTORS);
-        } else if (choice == 9) {
-        	String uid = Helper.readString();
-        	HMSPersonnelController.removePersonnel(uid, PersonnelFileType.PHARMACISTS);
-        }     
-    }
+	public static void viewAndManageStaff() {
+	    printBreadCrumbs("HMS App UI > Admin Dashboard > View and Manage Hospital Staff");
+	    System.out.println("1. View Staff By Role");
+	    System.out.println("2. View Staff By Gender");
+	    System.out.println("3. View Staff By Age");
+	    System.out.println("4. Add Doctor");
+	    System.out.println("5. Add Pharmacist");
+	    System.out.println("6. Update Doctor");
+	    System.out.println("7. Update Pharmacist");
+	    System.out.println("8. Remove Doctor");
+	    System.out.println("9. Remove Pharmacist");
+	    int choice = Helper.readInt();
+
+	    switch (choice) {
+	        case 1:
+	            listPersonnelByRole(PersonnelFileType.DOCTORS);
+	            listPersonnelByRole(PersonnelFileType.PHARMACISTS);
+	            break;
+	        case 2:
+	            listPersonnelByGender("Male");
+	            listPersonnelByGender("Female");
+	            break;
+	        case 3:
+	            listPersonnelByAge();
+	            break;
+	        case 4:
+	            HMSPersonnel personnel = addPersonnel("Doctor");
+	            Doctor doctor = (Doctor) personnel;
+	            HMSPersonnelController.addPersonnel(doctor);
+	            break;
+	        case 5:
+	            HMSPersonnel personnelPharmacist = addPersonnel("Pharmacist");
+	            Pharmacist pharmacist = (Pharmacist) personnelPharmacist;
+	            HMSPersonnelController.addPersonnel(pharmacist);
+	            break;
+	        case 6:
+	            HMSPersonnel personnelToUpdate = updatePersonnel("Doctor");
+	            Doctor doctorToUpdate = (Doctor) personnelToUpdate;
+	            HMSPersonnelController.updatePersonnel(doctorToUpdate.getUID(), doctorToUpdate);
+	            break;
+	        case 7:
+	            HMSPersonnel personnelPharmacistUpdate = updatePersonnel("Pharmacist");
+	            Pharmacist pharmacistToUpdate = (Pharmacist) personnelPharmacistUpdate;
+	            HMSPersonnelController.updatePersonnel(pharmacistToUpdate.getUID(), pharmacistToUpdate);
+	            break;
+	        case 8:
+	            String uidDoctor = Helper.readString();
+	            HMSPersonnelController.removePersonnel(uidDoctor, PersonnelFileType.DOCTORS);
+	            break;
+	        case 9:
+	            String uidPharmacist = Helper.readString();
+	            HMSPersonnelController.removePersonnel(uidPharmacist, PersonnelFileType.PHARMACISTS);
+	            break;
+	        default:
+	            System.out.println("Error: Invalid choice. Please select a valid option.");
+	            break;
+	    }
+	}
     
     public static HMSPersonnel updatePersonnel(String role) {
     	System.out.println("Enter UID: " );

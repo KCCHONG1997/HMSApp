@@ -1,5 +1,5 @@
 package enums;
 
 public enum ReplenishStatus {
-	REQUESTED, APPROVED;
+	NULL,REQUESTED, APPROVED;
 }

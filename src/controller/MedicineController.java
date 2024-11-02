@@ -1,6 +1,7 @@
 package controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import enums.ReplenishStatus;
 import model.Medicine;
@@ -75,7 +76,9 @@ public class MedicineController {
 
     public static void main(String[] args) {
     	MedicineRepository.loadAllMedicines(); 
-    	Medicine m = getMedicineByUID("12345");
-    	System.out.println(m.getName());
+    	Medicine m = getMedicineByUID("123456888");
+    	m.setName("Shaby");
+    	updateMedicine("123456888",m);
+    	
     }
 }

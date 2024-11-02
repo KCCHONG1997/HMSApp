@@ -91,16 +91,16 @@ public class MedicineRepository {
         }
 
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME; // Use ISO format to handle nanoseconds
+            //DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME; // Use ISO format to handle nanoseconds
             return new Medicine(
                 fields[0],   // medicineID
                 fields[1],   // name
                 fields[2],   // manufacturer
-                LocalDateTime.parse(fields[3], formatter),  // expiryDate
+                LocalDateTime.parse(fields[3]),  // expiryDate
                 Integer.parseInt(fields[4]),  // inventoryStock
                 Integer.parseInt(fields[5]),  // lowStockLevel
                 safeValueOf(fields[6]), // replenish status
-                LocalDateTime.parse(fields[7], formatter)  // approvedDate
+                LocalDateTime.parse(fields[7])  // approvedDate
             );
         } catch (Exception e) {
             System.out.println("Error parsing medicine data: " + e.getMessage());
