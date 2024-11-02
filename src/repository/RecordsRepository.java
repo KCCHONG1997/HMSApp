@@ -12,6 +12,7 @@ import static model.RecordStatusType.toEnumRecordStatusType;
 
 public class RecordsRepository {
     private static final String folder = "data";
+    private static Boolean loadRepo = false;
 
     // Static data collections for different record types
     public static HashMap<String, MedicalRecord> MEDICAL_RECORDS = new HashMap<>();
@@ -92,9 +93,14 @@ public class RecordsRepository {
      * Load all record files from CSV format, or create them if they don't exist
      */
     public static void loadAllRecordFiles() {
+    	if (!loadRepo)
         loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
 //        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
 //        loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS, PaymentRecord.class);
+    }
+    
+    public static Boolean isRepoLoad() {
+    	return RecordsRepository.loadRepo;
     }
 
     /**

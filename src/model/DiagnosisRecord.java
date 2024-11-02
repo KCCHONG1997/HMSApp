@@ -2,6 +2,8 @@ package model;
 
 import java.time.LocalDateTime;
 
+import repository.TreatmentPlansRepository;
+
 public class DiagnosisRecord {
 
     private String patientID;
@@ -42,11 +44,11 @@ public class DiagnosisRecord {
         this.diagnosisDate = diagnosisDate;
     }
 
-    public model.TreatmentPlans getTreatmentPlans() {
+    public TreatmentPlans getTreatmentPlans() {
         return TreatmentPlans;
     }
 
-    public void setTreatmentPlans(model.TreatmentPlans treatmentPlans) {
+    public void setTreatmentPlans(TreatmentPlans treatmentPlans) {
         TreatmentPlans = treatmentPlans;
     }
 
