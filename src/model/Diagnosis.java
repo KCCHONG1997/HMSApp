@@ -4,20 +4,24 @@ package model;
 import java.time.LocalDateTime;
 
 public class Diagnosis {
-
     private String patientID;
     private String diagnosisID;
     private LocalDateTime diagnosisDate;
     private TreatmentPlans TreatmentPlans;
     private String diagnosisDescription;
+    private Prescription prescription;
 
-    public Diagnosis(String patientID, String diagnosisID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription) {
+
+    public Diagnosis(String patientID, String diagnosisID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription, Prescription prescription) {
         this.patientID = patientID;
         this.diagnosisID = diagnosisID;
         this.diagnosisDate = diagnosisDate;
         TreatmentPlans = treatmentPlans;
         this.diagnosisDescription = diagnosisDescription;
+        this.prescription = prescription;
     }
+
+
 
     public String getPatientID() {
         return patientID;
@@ -43,11 +47,11 @@ public class Diagnosis {
         this.diagnosisDate = diagnosisDate;
     }
 
-    public TreatmentPlans getTreatmentPlans() {
+    public model.TreatmentPlans getTreatmentPlans() {
         return TreatmentPlans;
     }
 
-    public void setTreatmentPlans(TreatmentPlans treatmentPlans) {
+    public void setTreatmentPlans(model.TreatmentPlans treatmentPlans) {
         TreatmentPlans = treatmentPlans;
     }
 
@@ -58,5 +62,13 @@ public class Diagnosis {
     public void setDiagnosisDescription(String diagnosisDescription) {
         this.diagnosisDescription = diagnosisDescription;
     }
-}
 
+    public Prescription getPrescription() {
+        return prescription;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
+    }
+
+}

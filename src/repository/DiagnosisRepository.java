@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import model.Diagnosis;
+import model.Prescription;
 import model.TreatmentPlans;
 
 
@@ -111,7 +112,9 @@ public class DiagnosisRepository {
             // Remove leading and trailing quotes from Diagnosis Description if present
             String diagnosisDescription = fields[4].replace("\"", "");
 
-            return new Diagnosis(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription);
+            Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[1]);
+
+            return new Diagnosis(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription,prescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
         }
