@@ -43,7 +43,7 @@ public class RecordsController {
             String patientID,
             String doctorID,
             String bloodType,
-            ArrayList<model.DiagnosisRecord> diagnosisList
+            ArrayList<model.Diagnosis> diagnosisList
 			) {
 		MedicalRecord mr = new MedicalRecord(
 				generateRecordID(RecordFileType.MEDICAL_RECORDS),

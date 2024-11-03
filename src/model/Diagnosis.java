@@ -1,10 +1,9 @@
 package model;
 
+
 import java.time.LocalDateTime;
 
-import repository.TreatmentPlansRepository;
-
-public class DiagnosisRecord {
+public class Diagnosis {
 
     private String patientID;
     private String diagnosisID;
@@ -12,7 +11,7 @@ public class DiagnosisRecord {
     private TreatmentPlans TreatmentPlans;
     private String diagnosisDescription;
 
-    public DiagnosisRecord(String patientID, String diagnosisID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription) {
+    public Diagnosis(String patientID, String diagnosisID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription) {
         this.patientID = patientID;
         this.diagnosisID = diagnosisID;
         this.diagnosisDate = diagnosisDate;

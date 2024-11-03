@@ -2,11 +2,8 @@ package repository;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.DiagnosisRecord;
-import model.Patient;
 import model.TreatmentPlans;
 
 public class TreatmentPlansRepository {

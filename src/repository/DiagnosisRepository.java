@@ -4,15 +4,17 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import model.DiagnosisRecord;
+
+import model.Diagnosis;
 import model.TreatmentPlans;
+
 
 
 public class DiagnosisRepository {
     private static final String folder = "data";
 
     // Static data collection for Diagnosis records only  (key = patientID)
-    public static HashMap<String, ArrayList<DiagnosisRecord>> patientDiagnosisRecords = new HashMap<>();
+    public static HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords = new HashMap<>();
     /**
      * Save Diagnosis records map to a CSV file
      */
@@ -21,7 +23,7 @@ public class DiagnosisRepository {
     	return patientDiagnosisRecords.get(id) != null;
     	
     }
-    public static void saveDiagnosisRecordsToCSV(String fileName, HashMap<String, ArrayList<DiagnosisRecord>> patientDiagnosisRecords) {
+    public static void saveDiagnosisRecordsToCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -32,7 +34,7 @@ public class DiagnosisRepository {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (String patientID : patientDiagnosisRecords.keySet()) {
-                for (DiagnosisRecord record : patientDiagnosisRecords.get(patientID)) {
+                for (Diagnosis record : patientDiagnosisRecords.get(patientID)) {
                     writer.write(diagnosisToCSV(record));
                     writer.newLine();
                 }
@@ -44,7 +46,7 @@ public class DiagnosisRepository {
     }
 
     // Convert a DiagnosisRecord object to a CSV line
-    private static String diagnosisToCSV(DiagnosisRecord record) {
+    private static String diagnosisToCSV(Diagnosis record) {
         return String.join(",",
                 record.getPatientID(),                    // Patient ID
                 record.getDiagnosisID(),                  // Diagnosis ID
@@ -57,7 +59,7 @@ public class DiagnosisRepository {
     /**
      * Load Diagnosis records from a CSV file, or create an empty file if it doesn't exist
      */
-    public static void loadDiagnosisRecordsFromCSV(String fileName, HashMap<String, ArrayList<DiagnosisRecord>> patientDiagnosisRecords) {
+    public static void loadDiagnosisRecordsFromCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
@@ -79,7 +81,7 @@ public class DiagnosisRepository {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                DiagnosisRecord record = csvToDiagnosisRecord(line);
+                Diagnosis record = csvToDiagnosisRecord(line);
                 if (record != null) {
                     addDiagnosis(record.getPatientID(), record);
                 }
@@ -90,14 +92,14 @@ public class DiagnosisRepository {
         }
     }
 
-    public static void addDiagnosis(String patientID, DiagnosisRecord diagnosis) {
-        ArrayList<DiagnosisRecord> diagnoses = patientDiagnosisRecords.getOrDefault(patientID, new ArrayList<>());
+    public static void addDiagnosis(String patientID, Diagnosis diagnosis) {
+        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(patientID, new ArrayList<>());
         diagnoses.add(diagnosis);
         patientDiagnosisRecords.put(patientID, diagnoses);
     }
 
     // Convert a CSV line to a DiagnosisRecord object
-    private static DiagnosisRecord csvToDiagnosisRecord(String csv) {
+    private static Diagnosis csvToDiagnosisRecord(String csv) {
         // Split by comma, ignoring commas within quotes
         String[] fields = csv.split(",");
         try {
@@ -109,7 +111,7 @@ public class DiagnosisRepository {
             // Remove leading and trailing quotes from Diagnosis Description if present
             String diagnosisDescription = fields[4].replace("\"", "");
 
-            return new DiagnosisRecord(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription);
+            return new Diagnosis(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
         }

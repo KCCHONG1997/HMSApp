@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import model.*;
 import model.RecordStatusType;
-import java.util.List;
 
 import static model.RecordStatusType.toEnumRecordStatusType;
 
