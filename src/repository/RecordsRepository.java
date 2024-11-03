@@ -7,7 +7,6 @@ import java.util.HashMap;
 import enums.AppointmentStatus;
 import model.*;
 import model.RecordStatusType;
-import java.util.List;
 
 import static model.RecordStatusType.toEnumRecordStatusType;
 

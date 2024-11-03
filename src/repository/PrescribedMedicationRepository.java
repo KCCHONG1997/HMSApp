@@ -46,7 +46,7 @@ public class PrescribedMedicationRepository {
                 medication.getMedicineQuantity(),                           // Medicine quantity
                 String.valueOf(medication.getPeriodDays()),                 // Period in days converted to String
                 medication.getPrescriptionStatus().toString(),              // enums.PrescriptionStatus PrescriptionStatus;
-                "\"" + medication.getDosage()+ "\""                         // dosage  Instructions (quotes fr soafety)
+                "\"" + medication.getDosage()+ "\""                         // dosage  Instructions (quotes fr safety)
 
         );
     }

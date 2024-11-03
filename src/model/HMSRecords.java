@@ -11,10 +11,8 @@ public abstract class HMSRecords {
     private LocalDateTime updatedDate;
     private RecordStatusType recordStatus;
 
-    public HMSRecords(LocalDateTime createdDate, LocalDateTime updatedDate, RecordStatusType recordStatus) {
-        
-//    	this.recordID = rc.generateRecordID(RecordFileType.MEDICAL_RECORDS);
-        this.recordID = null;
+    public HMSRecords(String recordID,LocalDateTime createdDate, LocalDateTime updatedDate, RecordStatusType recordStatus) {
+    	this.recordID = recordID;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.recordStatus = recordStatus;
@@ -55,4 +53,4 @@ public abstract class HMSRecords {
 
 }
 
-    // Constructor
+
