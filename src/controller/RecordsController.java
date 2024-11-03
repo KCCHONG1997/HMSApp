@@ -13,14 +13,21 @@ import repository.RecordFileType;
 public class RecordsController {
 	
 	
-	public String generateRecordID(RecordFileType RecType) {
-		return switch (RecType) {
-			case MEDICAL_RECORDS -> "MR-" + System.currentTimeMillis();
-			case APPOINTMENT_RECORDS -> "A-" + System.currentTimeMillis();
-			case PAYMENT_RECORDS -> "P-" + System.currentTimeMillis();
-			default -> "R-" + System.currentTimeMillis();
-		};
+	// public String generateRecordID(RecordFileType RecType) {
+	// 	return switch (RecType) {
+	public static String generateRecordID(RecordFileType RecType) {
+		switch (RecType) {
+			case APPOINTMENT_RECORDS:
+				return "A-" + System.currentTimeMillis();
+			case PAYMENT_RECORDS:
+				return "P-" + System.currentTimeMillis();
+			case MEDICAL_RECORDS:
+				return "MR-" + System.currentTimeMillis();
+			default:
+				return "R-" + System.currentTimeMillis();
+		}
 	}
+	
 	
 	public Boolean checkRecordsDuplication(String UID, RecordFileType recType) {
 		switch(recType){
@@ -36,25 +43,7 @@ public class RecordsController {
 	}
 	
 	//automatically creates ID
-	public void createMedicalRecord(
-            LocalDateTime createdDate, 
-            LocalDateTime updatedDate,
-            RecordStatusType recordStatus,
-            String patientID,
-            String doctorID,
-            String bloodType,
-            ArrayList<model.Diagnosis> diagnosisList
-			) {
-		MedicalRecord mr = new MedicalRecord(
-				generateRecordID(RecordFileType.MEDICAL_RECORDS),
-				createdDate,
-				updatedDate,
-				recordStatus,
-				patientID,
-				doctorID,
-				bloodType,
-				diagnosisList
-				);
+	public void addMedicalRecord(MedicalRecord mr) {
 		RecordsRepository.MEDICAL_RECORDS.put(mr.getRecordID(), mr);
 		
 		

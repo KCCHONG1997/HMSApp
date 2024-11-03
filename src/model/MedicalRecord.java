@@ -3,6 +3,9 @@ package model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import controller.RecordsController;
+import repository.RecordFileType;
+
 public class MedicalRecord extends HMSRecords {
 
     private String patientID;
