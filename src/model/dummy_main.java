@@ -1,101 +1,89 @@
 package model;
+
 import repository.*;
+import view.HMSAppUI;
+import model.*;
+import enums.PrescriptionStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import static repository.DiagnosisRepository.*;
-import static repository.RecordsRepository.*;
 
 public class dummy_main {
     public static void main(String[] args) {
-//        System.out.println("hello");
-//        PersonnelRepository.loadAllPersonnelFiles();
-//        Doctor doctorA = PersonnelRepository.DOCTORS.get("D001");
-//        //RecordsRepository.loadAllRecordFiles();
-//        //RecordsRepository.
-//        System.out.println(doctorA.getUID());
+    	
+    	HMSAppUI hms = new HMSAppUI();
+    	hms.startTesting();
+    	
+        System.out.println("---- Starting Medical Record Repository Test ----\n");
 
+        // 1. Initialize related entities for a MedicalRecord
+        System.out.println("Creating related entities for MedicalRecord...");
 
+        // Create a sample Treatment Plan
+        TreatmentPlans treatmentPlan = new TreatmentPlans("D1", LocalDateTime.now(), "Rest and medication");
+        TreatmentPlansRepository.diagnosisToTreatmentPlansMap.put("D1", treatmentPlan);
+        TreatmentPlansRepository.saveTreatmentPlansToCSV("treatment_plans_records.csv", TreatmentPlansRepository.diagnosisToTreatmentPlansMap);
 
-//
-//
-//    public Patient(String UID, String fullName, String idCard, String username, String email, String phoneNo,
-//                String passwordHash, LocalDateTime DoB, String gender, String role,
-//                String insuranceInfo, String allergies, LocalDateTime dateOfAdmission) {
-//            super(UID, fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, role);
-//
-//
-//            this.insuranceInfo = insuranceInfo;
-//            this.allergies = allergies;
-//            this.dateOfAdmission = dateOfAdmission;
-//        }
+        // Create a sample Prescribed Medication
+        PrescribedMedication medication1 = new PrescribedMedication("D1", "M1", "100mg", 10, PrescriptionStatus.DISPENSED, "Take once daily");
+        ArrayList<PrescribedMedication> medicationsList = new ArrayList<>();
+        medicationsList.add(medication1);
+        PrescribedMedicationRepository.diagnosisToMedicationsMap.put("D1", medicationsList);
+        PrescribedMedicationRepository.saveMedicationsToCSV("prescribed_medications.csv", PrescribedMedicationRepository.diagnosisToMedicationsMap);
 
+        // Create a sample Prescription using the medications
+        Prescription prescription = new Prescription("D1", LocalDateTime.now(), medicationsList);
+        PrescriptionRepository.prescriptionMap.put("D1", prescription);
+        PrescriptionRepository.savePrescriptionsToCSV("prescriptions_records.csv", PrescriptionRepository.prescriptionMap);
 
-//            public MedicalRecord(String recordID,
-//                LocalDateTime createdDate, LocalDateTime updatedDate,
-//                RecordStatusType recordStatus,String patientID,String doctorID,
-//                String bloodType,ArrayList<model.DiagnosisRecord> diagnosis) {
-//            super(recordID, createdDate, updatedDate, recordStatus);
-//            this.patientID = patientID;
-//            this.doctorID = doctorID;
-//            this.bloodType = bloodType;
-//            this.Diagnosis= diagnosis;
-//
-//        }
+        // Create a Diagnosis with the Prescription and Treatment Plan
+        Diagnosis diagnosis = new Diagnosis("P1", "D1", "DOCTOR1", LocalDateTime.now(), treatmentPlan, "Flu symptoms", prescription);
+        ArrayList<Diagnosis> diagnosisList = new ArrayList<>();
+        diagnosisList.add(diagnosis);
+        DiagnosisRepository.patientDiagnosisRecords.put("P1", diagnosisList);
+        DiagnosisRepository.saveDiagnosisRecordsToCSV("diagnosis_records.csv", DiagnosisRepository.patientDiagnosisRecords);
 
+        System.out.println("Related entities created and saved.\n");
 
-//            public TreatmentPlans(String diagnosisID, LocalDateTime treatmentDate, String treatmentDescription) {
-//            this.diagnosisID = diagnosisID;
-//            this.treatmentDate = treatmentDate;
-//            this.treatmentDescription = treatmentDescription;
-//        }
+        // 2. Create a MedicalRecord and save it to RecordsRepository
+        System.out.println("Creating and saving MedicalRecord...");
+        MedicalRecord medicalRecord = new MedicalRecord(
+            "MR1", 
+            LocalDateTime.now(), 
+            LocalDateTime.now(), 
+            RecordStatusType.ACTIVE, 
+            "P1", 
+            "D1", 
+            "O+", 
+            diagnosisList
+        );
+        RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
+        RecordsRepository.saveAllRecordFiles();
 
-        //testing
-//        Patient patientA = new Patient(
-//                "P001", "ck","M22222W","ckhng",
-//                "hngbob77@gmail.com","+658888888","1234567",LocalDateTime.now(),
-//                "male","cooker","noInsurance","noAllergies", LocalDateTime.now());
-//
+        System.out.println("MedicalRecord created and saved.\n");
 
+        // 3. Clear data from repositories to simulate a fresh load
+        System.out.println("Clearing repository data to test loading...");
+        RecordsRepository.MEDICAL_RECORDS.clear();
+        DiagnosisRepository.patientDiagnosisRecords.clear();
+        PrescriptionRepository.prescriptionMap.clear();
+        PrescribedMedicationRepository.diagnosisToMedicationsMap.clear();
+        TreatmentPlansRepository.diagnosisToTreatmentPlansMap.clear();
 
-//
-//        TreatmentPlans treatmentPlansA = new TreatmentPlans("DIAG001",LocalDateTime.now(),"MRI Scan");
-//        TreatmentPlans treatmentPlansB = new TreatmentPlans("DIAG002",LocalDateTime.now(),"cook it");
-//        DiagnosisRecord diagnosisRecordA = new DiagnosisRecord("P001","DIAG003",LocalDateTime.now(),
-//                treatmentPlansA,"too hot");
-//        DiagnosisRecord diagnosisRecordB = new DiagnosisRecord("P001","DIAG002",LocalDateTime.now(),
-//                treatmentPlansA,"too siao");
-//
-//
-//        ArrayList<DiagnosisRecord> diagnosisRecordsA = new ArrayList<>();
-//        diagnosisRecordsA.add(diagnosisRecordA);
-//        diagnosisRecordsA.add(diagnosisRecordB);
-//
-//
-//        MedicalRecord medicalRecord = new MedicalRecord(
-//                "MR002", LocalDateTime.now(), LocalDateTime.now(),
-//                RecordStatusType.ACTIVE, "P001", "D001", "TypeO",diagnosisRecordsA
-//        );
-////        public static HashMap<String, MedicalRecord> MEDICAL_RECORDS = new HashMap<>();
-//        MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
-//        saveAllRecordFiles();
+        // 4. Reload data from CSV files to verify persistence
+        System.out.println("Loading data from CSV files...");
+        Repository.loadRepository(new RecordsRepository());
+        Repository.loadRepository(new DiagnosisRepository());
+        Repository.loadRepository(new PrescriptionRepository());
+        Repository.loadRepository(new PrescribedMedicationRepository());
+        Repository.loadRepository(new TreatmentPlansRepository());
 
+        // 5. Display loaded MedicalRecord to verify
+        System.out.println("\nLoaded Medical Records:");
+        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+            System.out.println(" - " + record);
+        }
 
-        //HashMap<String, ArrayList<DiagnosisRecord>> patientDiagnosisRecords = new HashMap<>();
-//        patientDiagnosisRecords.put("P002",diagnosisRecordsA);
-//        saveDiagnosisRecordsToCSV("diagnosis_records.csv", patientDiagnosisRecords);
-        DiagnosisRepository.loadDiagnosisRecordsFromCSV("diagnosis_records.csv", patientDiagnosisRecords);
-        loadAllRecordFiles();
-        MedicalRecord medicalRecord1 =  MEDICAL_RECORDS.get("MR002");
-        System.out.println(medicalRecord1.getDiagnosis().getFirst().getDiagnosisID());
-
-
-
-
-
-
-
+        System.out.println("\n---- Medical Record Repository Test Complete ----");
     }
 }
