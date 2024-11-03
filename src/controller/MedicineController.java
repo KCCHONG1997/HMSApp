@@ -95,6 +95,7 @@ public class MedicineController {
             System.out.println("Inventory Stock: " + medicine.getInventoryStock());
             System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
             System.out.println("Replenish Status: " + medicine.getReplenishStatus());
+            System.out.println("Replenishment Request Date: " + medicine.getReplenishRequestDate());
             System.out.println("Approved Date: " + medicine.getApprovedDate());
         }
     }
