@@ -9,21 +9,33 @@ import model.Diagnosis;
 import model.Prescription;
 import model.TreatmentPlans;
 
-
-
-public class DiagnosisRepository {
+public class DiagnosisRepository extends Repository {
     private static final String folder = "data";
+    private static final String fileName = "diagnosis_records.csv";
+    private static boolean isRepoLoaded = false;
 
-    // Static data collection for Diagnosis records only  (key = patientID)
+    // Static data collection for Diagnosis records (key = patientID)
     public static HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords = new HashMap<>();
+
     /**
-     * Save Diagnosis records map to a CSV file
+     * Specific loading logic for Diagnosis records.
+     *
+     * @return boolean indicating success or failure of the load operation
      */
-    
-    private boolean checkDuplicateID(String id) {
-    	return patientDiagnosisRecords.get(id) != null;
-    	
+    @Override
+    public boolean loadFromCSV() {
+        try {
+            if (PrescriptionRepository.isRepoLoad()) {
+                loadDiagnosisRecordsFromCSV(fileName, patientDiagnosisRecords);
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading diagnosis repository: " + e.getMessage());
+        }
+        return false;
     }
+
+    // Save and load methods, and any other methods in DiagnosisRepository
     public static void saveDiagnosisRecordsToCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
@@ -46,7 +58,6 @@ public class DiagnosisRepository {
         }
     }
 
-    // Convert a DiagnosisRecord object to a CSV line
     private static String diagnosisToCSV(Diagnosis record) {
         return String.join(",",
                 record.getPatientID(),                    // Patient ID
@@ -57,16 +68,14 @@ public class DiagnosisRepository {
         );
     }
 
-    /**
-     * Load Diagnosis records from a CSV file, or create an empty file if it doesn't exist
-     */
     public static void loadDiagnosisRecordsFromCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
-        // Ensure the directory exists
+
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
             directory.mkdirs();  // Create the directory if it doesn't exist
         }
+
         File file = new File(filePath);
 
         if (!file.exists()) {
@@ -99,34 +108,21 @@ public class DiagnosisRepository {
         patientDiagnosisRecords.put(patientID, diagnoses);
     }
 
-    // Convert a CSV line to a DiagnosisRecord object
     private static Diagnosis csvToDiagnosisRecord(String csv) {
-        // Split by comma, ignoring commas within quotes
         String[] fields = csv.split(",");
         try {
             String patientID = fields[0];
             String diagnosisID = fields[1];
-            LocalDateTime diagnosisDate = LocalDateTime.parse(fields[2]);
+            String doctorID = fields[2];
+            LocalDateTime diagnosisDate = LocalDateTime.parse(fields[3]);
             TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
-            
-            // Remove leading and trailing quotes from Diagnosis Description if present
-            String diagnosisDescription = fields[4].replace("\"", "");
-
+            String diagnosisDescription = fields[5].replace("\"", "");
             Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[1]);
 
-            return new Diagnosis(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription,prescription);
+            return new Diagnosis(patientID, diagnosisID, doctorID, diagnosisDate, treatmentPlan, diagnosisDescription, prescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
         }
         return null;
-    }
-
-    /**
-     * Clear all diagnosis record data and save empty files
-     */
-    public static boolean clearDiagnosisRecordDatabase() {
-        patientDiagnosisRecords.clear();
-        saveDiagnosisRecordsToCSV("diagnosis_records.csv", patientDiagnosisRecords);
-        return true;
     }
 }

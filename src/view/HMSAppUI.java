@@ -2,6 +2,14 @@ package view;
 
 import java.util.Scanner;
 
+import repository.DiagnosisRepository;
+import repository.PersonnelRepository;
+import repository.PrescribedMedicationRepository;
+import repository.PrescriptionRepository;
+import repository.RecordsRepository;
+import repository.Repository;
+import repository.TreatmentPlansRepository;
+
 public class HMSAppUI extends MainUI{
 	
 	// The centralized UI
@@ -19,6 +27,7 @@ public class HMSAppUI extends MainUI{
 	
 	@Override
 	public void start() {
+		loadHMSRepository();
 		Scanner sc = new Scanner(System.in);
 		
         while (true) {
@@ -41,4 +50,17 @@ public class HMSAppUI extends MainUI{
             }	
         }
 	}	
+	
+	public void startTesting() {
+		loadHMSRepository();
+	}	
+	
+	public void loadHMSRepository() {
+		PersonnelRepository.loadAllPersonnelFiles();
+        Repository.loadRepository(new RecordsRepository());
+        Repository.loadRepository(new DiagnosisRepository());
+        Repository.loadRepository(new PrescriptionRepository());
+        Repository.loadRepository(new PrescribedMedicationRepository());
+        Repository.loadRepository(new TreatmentPlansRepository());
+	}
 }

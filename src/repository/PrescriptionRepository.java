@@ -1,18 +1,35 @@
 package repository;
 
+import model.Prescription;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.Prescription;
-
-
-public class PrescriptionRepository {
+public class PrescriptionRepository extends Repository {
     private static final String folder = "data";
-
-    // Static data collection for Prescription records  //key : diagnosis ID
+    private static final String fileName = "prescriptions_records.csv";
+    private static boolean isRepoLoaded = false;
+    
+    // Static data collection for Prescription records (key: diagnosis ID)
     public static HashMap<String, Prescription> prescriptionMap = new HashMap<>();
+
+    /**
+     * Specific loading logic for Prescription records from CSV.
+     *
+     * @return boolean indicating success or failure of the load operation
+     */
+    @Override
+    public boolean loadFromCSV() {
+        try {
+            loadPrescriptionsFromCSV(fileName, prescriptionMap);
+            isRepoLoaded = true;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error loading prescription repository: " + e.getMessage());
+            return false;
+        }
+    }
 
     /**
      * Save Prescription records map to a CSV file
@@ -44,14 +61,9 @@ public class PrescriptionRepository {
     private static String prescriptionToCSV(String diagnosisID, Prescription prescription) {
         return String.join(",",
                 prescription.getDiagnosisID(),                 // Diagnosis ID
-                prescription.getPrescriptionDate().toString()           // Prescription date
+                prescription.getPrescriptionDate().toString()  // Prescription date
         );
     }
-
-    public static void loadPrescriptionDB(){
-        loadPrescriptionsFromCSV("prescriptions_records.csv",  prescriptionMap);
-    }
-
 
     /**
      * Load prescriptions from a CSV file or create an empty file if it doesn't exist
@@ -92,21 +104,20 @@ public class PrescriptionRepository {
         }
     }
 
-    // Helper to extract Prescription ID from CSV line
+    // Helper to extract Diagnosis ID from CSV line
     private static String getDiagnosisIDFromCSV(String csv) {
         String[] fields = csv.split(",");
         return fields[0];
     }
-    // Convert a CSV line to a Prescription object
+
     // Convert a CSV line to a Prescription object
     private static Prescription csvToPrescription(String csv) {
         String[] fields = csv.split(",");
         try {
             return new Prescription(
-                    fields[0],                              // diagnosisID
-                    LocalDateTime.parse(fields[1]),         // Prescription date
-                    PrescribedMedicationRepository.diagnosisToMedicationsMap.getOrDefault(fields[2], new ArrayList<>())
-
+                    fields[0],                               // diagnosisID
+                    LocalDateTime.parse(fields[1]),          // Prescription date
+                    PrescribedMedicationRepository.diagnosisToMedicationsMap.getOrDefault(fields[0], new ArrayList<>())
             );
         } catch (Exception e) {
             System.out.println("Error parsing prescription data: " + e.getMessage());
@@ -115,11 +126,12 @@ public class PrescriptionRepository {
     }
 
     /**
-     * Clear all prescription data and save empty files
+     * Clear all prescription data and save an empty file
      */
     public static boolean clearPrescriptionDatabase() {
         prescriptionMap.clear();
-        savePrescriptionsToCSV("prescriptions_records.csv", prescriptionMap);
+        savePrescriptionsToCSV(fileName, prescriptionMap);
+        isRepoLoaded = false;
         return true;
     }
 }

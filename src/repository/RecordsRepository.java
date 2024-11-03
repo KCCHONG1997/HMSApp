@@ -1,30 +1,48 @@
 package repository;
 
+import model.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import model.*;
-import model.RecordStatusType;
 
-import static model.RecordStatusType.toEnumRecordStatusType;
-
-public class RecordsRepository {
+public class RecordsRepository extends Repository {
     private static final String folder = "data";
-    private static Boolean loadRepo = false;
-
+    private static final String medicalFileName = "medical_records.csv";
+    private static final String appointmentFileName = "appointment_records.csv";
+    private static final String paymentFileName = "payment_records.csv";
+    private static Boolean isRepoLoaded = false;
     // Static data collections for different record types
     public static HashMap<String, MedicalRecord> MEDICAL_RECORDS = new HashMap<>();
     public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS = new HashMap<>();
     public static HashMap<String, PaymentRecord> PAYMENT_RECORDS = new HashMap<>();
 
     /**
-     * Method to save all record files into CSV format
+     * Specific loading logic for all records from CSV files.
+     *
+     * @return boolean indicating success or failure of the load operation
+     */
+    @Override
+	public boolean loadFromCSV() {
+        try {
+            loadRecordsFromCSV(medicalFileName, MEDICAL_RECORDS, MedicalRecord.class);
+            loadRecordsFromCSV(appointmentFileName, APPOINTMENT_RECORDS, AppointmentRecord.class);
+            loadRecordsFromCSV(paymentFileName, PAYMENT_RECORDS, PaymentRecord.class);
+            isRepoLoaded = true;
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error loading records repository: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Save all record files into CSV format
      */
     public static void saveAllRecordFiles() {
-        saveRecordsToCSV("medical_records.csv", MEDICAL_RECORDS);
-//        saveRecordsToCSV("appointment_records.csv", APPOINTMENT_RECORDS);
-//        saveRecordsToCSV("payment_records.csv", PAYMENT_RECORDS);
+        saveRecordsToCSV(medicalFileName, MEDICAL_RECORDS);
+        saveRecordsToCSV(appointmentFileName, APPOINTMENT_RECORDS);
+        saveRecordsToCSV(paymentFileName, PAYMENT_RECORDS);
     }
 
     /**
@@ -44,6 +62,7 @@ public class RecordsRepository {
                 writer.write(recordToCSV(record));
                 writer.newLine();
             }
+            System.out.println("Records successfully saved to " + fileName);
         } catch (IOException e) {
             System.out.println("Error saving record data: " + e.getMessage());
         }
@@ -51,55 +70,39 @@ public class RecordsRepository {
 
     // Convert a record object to a CSV line
     private static String recordToCSV(HMSRecords record) {
-    if (record instanceof MedicalRecord) {
-        MedicalRecord medRecord = (MedicalRecord) record;
-        return String.join(",",
-            medRecord.getRecordID(),
-            medRecord.getCreatedDate().toString(),
-            medRecord.getUpdatedDate().toString(),
-            medRecord.getRecordStatus().toString(),
-            medRecord.getPatientID(),
-            medRecord.getDoctorID(),
-            medRecord.getBloodType()
-            //medRecord.getDiagnosis()
-        );
-    } else if (record instanceof AppointmentRecord) {
-        AppointmentRecord appRecord = (AppointmentRecord) record;
-        return String.join(",",
-            appRecord.getRecordID(),
-            appRecord.getCreatedDate().toString(),
-            appRecord.getUpdatedDate().toString(),
-            appRecord.getRecordStatus().toString(),
-            appRecord.getPatientID(),
-            appRecord.getAppointmentTime().toString()
-        );
-    } else if (record instanceof PaymentRecord) {
-        PaymentRecord payRecord = (PaymentRecord) record;
-        return String.join(",",
-            payRecord.getRecordID(),
-            payRecord.getCreatedDate().toString(),
-            payRecord.getUpdatedDate().toString(),
-            payRecord.getRecordStatus().toString(),
-            payRecord.getPatientID(),
-            String.valueOf(payRecord.getPaymentAmount())      // Payment Amount
-        );
-    }
-    return "";
-}
-
-
-    /**
-     * Load all record files from CSV format, or create them if they don't exist
-     */
-    public static void loadAllRecordFiles() {
-    	if (!loadRepo)
-        loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
-//        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
-//        loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS, PaymentRecord.class);
-    }
-    
-    public static Boolean isRepoLoad() {
-    	return RecordsRepository.loadRepo;
+        if (record instanceof MedicalRecord) {
+            MedicalRecord medRecord = (MedicalRecord) record;
+            return String.join(",",
+                medRecord.getRecordID(),
+                medRecord.getCreatedDate().toString(),
+                medRecord.getUpdatedDate().toString(),
+                medRecord.getRecordStatus().toString(),
+                medRecord.getPatientID(),
+                medRecord.getDoctorID(),
+                medRecord.getBloodType()
+            );
+        } else if (record instanceof AppointmentRecord) {
+            AppointmentRecord appRecord = (AppointmentRecord) record;
+            return String.join(",",
+                appRecord.getRecordID(),
+                appRecord.getCreatedDate().toString(),
+                appRecord.getUpdatedDate().toString(),
+                appRecord.getRecordStatus().toString(),
+                appRecord.getPatientID(),
+                appRecord.getAppointmentTime().toString()
+            );
+        } else if (record instanceof PaymentRecord) {
+            PaymentRecord payRecord = (PaymentRecord) record;
+            return String.join(",",
+                payRecord.getRecordID(),
+                payRecord.getCreatedDate().toString(),
+                payRecord.getUpdatedDate().toString(),
+                payRecord.getRecordStatus().toString(),
+                payRecord.getPatientID(),
+                String.valueOf(payRecord.getPaymentAmount())
+            );
+        }
+        return "";
     }
 
     /**
@@ -147,51 +150,32 @@ public class RecordsRepository {
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
-//                        medRecord.getRecordID(),
-//                        medRecord.getCreatedDate().toString(),
-//                        medRecord.getUpdatedDate().toString(),
-//                        medRecord.getRecordStatus().toString(),
-//                        medRecord.getPatientID(),
-//                        medRecord.getDoctorID(),
-//                        medRecord.getBloodType()
-                    fields[0],                                       // recordID (MRID)
-                    LocalDateTime.parse(fields[1]),                  // createdDate
-                    LocalDateTime.parse(fields[2]),                  // updatedDate
-                    toEnumRecordStatusType(fields[3]),             // recordStatus
-                    fields[4],                                       // patientID
-                    fields[5],                                       // doctorID
-                    fields[6],                                       // blood type
-                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[4], new ArrayList<>())                               // bloodType
+                    fields[0],                                        // recordID
+                    LocalDateTime.parse(fields[1]),                   // createdDate
+                    LocalDateTime.parse(fields[2]),                   // updatedDate
+                    RecordStatusType.valueOf(fields[3]),              // recordStatus
+                    fields[4],                                        // patientID
+                    fields[5],                                        // doctorID
+                    fields[6],                                        // bloodType
+                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[4], new ArrayList<>())
                 ));
             } else if (type == AppointmentRecord.class) {
                 return type.cast(new AppointmentRecord(
-//                        appRecord.getRecordID(),
-//                        appRecord.getCreatedDate().toString(),
-//                        appRecord.getUpdatedDate().toString(),
-//                        appRecord.getRecordStatus().toString(),
-//                        appRecord.getPatientID(),
-//                        appRecord.getAppointmentTime().toString()
-                    fields[0],                                       // recordID
-                    LocalDateTime.parse(fields[1]),                  // createdDate
-                    LocalDateTime.parse(fields[2]),                  // updatedDate
-                    RecordStatusType.valueOf(fields[3]),             // recordStatus
-                    fields[4],                                       // patientID
-                    LocalDateTime.parse(fields[5])                   // appointmentTime
+                    fields[0],                                        // recordID
+                    LocalDateTime.parse(fields[1]),                   // createdDate
+                    LocalDateTime.parse(fields[2]),                   // updatedDate
+                    RecordStatusType.valueOf(fields[3]),              // recordStatus
+                    fields[4],                                        // patientID
+                    LocalDateTime.parse(fields[5])                    // appointmentTime
                 ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
-//                        payRecord.getRecordID(),
-//                        payRecord.getCreatedDate().toString(),
-//                        payRecord.getUpdatedDate().toString(),
-//                        payRecord.getRecordStatus().toString(),
-//                        payRecord.getPatientID(),
-//                        String.valueOf(payRecord.getPaymentAmount())      // Payment Amount
-                    fields[0],                                       // recordID
-                    LocalDateTime.parse(fields[1]),                  // createdDate
-                    LocalDateTime.parse(fields[2]),                  // updatedDate
-                    RecordStatusType.valueOf(fields[3]),             // recordStatus
-                    fields[4],                                       // patientID
-                    Double.parseDouble(fields[5])                    // paymentAmount
+                    fields[0],                                        // recordID
+                    LocalDateTime.parse(fields[1]),                   // createdDate
+                    LocalDateTime.parse(fields[2]),                   // updatedDate
+                    RecordStatusType.valueOf(fields[3]),              // recordStatus
+                    fields[4],                                        // patientID
+                    Double.parseDouble(fields[5])                     // paymentAmount
                 ));
             }
         } catch (Exception e) {
@@ -201,7 +185,6 @@ public class RecordsRepository {
         return null;
     }
 
-
     /**
      * Clear all record data and save empty files
      */
@@ -210,6 +193,7 @@ public class RecordsRepository {
         APPOINTMENT_RECORDS.clear();
         PAYMENT_RECORDS.clear();
         saveAllRecordFiles();
+        isRepoLoaded = false;
         return true;
     }
 }
