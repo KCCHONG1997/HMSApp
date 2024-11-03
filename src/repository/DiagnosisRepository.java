@@ -62,6 +62,7 @@ public class DiagnosisRepository extends Repository {
         return String.join(",",
                 record.getPatientID(),                    // Patient ID
                 record.getDiagnosisID(),                  // Diagnosis ID
+                record.getDoctorID(),
                 record.getDiagnosisDate().toString(),     // Diagnosis date
                 record.getTreatmentPlans().toString(),    // Treatment plans
                 "\"" + record.getDiagnosisDescription() + "\""         // Diagnosis description

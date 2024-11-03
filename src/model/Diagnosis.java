@@ -16,7 +16,7 @@ public class Diagnosis {
     public Diagnosis(String patientID, String diagnosisID, String doctorID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription, Prescription prescription) {
         this.patientID = patientID;
         this.diagnosisID = diagnosisID;
-        this.setDoctorID(doctorID);
+        this.doctorID = doctorID;
         this.diagnosisDate = diagnosisDate;
         TreatmentPlans = treatmentPlans;
         this.diagnosisDescription = diagnosisDescription;

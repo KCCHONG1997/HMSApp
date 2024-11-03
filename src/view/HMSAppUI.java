@@ -58,9 +58,9 @@ public class HMSAppUI extends MainUI{
 	public void loadHMSRepository() {
 		PersonnelRepository.loadAllPersonnelFiles();
         Repository.loadRepository(new RecordsRepository());
-        Repository.loadRepository(new DiagnosisRepository());
-        Repository.loadRepository(new PrescriptionRepository());
         Repository.loadRepository(new PrescribedMedicationRepository());
         Repository.loadRepository(new TreatmentPlansRepository());
+        Repository.loadRepository(new PrescriptionRepository());
+        Repository.loadRepository(new DiagnosisRepository());
 	}
 }
