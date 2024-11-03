@@ -92,6 +92,12 @@ public class PersonnelRepository {
             csvBuilder.append(pharmacist.getPharmacistLicenseNumber()).append(",")
                       .append(pharmacist.getDateOfEmployment().toString());
         }
+        
+        else if (personnel instanceof Admin) {
+            Admin admin = (Admin) personnel;
+            csvBuilder.append(admin.getDateOfCreation().toString());
+                      
+        }
 
         return csvBuilder.toString();
     }

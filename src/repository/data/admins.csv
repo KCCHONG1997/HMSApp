@@ -1,1 +1,5 @@
-UIDA001,ADMIN1,IDA001,admin,admin.johnson@example.com,1234567890,hashedPasswordABC,1980-02-20T00:00,Female,Admin,,,,
+U0001,Admin,Admin1,admin1,admin1@gmail.com,123456,default,2022-07-08T00:00,Male,Admin,2022-07-08T00:00
+U0002,Admin,Admin2,admin2,admin1@gmail.com,123456,default,2020-09-09T09:00,Male,Admin,2020-09-09T09:00
+U0003,Admin,Admin2,admin2,admin1@gmail.com,123456,default,2020-09-09T09:00,Male,Admin,2020-09-09T09:00
+U0004,Admin,Admin2,admin2,admin1@gmail.com,123456,default,2020-09-09T09:00,Male,Admin,2020-09-09T09:00
+U0005,Admin,Admin2,admin2,admin1@gmail.com,123456,default,2020-09-09T09:00,Male,Admin,2020-09-09T09:00

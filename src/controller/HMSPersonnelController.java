@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import model.*;
 import repository.*;
@@ -170,6 +171,16 @@ public class HMSPersonnelController {
     }
     
     public static void main(String[] args) {
-    	listAllPersonnel(PersonnelFileType.DOCTORS);
+    	PersonnelRepository.loadAllPersonnelFiles();
+    	LocalDateTime DoB = AdminController.readDate();
+    	LocalDateTime dateOfCreation = DoB;
+    	Admin admin = new Admin("U0005", "Admin", "Admin2", "admin2", "admin1@gmail.com", "123456",
+                "default", DoB, "Male", "Admin", dateOfCreation);
+    	addPersonnel(admin);
+    	Admin a = (Admin) getPersonnelByUID("U0002", PersonnelFileType.ADMINS);
+    	Admin b = (Admin) getPersonnelByUID("U0005", PersonnelFileType.ADMINS);
+    	System.out.println(a.getFullName());
+    	System.out.println(b.getFullName());
+    	
     }
 }
