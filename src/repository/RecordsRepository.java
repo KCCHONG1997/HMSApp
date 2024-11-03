@@ -153,7 +153,7 @@ public class RecordsRepository extends Repository {
                     fields[0],                                        // recordID
                     LocalDateTime.parse(fields[1]),                   // createdDate
                     LocalDateTime.parse(fields[2]),                   // updatedDate
-                    RecordStatusType.valueOf(fields[3]),              // recordStatus
+                    RecordStatusType.toEnumRecordStatusType(fields[3]),              // recordStatus
                     fields[4],                                        // patientID
                     fields[5],                                        // doctorID
                     fields[6],                                        // bloodType
@@ -164,7 +164,7 @@ public class RecordsRepository extends Repository {
                     fields[0],                                        // recordID
                     LocalDateTime.parse(fields[1]),                   // createdDate
                     LocalDateTime.parse(fields[2]),                   // updatedDate
-                    RecordStatusType.valueOf(fields[3]),              // recordStatus
+                    RecordStatusType.toEnumRecordStatusType(fields[3]),              // recordStatus
                     fields[4],                                        // patientID
                     LocalDateTime.parse(fields[5])                    // appointmentTime
                 ));
@@ -173,7 +173,7 @@ public class RecordsRepository extends Repository {
                     fields[0],                                        // recordID
                     LocalDateTime.parse(fields[1]),                   // createdDate
                     LocalDateTime.parse(fields[2]),                   // updatedDate
-                    RecordStatusType.valueOf(fields[3]),              // recordStatus
+                    RecordStatusType.toEnumRecordStatusType(fields[3]),              // recordStatus
                     fields[4],                                        // patientID
                     Double.parseDouble(fields[5])                     // paymentAmount
                 ));
