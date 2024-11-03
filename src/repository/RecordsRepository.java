@@ -156,7 +156,7 @@ public class RecordsRepository {
 //                        medRecord.getPatientID(),
 //                        medRecord.getDoctorID(),
 //                        medRecord.getBloodType()
-                    fields[0],                                       // recordID (MRID)
+                    //fields[0],                                       // recordID (MRID)
                     LocalDateTime.parse(fields[1]),                  // createdDate
                     LocalDateTime.parse(fields[2]),                  // updatedDate
                     toEnumRecordStatusType(fields[3]),             // recordStatus
@@ -167,48 +167,48 @@ public class RecordsRepository {
                 ));
             } else if (type == AppointmentRecord.class) {
                 // Parse fields[10] into parts for AppointmentOutcomeRecord
-                String[] outcomeFields = fields[10].split(";");  // Assuming ";" as delimiter for `typeOfService`, `prescription`, `consultationNotes`
-                
-                // Create AppointmentOutcomeRecord using parsed data
-                AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord();
-                if (outcomeFields.length >= 3) {  // Ensure we have enough fields for typeOfService, prescription, consultationNotes
-                    outcomeRecord.setTypeOfService(outcomeFields[0]);            // Set typeOfService
-                    outcomeRecord.setPrescription(new Prescription(outcomeFields[1])); // Create Prescription from string
-                    outcomeRecord.setConsultationNotes(outcomeFields[2]);        // Set consultationNotes
-                }
-              
-                
-                return type.cast(new AppointmentRecord(
-//                        appRecord.getRecordID(),
-//                        appRecord.getCreatedDate().toString(),
-//                        appRecord.getUpdatedDate().toString(),
-//                        appRecord.getRecordStatus().toString(),
-//                        appRecord.getPatientID(),
-//                        appRecord.getAppointmentTime().toString()                    
-                    LocalDateTime.parse(fields[1]),                  // createdDate
-                    LocalDateTime.parse(fields[2]),                  // updatedDate
-                    RecordStatusType.valueOf(fields[3]),             // recordStatus
-                    fields[4],                                       // patientID
-                    LocalDateTime.parse(fields[5]),                   // appointmentTime
-                    fields[8],                                       // location
-                    AppointmentStatus.valueOf(fields[9]),            // appointmentStatus
-                    outcomeRecord                                    // appointmentOutcomeRecord
-                ));
+//                String[] outcomeFields = fields[10].split(";");  // Assuming ";" as delimiter for `typeOfService`, `prescription`, `consultationNotes`
+//                
+//                // Create AppointmentOutcomeRecord using parsed data
+//                AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord();
+//                if (outcomeFields.length >= 3) {  // Ensure we have enough fields for typeOfService, prescription, consultationNotes
+//                    outcomeRecord.setTypeOfService(outcomeFields[0]);            // Set typeOfService
+//                    outcomeRecord.setPrescription(new Prescription(outcomeFields[1])); // Create Prescription from string
+//                    outcomeRecord.setConsultationNotes(outcomeFields[2]);        // Set consultationNotes
+//                }
+//              
+//                
+//                return type.cast(new AppointmentRecord(
+////                        appRecord.getRecordID(),
+////                        appRecord.getCreatedDate().toString(),
+////                        appRecord.getUpdatedDate().toString(),
+////                        appRecord.getRecordStatus().toString(),
+////                        appRecord.getPatientID(),
+////                        appRecord.getAppointmentTime().toString()                    
+//                    LocalDateTime.parse(fields[1]),                  // createdDate
+//                    LocalDateTime.parse(fields[2]),                  // updatedDate
+//                    RecordStatusType.valueOf(fields[3]),             // recordStatus
+//                    fields[4],                                       // patientID
+//                    LocalDateTime.parse(fields[5]),                   // appointmentTime
+//                    fields[8],                                       // location
+//                    AppointmentStatus.valueOf(fields[9]),            // appointmentStatus
+//                    outcomeRecord                                    // appointmentOutcomeRecord
+//                ));
             } else if (type == PaymentRecord.class) {
-                return type.cast(new PaymentRecord(
-//                        payRecord.getRecordID(),
-//                        payRecord.getCreatedDate().toString(),
-//                        payRecord.getUpdatedDate().toString(),
-//                        payRecord.getRecordStatus().toString(),
-//                        payRecord.getPatientID(),
-//                        String.valueOf(payRecord.getPaymentAmount())      // Payment Amount
-                    fields[0],                                       // recordID
-                    LocalDateTime.parse(fields[1]),                  // createdDate
-                    LocalDateTime.parse(fields[2]),                  // updatedDate
-                    RecordStatusType.valueOf(fields[3]),             // recordStatus
-                    fields[4],                                       // patientID
-                    Double.parseDouble(fields[5])                    // paymentAmount
-                ));
+//                return type.cast(new PaymentRecord(
+////                        payRecord.getRecordID(),
+////                        payRecord.getCreatedDate().toString(),
+////                        payRecord.getUpdatedDate().toString(),
+////                        payRecord.getRecordStatus().toString(),
+////                        payRecord.getPatientID(),
+////                        String.valueOf(payRecord.getPaymentAmount())      // Payment Amount
+//                    fields[0],                                       // recordID
+//                    LocalDateTime.parse(fields[1]),                  // createdDate
+//                    LocalDateTime.parse(fields[2]),                  // updatedDate
+//                    RecordStatusType.valueOf(fields[3]),             // recordStatus
+//                    fields[4],                                       // patientID
+//                    Double.parseDouble(fields[5])                    // paymentAmount
+//                ));
             }
         } catch (Exception e) {
             System.out.println("Error parsing record data: " + e.getMessage());

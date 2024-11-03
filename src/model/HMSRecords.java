@@ -12,8 +12,9 @@ public abstract class HMSRecords {
     private RecordStatusType recordStatus;
 
     public HMSRecords(LocalDateTime createdDate, LocalDateTime updatedDate, RecordStatusType recordStatus) {
-        RecordsController rc = new RecordsController();
-    	this.recordID = rc.generateRecordID(RecordFileType.MEDICAL_RECORDS);
+        
+//    	this.recordID = rc.generateRecordID(RecordFileType.MEDICAL_RECORDS);
+        this.recordID = null;
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.recordStatus = recordStatus;

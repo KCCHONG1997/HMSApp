@@ -6,11 +6,28 @@ import java.util.ArrayList;
 public class MedicalRecord extends HMSRecords {
     private String bloodType;
     private ArrayList <DiagnosisRecord> Diagnosis;
-
-
     private String patientID;
     private String doctorID;
 
+    public MedicalRecord
+    (
+		LocalDateTime createdDate, 
+		LocalDateTime updatedDate,
+		RecordStatusType recordStatus,
+		String patientID,
+		String doctorID,
+		String bloodType,
+		ArrayList<model.DiagnosisRecord> diagnosis
+		) 
+    {
+    	super(createdDate, updatedDate, recordStatus);
+    	
+		this.patientID = patientID;
+		this.doctorID = doctorID;
+		this.bloodType = bloodType;
+		this.Diagnosis= diagnosis;
+		
+		}
 
 
     public String getBloodType() {
@@ -46,17 +63,7 @@ public class MedicalRecord extends HMSRecords {
 
 
 
-    public MedicalRecord(String recordID,
-                         LocalDateTime createdDate, LocalDateTime updatedDate,
-                         RecordStatusType recordStatus,String patientID,String doctorID,
-                         String bloodType,ArrayList<model.DiagnosisRecord> diagnosis) {
-        super(recordID, createdDate, updatedDate, recordStatus);
-        this.patientID = patientID;
-        this.doctorID = doctorID;
-        this.bloodType = bloodType;
-        this.Diagnosis= diagnosis;
 
-    }
 
 
 }
