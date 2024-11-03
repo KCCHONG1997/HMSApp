@@ -6,15 +6,17 @@ import java.time.LocalDateTime;
 public class Diagnosis {
     private String patientID;
     private String diagnosisID;
+    private String doctorID;
     private LocalDateTime diagnosisDate;
     private TreatmentPlans TreatmentPlans;
     private String diagnosisDescription;
     private Prescription prescription;
 
 
-    public Diagnosis(String patientID, String diagnosisID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription, Prescription prescription) {
+    public Diagnosis(String patientID, String diagnosisID, String doctorID, LocalDateTime diagnosisDate, model.TreatmentPlans treatmentPlans, String diagnosisDescription, Prescription prescription) {
         this.patientID = patientID;
         this.diagnosisID = diagnosisID;
+        this.setDoctorID(doctorID);
         this.diagnosisDate = diagnosisDate;
         TreatmentPlans = treatmentPlans;
         this.diagnosisDescription = diagnosisDescription;
@@ -70,5 +72,17 @@ public class Diagnosis {
     public void setPrescription(Prescription prescription) {
         this.prescription = prescription;
     }
+
+
+
+	public String getDoctorID() {
+		return doctorID;
+	}
+
+
+
+	public void setDoctorID(String doctorID) {
+		this.doctorID = doctorID;
+	}
 
 }
