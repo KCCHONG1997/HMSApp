@@ -12,6 +12,19 @@ public class MedicalRecord extends HMSRecords {
     private String doctorID;
     private String bloodType;
     private ArrayList <Diagnosis> Diagnosis;
+    
+    public MedicalRecord(
+            LocalDateTime createdDate, LocalDateTime updatedDate,
+            RecordStatusType recordStatus,String patientID,String doctorID,
+            String bloodType,ArrayList<model.Diagnosis> diagnosis) {
+    	
+			super(RecordsController.generateRecordID(RecordFileType.MEDICAL_RECORDS), createdDate, updatedDate, recordStatus);
+			this.patientID = patientID;
+			this.doctorID = doctorID;
+			this.bloodType = bloodType;
+			this.Diagnosis= diagnosis;
+
+    }
 
     public String getPatientID() {
         return patientID;
@@ -46,17 +59,7 @@ public class MedicalRecord extends HMSRecords {
     }
 
 
-    public MedicalRecord(String recordID,
-                         LocalDateTime createdDate, LocalDateTime updatedDate,
-                         RecordStatusType recordStatus,String patientID,String doctorID,
-                         String bloodType,ArrayList<model.Diagnosis> diagnosis) {
-        super(recordID, createdDate, updatedDate, recordStatus);
-        this.patientID = patientID;
-        this.doctorID = doctorID;
-        this.bloodType = bloodType;
-        this.Diagnosis= diagnosis;
 
-    }
 
 
 }
