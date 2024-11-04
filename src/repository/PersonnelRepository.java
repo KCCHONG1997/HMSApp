@@ -60,37 +60,58 @@ public class PersonnelRepository extends Repository{
 
     // Convert personnel object to a CSV line
     private static String personnelToCSV(HMSPersonnel personnel) {
-        return String.join(",",
-            personnel.getUID(),
-            personnel.getFullName(),
-            personnel.getIdCard(),
-            personnel.getUsername(),
-            personnel.getEmail(),
-            personnel.getPhoneNo(),
-            personnel.getPasswordHash(),
-            personnel.getDoB().toString(),
-            personnel.getGender(),
-            personnel.getRole(),
-            
-            // Doctor-specific fields
-            personnel instanceof Doctor ? ((Doctor) personnel).getSpecialty() : "",
-            personnel instanceof Doctor ? ((Doctor) personnel).getMedicalLicenseNumber() : "",
-            personnel instanceof Doctor ? ((Doctor) personnel).getDateJoin().toString() : "",
-            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : "",
-            
-            // Patient-specific fields
-            personnel instanceof Patient ? ((Patient) personnel).getInsuranceInfo() : "",
-            personnel instanceof Patient ? ((Patient) personnel).getAllergies() : "",
-            personnel instanceof Patient ? ((Patient) personnel).getDateOfAdmission().toString() : "",
-            
-            // Pharmacist-specific fields
-            personnel instanceof Pharmacist ? ((Pharmacist) personnel).getPharmacistLicenseNumber() : "",
-            personnel instanceof Pharmacist ? ((Pharmacist) personnel).getDateOfEmployment().toString() : "",
-            
-            // Admin-specific fields
-            personnel instanceof Admin ? ((Admin) personnel).getDateOfCreation().toString() : ""
-        );
+    StringBuilder csvBuilder = new StringBuilder();
+    
+    // Add common fields
+    csvBuilder.append(personnel.getUID()).append(",");
+    csvBuilder.append(personnel.getFullName()).append(",");
+    csvBuilder.append(personnel.getIdCard()).append(",");
+    csvBuilder.append(personnel.getUsername()).append(",");
+    csvBuilder.append(personnel.getEmail()).append(",");
+    csvBuilder.append(personnel.getPhoneNo()).append(",");
+    csvBuilder.append(personnel.getPasswordHash()).append(",");
+    csvBuilder.append(personnel.getDoB().toString()).append(",");
+    csvBuilder.append(personnel.getGender()).append(",");
+    csvBuilder.append(personnel.getRole()).append(",");
+    
+    // Add Doctor-specific fields or empty placeholders
+    if (personnel instanceof Doctor) {
+        Doctor doctor = (Doctor) personnel;
+        csvBuilder.append(doctor.getSpecialty()).append(",");
+        csvBuilder.append(doctor.getMedicalLicenseNumber()).append(",");
+        csvBuilder.append(doctor.getDateJoin().toString()).append(",");
+        csvBuilder.append(doctor.getYearsOfExperiences()).append(",");
+    } 
+    
+    // Add Patient-specific fields or empty placeholders
+    if (personnel instanceof Patient) {
+        Patient patient = (Patient) personnel;
+        csvBuilder.append(patient.getInsuranceInfo()).append(",");
+        csvBuilder.append(patient.getAllergies()).append(",");
+        csvBuilder.append(patient.getDateOfAdmission().toString()).append(",");
+    } 
+    
+    // Add Pharmacist-specific fields or empty placeholders
+    if (personnel instanceof Pharmacist) {
+        Pharmacist pharmacist = (Pharmacist) personnel;
+        csvBuilder.append(pharmacist.getPharmacistLicenseNumber()).append(",");
+        csvBuilder.append(pharmacist.getDateOfEmployment().toString()).append(",");
+    } 
+    
+    // Add Admin-specific fields or empty placeholder
+    if (personnel instanceof Admin) {
+        Admin admin = (Admin) personnel;
+        csvBuilder.append(admin.getDateOfCreation().toString()).append(",");
+    } 
+    
+    // Remove the trailing comma at the end
+    if (csvBuilder.charAt(csvBuilder.length() - 1) == ',') {
+        csvBuilder.setLength(csvBuilder.length() - 1);
     }
+    
+    return csvBuilder.toString();
+}
+
 
 
 
