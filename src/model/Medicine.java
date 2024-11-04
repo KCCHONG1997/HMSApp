@@ -6,9 +6,17 @@ public class Medicine {
     private String manufacturer;
     private LocalDateTime expiryDate;
     private int inventoryStock;
-
-
     private LocalDateTime  replenishDate;
+    
+    public Medicine(String medicineID, String medicineName, String manufacturer, LocalDateTime expiryDate, int inventoryStock, LocalDateTime replenishDate) {
+        this.medicineID = medicineID;
+        this.medicineName = medicineName;
+        this.manufacturer = manufacturer;
+        this.expiryDate = expiryDate;
+        this.inventoryStock = inventoryStock;
+        this.replenishDate = replenishDate;
+    }
+
     
     
     public String getMedicineName() {
@@ -48,6 +56,18 @@ public class Medicine {
     public void setInventoryStock(int inventoryStock) {
         this.inventoryStock = inventoryStock;
     }
+
+
+
+	public LocalDateTime getReplenishDate() {
+		return replenishDate;
+	}
+
+
+
+	public void setReplenishDate(LocalDateTime replenishDate) {
+		this.replenishDate = replenishDate;
+	}
 
 
 }
