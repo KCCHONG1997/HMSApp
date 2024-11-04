@@ -11,4 +11,14 @@ public enum PersonnelFileType {
     PersonnelFileType(String fileName) {
         this.fileName = fileName;
     }
+
+    // Static method to convert a string to the corresponding enum constant
+    public static PersonnelFileType toEnum(String fileName) {
+        for (PersonnelFileType type : PersonnelFileType.values()) {
+            if (type.fileName.equalsIgnoreCase(fileName)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant for file name: " + fileName);
+    }
 }

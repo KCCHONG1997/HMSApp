@@ -1,8 +1,10 @@
 package view;
 
 import java.util.Scanner;
+import controller.AuthenticationController;
 import HMSApp.HMSMain;
 import model.Doctor;
+import model.SessionCookie;
 
 public class DoctorUI extends MainUI {
 	private Doctor doctor;
@@ -37,6 +39,7 @@ public class DoctorUI extends MainUI {
             switch(choice) {
                 case 1: 
                     // Code for viewing patient medical records
+                	viewPatientRecords();
                     break;
                 case 2: 
                     // Code for updating patient medical records
@@ -67,4 +70,10 @@ public class DoctorUI extends MainUI {
         
         sc.close(); // Close the Scanner
     }
+
+	private void viewPatientRecords() {
+		// TODO Auto-generated method stub
+		System.out.println(AuthenticationController.cookie.getUid());
+		
+	}
 }

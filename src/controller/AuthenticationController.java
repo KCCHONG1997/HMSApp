@@ -6,6 +6,7 @@ import repository.PersonnelFileType;
 import repository.PersonnelRepository;
 
 public class AuthenticationController {
+	public static SessionCookie cookie = new SessionCookie(null, null);
 
     // Method to authenticate a user based on username and password
 	public static HMSPersonnel login(String username, String password, PersonnelFileType role) {
@@ -34,6 +35,9 @@ public class AuthenticationController {
 	    for (HMSPersonnel personnel : personnelMap.values()) {
 	        if (personnel.getUsername().equals(username) && verifyPassword(personnel, password)) {
 	            System.out.println(role + " " + personnel.getFullName() + " logged in successfully.");
+	            cookie.setRole(PersonnelFileType.toEnum(personnel.getRole()));
+	            cookie.setUid(personnel.getUID());
+	            
 	            return personnel;
 	        }
 	    }
