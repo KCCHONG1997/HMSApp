@@ -13,7 +13,7 @@ public class Doctor extends HMSPersonnel {
     			String fullName, String idCard, String username, String email, String phoneNo,
                   String passwordHash, LocalDateTime DoB, String gender, String role,
                   String specialty, String medicalLicenseNumber, LocalDateTime dateJoin, int yearsOfExperiences) {
-        super(UID, fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, role);
+        super(UID, fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, "Doctors");
         this.specialty = specialty;
         this.medicalLicenseNumber = medicalLicenseNumber;
         this.dateJoin = dateJoin;
