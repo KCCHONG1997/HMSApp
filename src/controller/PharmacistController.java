@@ -156,12 +156,12 @@ public class PharmacistController extends HMSPersonnelController{
                         }
                     }
 
-                    // Check if the medicine needs replenishment based on stock level and expiration date
-                    LocalDateTime now = LocalDateTime.now();
-                    if (medicine.getInventoryStock() >= medicine.getLowStockLevel() && medicine.getExpiryDate().isAfter(now.plusMonths(1))) {
-                        System.out.println("No replenishment needed for " + medicine.getName() + ". Stock is sufficient and expiration date is not near.");
-                        return;
-                    }
+//                    // Check if the medicine needs replenishment based on stock level and expiration date
+//                    LocalDateTime now = LocalDateTime.now();
+//                    if (medicine.getInventoryStock() >= medicine.getLowStockLevel() && medicine.getExpiryDate().isAfter(now.plusMonths(1))) {
+//                        System.out.println("No replenishment needed for " + medicine.getName() + ". Stock is sufficient and expiration date is not near.");
+//                        return;
+//                    }
 
                     // Proceed with replenishment request
                     System.out.print("Enter Requested Quantity: ");
