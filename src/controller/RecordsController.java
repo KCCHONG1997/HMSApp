@@ -55,6 +55,29 @@ public class RecordsController {
 		
 	}
 	
+public MedicalRecord getMedicalRecordsByPatientID(String patientID) {
+    if (RecordsRepository.isRepoLoad()) {
+        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+            if (record.getPatientID().equals(patientID)) {
+                return record;
+            }
+        }
+    }
+    return null;
+}
+
+public MedicalRecord getMedicalRecordsByDoctorID(String doctorID) {
+    if (RecordsRepository.isRepoLoad()) {
+        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+            if (record.getDoctorID().equals(doctorID)) {
+                return record; // Return the record if found
+            }
+        }
+    }
+    return null;
+}
+
+	
 	
 	// Always check for null when use this function
 	public MedicalRecord getMedicalRecordbyID(String RecordID) {
