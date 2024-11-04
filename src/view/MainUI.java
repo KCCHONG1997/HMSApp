@@ -20,6 +20,11 @@ public abstract class MainUI {
         System.out.println(
                 "╚══════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
     }
+    
+    public void printWarning(String breadcrumb) {
+        String spaces = String.format("%" + (105 - breadcrumb.length()) + "s", "");
+        System.out.println("[ERROR !!! " + breadcrumb + spaces + "!!!]");
+    }
 
     /**
      * Method to handle invalid inputs for all views.
