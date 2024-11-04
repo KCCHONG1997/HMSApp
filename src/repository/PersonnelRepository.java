@@ -71,13 +71,27 @@ public class PersonnelRepository extends Repository{
             personnel.getDoB().toString(),
             personnel.getGender(),
             personnel.getRole(),
-            // Additional fields for specific personnel types (like Doctor)
+            
+            // Doctor-specific fields
             personnel instanceof Doctor ? ((Doctor) personnel).getSpecialty() : "",
             personnel instanceof Doctor ? ((Doctor) personnel).getMedicalLicenseNumber() : "",
             personnel instanceof Doctor ? ((Doctor) personnel).getDateJoin().toString() : "",
-            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : ""
+            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : "",
+            
+            // Patient-specific fields
+            personnel instanceof Patient ? ((Patient) personnel).getInsuranceInfo() : "",
+            personnel instanceof Patient ? ((Patient) personnel).getAllergies() : "",
+            personnel instanceof Patient ? ((Patient) personnel).getDateOfAdmission().toString() : "",
+            
+            // Pharmacist-specific fields
+            personnel instanceof Pharmacist ? ((Pharmacist) personnel).getPharmacistLicenseNumber() : "",
+            personnel instanceof Pharmacist ? ((Pharmacist) personnel).getDateOfEmployment().toString() : "",
+            
+            // Admin-specific fields
+            personnel instanceof Admin ? ((Admin) personnel).getDateOfCreation().toString() : ""
         );
     }
+
 
 
 

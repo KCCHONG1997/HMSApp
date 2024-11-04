@@ -33,6 +33,10 @@ public class DiagnosisRepository extends Repository {
         }
         return false;
     }
+    public static boolean saveAlltoCSV() {
+    	DiagnosisRepository.saveDiagnosisRecordsToCSV(fileName, patientDiagnosisRecords);
+		return true;
+    }
 
     // Save and load methods, and any other methods in DiagnosisRepository
     public static void saveDiagnosisRecordsToCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
@@ -61,9 +65,10 @@ public class DiagnosisRepository extends Repository {
         return String.join(",",
                 record.getPatientID(),                    // Patient ID
                 record.getDiagnosisID(),                  // Diagnosis ID
-                record.getDoctorID(),
+                record.getDoctorID(),					  // Doctor ID
+                record.getMedicalRecordID(),			  // MedicalRecord ID
                 record.getDiagnosisDate().toString(),     // Diagnosis date
-                record.getTreatmentPlans().toString(),    // Treatment plans
+//                record.getTreatmentPlans().toString(),    // FIXME You get Treatment plans from medical Record...
                 "\"" + record.getDiagnosisDescription() + "\""         // Diagnosis description
         );
     }
@@ -93,7 +98,7 @@ public class DiagnosisRepository extends Repository {
             while ((line = reader.readLine()) != null) {
                 Diagnosis record = csvToDiagnosisRecord(line);
                 if (record != null) {
-                    addDiagnosis(record.getPatientID(), record);
+                    addDiagnosis(record.getMedicalRecordID(), record);
                 }
             }
             System.out.println("Successfully loaded " + patientDiagnosisRecords.size() + " diagnosis records from " + fileName);
@@ -102,10 +107,10 @@ public class DiagnosisRepository extends Repository {
         }
     }
 
-    public static void addDiagnosis(String patientID, Diagnosis diagnosis) {
-        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(patientID, new ArrayList<>());
+    public static void addDiagnosis(String MedicalRecordID, Diagnosis diagnosis) {
+        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(MedicalRecordID, new ArrayList<>());
         diagnoses.add(diagnosis);
-        patientDiagnosisRecords.put(patientID, diagnoses);
+        patientDiagnosisRecords.put(MedicalRecordID, diagnoses);
     }
 
     private static Diagnosis csvToDiagnosisRecord(String csv) {
@@ -114,12 +119,13 @@ public class DiagnosisRepository extends Repository {
             String patientID = fields[0];
             String diagnosisID = fields[1];
             String doctorID = fields[2];
-            LocalDateTime diagnosisDate = LocalDateTime.parse(fields[3]);
-            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
+            String medicalRecordID = fields[3];
+            LocalDateTime diagnosisDate = LocalDateTime.parse(fields[4]);
+//            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
             String diagnosisDescription = fields[5].replace("\"", "");
-            Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[1]);
+            Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[1]);
 
-            return new Diagnosis(patientID, diagnosisID, doctorID, diagnosisDate, treatmentPlan, diagnosisDescription, prescription);
+            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate, diagnosisDescription, prescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
         }

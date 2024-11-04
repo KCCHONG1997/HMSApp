@@ -157,7 +157,7 @@ public class RecordsRepository extends Repository {
                     fields[4],                                        // patientID
                     fields[5],                                        // doctorID
                     fields[6],                                        // bloodType
-                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[4], new ArrayList<>())
+                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())
                 ));
             } else if (type == AppointmentRecord.class) {
                 return type.cast(new AppointmentRecord(

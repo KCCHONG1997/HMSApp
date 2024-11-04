@@ -1,6 +1,9 @@
 package controller;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
+import java.util.ArrayList;
+
 import model.AppointmentRecord;
 import model.MedicalRecord;
 import model.PaymentRecord;
@@ -12,16 +15,18 @@ public class RecordsController {
 
     private static final System.Logger logger = System.getLogger(RecordsController.class.getName());
 
-    public static String generateRecordID(RecordFileType recType) {
+    public static String generateRecordID(RecordFileType recType) {		
+    	UUID uuid = UUID.randomUUID();
+    	String uuidAsString = uuid.toString();
         switch (recType) {
             case APPOINTMENT_RECORDS:
-                return "A-" + System.currentTimeMillis();
+                return "A-" + uuidAsString;
             case PAYMENT_RECORDS:
-                return "P-" + System.currentTimeMillis();
+                return "P-" + uuidAsString;
             case MEDICAL_RECORDS:
-                return "MR-" + System.currentTimeMillis();
+                return "MR-" + uuidAsString;
             default:
-                return "R-" + System.currentTimeMillis();
+                return "R-" + uuidAsString;
         }
     }
 
@@ -156,16 +161,19 @@ public class RecordsController {
         return null;
     }
 
-    public MedicalRecord getMedicalRecordsByDoctorID(String doctorID) {
-        if (RecordsRepository.isRepoLoad()) {
-            for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
-                if (record.getDoctorID().equals(doctorID)) {
-                    return record;
-                }
+public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
+    ArrayList<MedicalRecord> recordsByDoctor = new ArrayList<>(); // Initialize an empty list
+    
+    if (RecordsRepository.isRepoLoaded()) {
+        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+            if (record.getDoctorID().equals(doctorID)) {
+                recordsByDoctor.add(record); // Add matching records to the list
             }
         }
-        return null;
     }
+    return recordsByDoctor; // Return the list, even if it might be empty
+}
+
 
     public MedicalRecord getMedicalRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())

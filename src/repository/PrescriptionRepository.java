@@ -12,7 +12,7 @@ public class PrescriptionRepository extends Repository {
     private static boolean isRepoLoaded = false;
     
     // Static data collection for Prescription records (key: diagnosis ID)
-    public static HashMap<String, Prescription> prescriptionMap = new HashMap<>();
+    public static HashMap<String, Prescription> PRESCRIPTION_MAP = new HashMap<>();
 
     /**
      * Specific loading logic for Prescription records from CSV.
@@ -22,13 +22,18 @@ public class PrescriptionRepository extends Repository {
     @Override
     public boolean loadFromCSV() {
         try {
-            loadPrescriptionsFromCSV(fileName, prescriptionMap);
+            loadPrescriptionsFromCSV(fileName, PRESCRIPTION_MAP);
             PrescriptionRepository.setRepoLoaded(true);
             return true;
         } catch (Exception e) {
             System.out.println("Error loading prescription repository: " + e.getMessage());
             return false;
         }
+    }
+    
+    public static boolean saveAlltoCSV() {
+    	PrescriptionRepository.savePrescriptionsToCSV(fileName, PRESCRIPTION_MAP);
+		return true;
     }
 
     /**
@@ -129,8 +134,8 @@ public class PrescriptionRepository extends Repository {
      * Clear all prescription data and save an empty file
      */
     public static boolean clearPrescriptionDatabase() {
-        prescriptionMap.clear();
-        savePrescriptionsToCSV(fileName, prescriptionMap);
+    	PRESCRIPTION_MAP.clear();
+        savePrescriptionsToCSV(fileName, PRESCRIPTION_MAP);
         setRepoLoaded(false);
         return true;
     }

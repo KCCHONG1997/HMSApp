@@ -114,7 +114,7 @@ public class AppointmentOutcomeRecordRepository extends Repository{
         try {
             LocalDateTime appointmentTime = LocalDateTime.parse(fields[0]);
             String typeOfService = fields[1];
-            Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[2]);
+            Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[2]);
             String consultationNotes = fields[3].replace("\"", "");
             String patientID = fields[4];
             String doctorID = fields[5];

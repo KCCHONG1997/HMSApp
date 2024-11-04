@@ -1,9 +1,15 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import controller.AuthenticationController;
+import controller.RecordsController;
 import HMSApp.HMSMain;
+import model.Diagnosis;
 import model.Doctor;
+import model.MedicalRecord;
+import model.PrescribedMedication;
+import model.Prescription;
 import model.SessionCookie;
 
 public class DoctorUI extends MainUI {
@@ -71,9 +77,55 @@ public class DoctorUI extends MainUI {
         sc.close(); // Close the Scanner
     }
 
-	private void viewPatientRecords() {
-		// TODO Auto-generated method stub
-		System.out.println(AuthenticationController.cookie.getUid());
-		
-	}
+    private void viewPatientRecords() {
+        printBreadCrumbs("HMS App UI > Doctor Dashboard > View Patient Records");
+        RecordsController rc = new RecordsController();
+        ArrayList<MedicalRecord> records = rc.getMedicalRecordsByDoctorID(AuthenticationController.cookie.getUid());
+
+        if (records.isEmpty()) {
+            System.out.println("No medical records found for this doctor.");
+            return;
+        }
+
+        for (MedicalRecord record : records) {
+        	displayMedicalRecordInBox(record);
+        }
+    }
+    
+    private static void displayMedicalRecordInBox(MedicalRecord medicalRecord) {
+        String border = "+----------------------------------------+";
+        
+        System.out.println(border);
+        System.out.printf("| %-58s |\n", "Medical Record");
+        System.out.println(border);
+        System.out.printf("| %-25s: %-35s |\n", "Doctor ID", medicalRecord.getDoctorID());
+        System.out.printf("| %-25s: %-35s |\n", "Patient ID", medicalRecord.getPatientID());
+        System.out.printf("| %-25s: %-35s |\n", "Blood Type", medicalRecord.getBloodType());
+        System.out.println(border);
+
+        System.out.println("| Diagnoses:");
+        for (Diagnosis diagnosis : medicalRecord.getDiagnosis()) {
+            System.out.println(border);
+            System.out.printf("| %-25s: %-35s |\n", "Diagnosis ID", diagnosis.getDiagnosisID());
+            System.out.printf("| %-25s: %-35s |\n", "Description", diagnosis.getDiagnosisDescription());
+
+            Prescription prescription = diagnosis.getPrescription();
+            System.out.printf("| %-25s: %-35s |\n", "Prescription Date", prescription.getPrescriptionDate());
+            
+            System.out.println("| Medications--------------------------");
+            for (PrescribedMedication medication : prescription.getMedications()) {
+                System.out.printf("| %-25s: %-35s |\n", "Medicine ID", medication.getMedicineID());
+                System.out.printf("| %-25s: %-35s |\n", "Quantity", medication.getMedicineQuantity());
+                System.out.printf("| %-25s: %-35s |\n", "Dosage", medication.getDosage());
+                System.out.printf("| %-25s: %-35s |\n", "Period (days)", medication.getPeriodDays());
+                System.out.printf("| %-25s: %-35s |\n", "Status", medication.getPrescriptionStatus());
+                System.out.println(border);
+            }
+            
+            System.out.println(border);
+        }
+        
+        System.out.println();
+    }
+
 }

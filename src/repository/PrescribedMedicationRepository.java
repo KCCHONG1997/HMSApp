@@ -32,7 +32,12 @@ public class PrescribedMedicationRepository extends Repository {
             return false;
         }
     }
+    public static boolean saveAlltoCSV() {
+    	PrescribedMedicationRepository.saveMedicationsToCSV(fileName,diagnosisToMedicationsMap);
+		return true;
+    }
 
+    
     /**
      * Save prescribed medications to CSV
      */
