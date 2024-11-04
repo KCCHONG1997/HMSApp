@@ -1,7 +1,6 @@
 package HMSApp;
 
 
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import model.*;
@@ -11,12 +10,8 @@ import view.*;
 public class HMSMain {
     public static void main(String[] args) {
     	HMSAppUI hmsAppUI = new HMSAppUI();
-    	PersonnelRepository.loadAllPersonnelFiles();
-
         printHMSWelcomeTitle();
         hmsAppUI.start();      
-           
-        
     }
 
     private static void printHMSWelcomeTitle() {

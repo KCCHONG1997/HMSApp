@@ -28,7 +28,7 @@ public class RecordsRepository extends Repository {
             loadRecordsFromCSV(medicalFileName, MEDICAL_RECORDS, MedicalRecord.class);
             loadRecordsFromCSV(appointmentFileName, APPOINTMENT_RECORDS, AppointmentRecord.class);
             loadRecordsFromCSV(paymentFileName, PAYMENT_RECORDS, PaymentRecord.class);
-            isRepoLoaded = true;
+            setRepoLoaded(true);
             return true;
         } catch (Exception e) {
             System.out.println("Error loading records repository: " + e.getMessage());
@@ -193,7 +193,15 @@ public class RecordsRepository extends Repository {
         APPOINTMENT_RECORDS.clear();
         PAYMENT_RECORDS.clear();
         saveAllRecordFiles();
-        isRepoLoaded = false;
+        setRepoLoaded(false);
         return true;
     }
+
+	public static Boolean isRepoLoaded() {
+		return isRepoLoaded;
+	}
+
+	public static void setRepoLoaded(Boolean isRepoLoaded) {
+		RecordsRepository.isRepoLoaded = isRepoLoaded;
+	}
 }

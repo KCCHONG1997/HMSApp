@@ -6,9 +6,14 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import model.*;
 
-public class PersonnelRepository {
+public class PersonnelRepository extends Repository{
     private static final String folder = "data";
-
+    private static final String doctorsFileName = "doctors.csv";
+    private static final String patientsFileName = "patients.csv";
+    private static final String pharmacistsFileName = "pharmacists.csv";
+    private static final String adminsFileName = "admins.csv";
+    private static Boolean isRepoLoaded = false;
+    
     // Static data collections for personnel
     public static HashMap<String, Doctor> DOCTORS = new HashMap<>();
     public static HashMap<String, Patient> PATIENTS = new HashMap<>();
@@ -17,12 +22,28 @@ public class PersonnelRepository {
 
     // Save all personnel files to CSV files
     public static void saveAllPersonnelFiles() {
-        savePersonnelToCSV("doctors.csv", DOCTORS);
-        savePersonnelToCSV("patients.csv", PATIENTS);
-        savePersonnelToCSV("pharmacists.csv", PHARMACISTS);
-        savePersonnelToCSV("admins.csv", ADMINS);
+        savePersonnelToCSV(doctorsFileName, DOCTORS);
+        savePersonnelToCSV(patientsFileName, PATIENTS);
+        savePersonnelToCSV(pharmacistsFileName, PHARMACISTS);
+        savePersonnelToCSV(adminsFileName, ADMINS);
     }
-
+    
+    @Override
+    // Load personnel data from CSV files
+    public boolean loadFromCSV() {
+    	try{
+        loadPersonnelFromCSV(doctorsFileName, DOCTORS, Doctor.class);
+        loadPersonnelFromCSV(patientsFileName, PATIENTS, Patient.class);
+        loadPersonnelFromCSV(pharmacistsFileName, PHARMACISTS, Pharmacist.class);
+        loadPersonnelFromCSV(adminsFileName, ADMINS, Admin.class);
+        setRepoLoaded(true);
+        return true;
+    	} catch (Exception e) {
+            System.out.println("Error loading records repository: " + e.getMessage());
+            return false;
+        }
+    }
+	
     // Save a specific personnel map to a CSV file
     private static <T extends HMSPersonnel> void savePersonnelToCSV(String fileName, HashMap<String, T> personnelMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
@@ -58,13 +79,7 @@ public class PersonnelRepository {
         );
     }
 
-    // Load personnel data from CSV files
-    public static void loadAllPersonnelFiles() {
-        loadPersonnelFromCSV("doctors.csv", DOCTORS, Doctor.class);
-        loadPersonnelFromCSV("patients.csv", PATIENTS, Patient.class);
-        loadPersonnelFromCSV("pharmacists.csv", PHARMACISTS, Pharmacist.class);
-        loadPersonnelFromCSV("admins.csv", ADMINS, Admin.class);
-    }
+
 
     // Load personnel from a CSV file or create an empty file if it doesn't exist
     private static <T extends HMSPersonnel> void loadPersonnelFromCSV(String fileName, HashMap<String, T> personnelMap, Class<T> type) {
@@ -194,4 +209,14 @@ public class PersonnelRepository {
         saveAllPersonnelFiles();
         return true;
     }
+
+	public static Boolean isRepoLoaded() {
+		return isRepoLoaded;
+	}
+
+	public static void setRepoLoaded(Boolean isRepoLoaded) {
+		PersonnelRepository.isRepoLoaded = isRepoLoaded;
+	}
+
+
 }

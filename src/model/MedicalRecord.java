@@ -13,12 +13,25 @@ public class MedicalRecord extends HMSRecords {
     private String bloodType;
     private ArrayList <Diagnosis> Diagnosis;
     
-    public MedicalRecord(
+    public MedicalRecord( // This Constructor is for create new MedicalRecord
             LocalDateTime createdDate, LocalDateTime updatedDate,
             RecordStatusType recordStatus,String patientID,String doctorID,
             String bloodType,ArrayList<model.Diagnosis> diagnosis) {
     	
 			super(RecordsController.generateRecordID(RecordFileType.MEDICAL_RECORDS), createdDate, updatedDate, recordStatus);
+			this.patientID = patientID;
+			this.doctorID = doctorID;
+			this.bloodType = bloodType;
+			this.Diagnosis= diagnosis;
+
+    }
+    
+    public MedicalRecord(String recordID, // This Constructor is for converting CSV to a MedicalRecord
+            LocalDateTime createdDate, LocalDateTime updatedDate,
+            RecordStatusType recordStatus,String patientID,String doctorID,
+            String bloodType,ArrayList<model.Diagnosis> diagnosis) {
+    	
+			super(recordID, createdDate, updatedDate, recordStatus);
 			this.patientID = patientID;
 			this.doctorID = doctorID;
 			this.bloodType = bloodType;

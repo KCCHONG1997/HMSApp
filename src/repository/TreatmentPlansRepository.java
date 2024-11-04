@@ -23,7 +23,7 @@ public class TreatmentPlansRepository extends Repository {
 	public boolean loadFromCSV() {
         try {
             loadTreatmentPlansFromCSV(fileName, diagnosisToTreatmentPlansMap);
-            isRepoLoaded = true;
+            setRepoLoaded(true);
             return true;
         } catch (Exception e) {
             System.out.println("Error loading treatment plans repository: " + e.getMessage());
@@ -132,7 +132,15 @@ public class TreatmentPlansRepository extends Repository {
     public static boolean clearTreatmentPlanDatabase() {
         diagnosisToTreatmentPlansMap.clear();
         saveTreatmentPlansToCSV(fileName, diagnosisToTreatmentPlansMap);
-        isRepoLoaded = false;
+        setRepoLoaded(false);
         return true;
     }
+
+	public static boolean isRepoLoaded() {
+		return isRepoLoaded;
+	}
+
+	public static void setRepoLoaded(boolean isRepoLoaded) {
+		TreatmentPlansRepository.isRepoLoaded = isRepoLoaded;
+	}
 }

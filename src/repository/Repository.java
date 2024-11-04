@@ -1,7 +1,7 @@
 package repository;
 
 public abstract class Repository {
-	private static boolean isRepoLoaded = false;
+	private static boolean isRepoLoad = false;
 
     /**
      * Static method to load the repository data.
@@ -14,8 +14,8 @@ public abstract class Repository {
         if (repository == null) {
             throw new IllegalArgumentException("Repository instance cannot be null.");
         }
-        isRepoLoaded = repository.loadFromCSV();
-        return isRepoLoaded;
+        isRepoLoad = repository.loadFromCSV();
+        return isRepoLoad;
     }
 
     /**
@@ -24,7 +24,7 @@ public abstract class Repository {
      * @return boolean indicating if the repository is loaded
      */
     public static boolean isRepoLoad() {
-        return isRepoLoaded;
+        return isRepoLoad;
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class Repository {
      * Clears repository data.
      */
     public void clearRepository() {
-        isRepoLoaded = false;
+        isRepoLoad = false;
         System.out.println("Repository cleared.");
     }
 }

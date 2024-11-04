@@ -25,10 +25,9 @@ public class DiagnosisRepository extends Repository {
     @Override
     public boolean loadFromCSV() {
         try {
-            if (PrescriptionRepository.isRepoLoad()) {
-                loadDiagnosisRecordsFromCSV(fileName, patientDiagnosisRecords);
-                return true;
-            }
+            loadDiagnosisRecordsFromCSV(fileName, patientDiagnosisRecords);
+            setRepoLoaded(true);
+            return true;
         } catch (Exception e) {
             System.out.println("Error loading diagnosis repository: " + e.getMessage());
         }
@@ -126,4 +125,12 @@ public class DiagnosisRepository extends Repository {
         }
         return null;
     }
+
+	public static boolean isRepoLoaded() {
+		return isRepoLoaded;
+	}
+
+	public static void setRepoLoaded(boolean isRepoLoaded) {
+		DiagnosisRepository.isRepoLoaded = isRepoLoaded;
+	}
 }

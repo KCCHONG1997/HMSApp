@@ -25,7 +25,7 @@ public class PrescribedMedicationRepository extends Repository {
 	public boolean loadFromCSV() {
         try {
             loadMedicationsFromCSV(fileName, diagnosisToMedicationsMap);
-            isRepoLoaded = true;
+            setRepoLoaded(true);
             return true;
         } catch (Exception e) {
             System.out.println("Error loading prescribed medications repository: " + e.getMessage());
@@ -143,7 +143,15 @@ public class PrescribedMedicationRepository extends Repository {
     public static boolean clearPrescribedMedicationDatabase() {
         diagnosisToMedicationsMap.clear();
         saveMedicationsToCSV(fileName, diagnosisToMedicationsMap);
-        isRepoLoaded = false;
+        setRepoLoaded(false);
         return true;
     }
+
+	public static boolean isRepoLoaded() {
+		return isRepoLoaded;
+	}
+
+	public static void setRepoLoaded(boolean isRepoLoaded) {
+		PrescribedMedicationRepository.isRepoLoaded = isRepoLoaded;
+	}
 }
