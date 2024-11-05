@@ -136,8 +136,5 @@ public class LoginUI extends MainUI {
         return sc.nextLine();
     }
     
-    public static void main(String[] args) {
-    	LoginUI a = new LoginUI();
-    	a.start();
-    }
+   
 }

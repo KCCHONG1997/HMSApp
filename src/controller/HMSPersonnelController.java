@@ -195,14 +195,5 @@ public class HMSPersonnelController {
 //    	if (PersonnelRepository.is)
 //    }
     
-    public static void main(String[] args) {
-    	Repository.loadRepository(new PersonnelRepository());
-    	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		 LocalDateTime currentDateTime = LocalDateTime.now();
-		 String formattedDateTime = currentDateTime.format(formatter);
-		 LocalDateTime date = LocalDateTime.parse(formattedDateTime, formatter);
-    	 Admin admin = new  Admin("ADMIN", "1", "admin", "admin@gmail.com", "123456",
-                 "default", date, "Male", "Admin", date);
-    	addPersonnel(admin);
-    }
+    
 }

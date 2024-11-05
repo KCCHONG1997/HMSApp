@@ -321,12 +321,6 @@ public class AdminUI extends MainUI {
         return date;
     }
     
-    public static void main(String[] args) {
-    	Repository.loadRepository(new PersonnelRepository());
-		Repository.loadRepository(new MedicineRepository());
-		approveReplenishRequest();
-    	
-    }
     
 }
    
