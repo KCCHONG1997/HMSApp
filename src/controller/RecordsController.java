@@ -199,27 +199,4 @@ public class RecordsController {
         else
             return null;
     }
-
-}
-
-    public MedicalRecord getMedicalRecordbyID(String recordID) {
-        if (RecordsRepository.isRepoLoad())
-            return RecordsRepository.MEDICAL_RECORDS.get(recordID);
-        else
-            return null;
-    }
-
-    public AppointmentRecord getDiagnosisRecordbyID(String recordID) {
-        if (RecordsRepository.isRepoLoad())
-            return RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
-        else
-            return null;
-    }
-
-    public PaymentRecord getPaymentRecordbyID(String recordID) {
-        if (RecordsRepository.isRepoLoad())
-            return RecordsRepository.PAYMENT_RECORDS.get(recordID);
-        else
-            return null;
-    }
 }

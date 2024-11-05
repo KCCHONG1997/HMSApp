@@ -190,10 +190,5 @@ public class HMSPersonnelController {
             System.out.println("No personnel found for type: " + type);
         }
     }
+}
 
-    // public List<Patient> getListOfPatientByName(String name){
-    // if (PersonnelRepository.is)
-    // }
-    <<<<<<<HEAD
-
-}=======}>>>>>>>ck/MedicalRecord

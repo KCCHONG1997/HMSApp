@@ -58,32 +58,42 @@ public class AdminController extends HMSPersonnelController {
         return date;
     }
     public static void printPersonnelDetails(HMSPersonnel personnel) {
-    	System.out.println("UID: " + personnel.getUID());
-        System.out.println("Full Name: " + personnel.getFullName());
-        System.out.println("ID Card: " + personnel.getIdCard());
-        System.out.println("Username: " + personnel.getUsername());
-        System.out.println("Email: " + personnel.getEmail());
-        System.out.println("Phone No: " + personnel.getPhoneNo());
-        System.out.println("Password: " + personnel.getPasswordHash());
-        System.out.println("DOB: " + personnel.getDoB());
-        System.out.println("Gender: " + personnel.getGender());
-        System.out.println("Role: " + personnel.getRole());
+        System.out.println("--------------------------------------------------");
+        System.out.println("Personnel Details:");
+        System.out.println("--------------------------------------------------");
+        System.out.printf("%-20s: %s%n", "UID", personnel.getUID());
+        System.out.printf("%-20s: %s%n", "Full Name", personnel.getFullName());
+        System.out.printf("%-20s: %s%n", "ID Card", personnel.getIdCard());
+        System.out.printf("%-20s: %s%n", "Username", personnel.getUsername());
+        System.out.printf("%-20s: %s%n", "Email", personnel.getEmail());
+        System.out.printf("%-20s: %s%n", "Phone No", personnel.getPhoneNo());
+        System.out.printf("%-20s: %s%n", "Password", personnel.getPasswordHash());
+        System.out.printf("%-20s: %s%n", "DOB", personnel.getDoB());
+        System.out.printf("%-20s: %s%n", "Gender", personnel.getGender());
+        System.out.printf("%-20s: %s%n", "Role", personnel.getRole());
+        System.out.println("--------------------------------------------------\n");
     }
-    
+
     public static void printDoctorDetails(Doctor doctor) {
-    	printPersonnelDetails(doctor);
-        System.out.println("Speciality: " + doctor.getSpecialty());
-        System.out.println("Medical License Number: " + doctor.getMedicalLicenseNumber());
-        System.out.println("Date Join: " + doctor.getDateJoin());
-        System.out.println("Years of Experiences: " + doctor.getYearsOfExperiences());
+        System.out.println("============== Doctor Details ==============");
+        printPersonnelDetails(doctor);
+        System.out.printf("%-20s: %s%n", "Specialty", doctor.getSpecialty());
+        System.out.printf("%-20s: %s%n", "Medical License", doctor.getMedicalLicenseNumber());
+        System.out.printf("%-20s: %s%n", "Date Joined", doctor.getDateJoin());
+        System.out.printf("%-20s: %s years%n", "Experience", doctor.getYearsOfExperiences());
+        System.out.println("===========================================\n");
+        System.out.println();
     }
-    
+
     public static void printPharmacistDetails(Pharmacist pharmacist) {
-    	printPersonnelDetails(pharmacist);
-        System.out.println("Pharmacist License Number: " + pharmacist.getPharmacistLicenseNumber());
-        System.out.println("Date of Employment: " + pharmacist.getDateOfEmployment());
+        System.out.println("========== Pharmacist Details ===========");
+        printPersonnelDetails(pharmacist);
+        System.out.printf("%-20s: %s%n", "License Number", pharmacist.getPharmacistLicenseNumber());
+        System.out.printf("%-20s: %s%n", "Date of Employment", pharmacist.getDateOfEmployment());
+        System.out.println("=========================================\n");
+        System.out.println();
     }
-    
+
     public static void listPersonnelByRole(PersonnelFileType type) {
         Map<String, ? extends HMSPersonnel> personnelMap = null;
 
@@ -100,7 +110,8 @@ public class AdminController extends HMSPersonnelController {
         }
 
         if (personnelMap != null && !personnelMap.isEmpty()) {
-            System.out.println("Listing all personnel of type: " + type);
+            System.out.println("\nListing all personnel of type: " + type);
+            System.out.println("===========================================");
             for (HMSPersonnel personnel : personnelMap.values()) {
                 if (type == PersonnelFileType.DOCTORS) {
                     printDoctorDetails((Doctor) personnel);
@@ -108,13 +119,15 @@ public class AdminController extends HMSPersonnelController {
                     printPharmacistDetails((Pharmacist) personnel);
                 }
             }
+            System.out.println("===========================================\n");
         } else {
             System.out.println("No personnel found for type: " + type);
         }
     }
     
     public static void listPersonnelByGender(String gender) {
-        System.out.println("Listing staff filtered by gender: " + gender);
+        System.out.println("\nListing staff filtered by gender: " + gender);
+        System.out.println("===========================================");
         
         for (Doctor doctor : PersonnelRepository.DOCTORS.values()) {
             if (doctor.getGender().equalsIgnoreCase(gender)) {
@@ -127,6 +140,7 @@ public class AdminController extends HMSPersonnelController {
                 printPharmacistDetails(pharmacist);
             }
         }
+        System.out.println("===========================================\n");
     }
     
    
@@ -140,7 +154,8 @@ public class AdminController extends HMSPersonnelController {
         // Sort the combined list by age from oldest to youngest
         combinedList.sort(Comparator.comparingInt(personnel -> calculateAge((HMSPersonnel) personnel)).reversed());
 
-        System.out.println("Listing all personnel sorted by age (oldest to youngest):");
+        System.out.println("\nListing all personnel sorted by age (oldest to youngest):");
+        System.out.println("===========================================");
         for (HMSPersonnel personnel : combinedList) {
             if (personnel instanceof Doctor) {
                 printDoctorDetails((Doctor) personnel);
@@ -148,6 +163,7 @@ public class AdminController extends HMSPersonnelController {
                 printPharmacistDetails((Pharmacist) personnel);
             }
         }
+        System.out.println("===========================================\n");
     }
 
    
