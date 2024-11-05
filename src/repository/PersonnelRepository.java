@@ -194,7 +194,7 @@ public class PersonnelRepository extends Repository{
                     fields[9],               // role (e.g., Patient)
                     fields[10],              //insurance info
                     fields[11],              //allergies
-                    LocalDateTime.parse(fields[12])  // dateOfAdmission (LocalDateTime)
+                    csv, csv, LocalDateTime.parse(fields[12])  // dateOfAdmission (LocalDateTime)
 
                 ));
             } else if (type == Pharmacist.class) {
