@@ -62,71 +62,99 @@ public class PharmacistController extends HMSPersonnelController{
 //        }
 //    }
 
-    /**
-     * Monitor inventory levels of all medicines to check for low stock.
-     */
-    public static void monitorInventory() {
-        if (MedicineRepository.MEDICINES.isEmpty()) {
-            System.out.println("No medicines available in the inventory.");
-            return;
-        }
+	/**
+	 * Monitor inventory levels of all medicines, check for expired medicines, and allow removal.
+	 */
+	public static void monitorInventory() {
+	    if (MedicineRepository.MEDICINES.isEmpty()) {
+	        System.out.println("No medicines available in the inventory.");
+	        return;
+	    }
 
-        System.out.println("Full Inventory - Monitoring stock levels:");
-        for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
-            System.out.println("Medicine ID: " + medicine.getMedicineID());
-            System.out.println("Name: " + medicine.getName());
-            System.out.println("Stock Level: " + medicine.getInventoryStock());
-            System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
-            System.out.println("Expiry Date: " + medicine.getExpiryDate());
-            System.out.println();
-        }
+	    System.out.println("Full Inventory - Monitoring stock levels:");
+	    for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
+	        System.out.println("Medicine ID: " + medicine.getMedicineID());
+	        System.out.println("Name: " + medicine.getName());
+	        System.out.println("Stock Level: " + medicine.getInventoryStock());
+	        System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
+	        System.out.println("Expiry Date: " + medicine.getExpiryDate());
+	        System.out.println();
+	    }
 
-        System.out.println("------------------------------------------------------");
-        System.out.println("Medicines Below Low Stock Level:");
-        boolean lowStockFound = false;
+	    System.out.println("------------------------------------------------------");
 
-        for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
-            if (medicine.getInventoryStock() < medicine.getLowStockLevel()) {
-                lowStockFound = true;
-                System.out.println("Medicine ID: " + medicine.getMedicineID());
-                System.out.println("Name: " + medicine.getName());
-                System.out.println("Stock Level: " + medicine.getInventoryStock() + " (Below threshold)");
-                System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
-                System.out.println("Expiry Date: " + medicine.getExpiryDate());
-                System.out.println("Replenishment Status: " + medicine.getReplenishStatus());
-                System.out.println("Replenishment Request Date: " + medicine.getReplenishRequestDate());
-                System.out.println();
-            }
-        }
+	    // Step 1: Check for expired medicines
+	    System.out.println("Expired Medicines:");
+	    boolean expired = false;
+	    LocalDateTime now = LocalDateTime.now();
+	    for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
+	        if (medicine.getExpiryDate().isBefore(now)) {
+	            expired = true;
+	            System.out.println("Medicine ID: " + medicine.getMedicineID());
+	            System.out.println("Name: " + medicine.getName());
+	            System.out.println("Stock Level: " + medicine.getInventoryStock());
+	            System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
+	            System.out.println("Expiry Date: " + medicine.getExpiryDate() + " (Expired)");
+	            System.out.println("Replenishment Status: " + medicine.getReplenishStatus());
+	            System.out.println();
+	        }
+	    }
 
-        if (!lowStockFound) {
-            System.out.println("All medicines are above the low stock level.");
-        }
-        
-        System.out.println("------------------------------------------------------");
+	    if (!expired) {
+	        System.out.println("No medicines are expired.");
+	    } else {
+	        // Step 2: Prompt to remove expired medicines
+	        int response;
+	        do {
+	            System.out.println("Do you want to remove expired medicines from stock?");
+	            System.out.println("1. Yes");
+	            System.out.println("2. No");
+	            System.out.print("Enter your choice: ");
+	            response = Helper.readInt();
+	            
+	            switch (response) {
+	                case 1:
+	                    // Step 3: Remove expired medicines
+	                    for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
+	                        if (medicine.getExpiryDate().isBefore(now)) {
+	                            medicine.setInventoryStock(0);  // Set stock to zero for expired medicines
+	                            System.out.println("Removed " + medicine.getName() + " from stock due to expiration.");
+	                        }
+	                    }
+	                    MedicineRepository.saveAllMedicinesToCSV();
+	                    break;
+	                case 2:
+	                    System.out.println("No expired medicines were removed.");
+	                    break;
+	                default:
+	                    System.out.println("Invalid choice. Please enter 1 or 2.");
+	            }
+	        } while (response != 1 && response != 2);  // Continue until a valid choice is made
+	    }
 
-        // List medicines nearing expiration
-        System.out.println("Medicines Near Expiration (within 1 month):");
-        boolean nearingExpiryFound = false;
-        LocalDateTime now = LocalDateTime.now();
-        for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
-            // Check if the expiration date is within the next month
-            if (medicine.getExpiryDate().isBefore(now.plusMonths(1))) {
-                nearingExpiryFound = true;
-                System.out.println("Medicine ID: " + medicine.getMedicineID());
-                System.out.println("Name: " + medicine.getName());
-                System.out.println("Stock Level: " + medicine.getInventoryStock());
-                System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
-                System.out.println("Expiry Date: " + medicine.getExpiryDate() + " (Expiring Soon)");
-                System.out.println("Replenishment Status: " + medicine.getReplenishStatus());
-                System.out.println("Replenishment Request Date: " + medicine.getReplenishRequestDate());
-                System.out.println();
-            }
-        }
-        if (!nearingExpiryFound) {
-            System.out.println("No medicines are nearing expiration.");
-        }
-    }
+	    System.out.println("------------------------------------------------------");
+
+	    // Step 4: Check for medicines below the low stock level
+	    System.out.println("Medicines Below Low Stock Level:");
+	    boolean lowStockFound = false;
+	    for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
+	        if (medicine.getInventoryStock() < medicine.getLowStockLevel()) {
+	            lowStockFound = true;
+	            System.out.println("Medicine ID: " + medicine.getMedicineID());
+	            System.out.println("Name: " + medicine.getName());
+	            System.out.println("Stock Level: " + medicine.getInventoryStock() + " (Below threshold)");
+	            System.out.println("Low Stock Level: " + medicine.getLowStockLevel());
+	            System.out.println("Expiry Date: " + medicine.getExpiryDate());
+	            System.out.println("Replenishment Status: " + medicine.getReplenishStatus());
+	            System.out.println("Replenishment Request Date: " + medicine.getReplenishRequestDate());
+	            System.out.println();
+	        }
+	    }
+
+	    if (!lowStockFound) {
+	        System.out.println("All medicines are above the low stock level.");
+	    }
+	}
 
     /**
      * Submit a replenishment request for a specific medicine when stock is low.
@@ -169,7 +197,7 @@ public class PharmacistController extends HMSPersonnelController{
 
                     medicine.setReplenishStatus(ReplenishStatus.REQUESTED);
                     medicine.setReplenishRequestDate(LocalDateTime.now());
-                    MedicineRepository.saveAllMedicines();  // Save changes
+                    MedicineRepository.saveAllMedicinesToCSV();  // Save changes
 
                     System.out.println("Replenishment request submitted for " + medicine.getName() + " with quantity " + requestedQuantity);
                     break;
@@ -184,7 +212,8 @@ public class PharmacistController extends HMSPersonnelController{
      * Main method to test the PharmacistController functionality.
      */
     public static void main(String[] args) {
-        MedicineRepository.loadAllMedicines();
+        MedicineRepository medicineRepository = new MedicineRepository();
+		medicineRepository.loadFromCSV();
         // AppointmentRepository.loadAllAppointments();
         
         int choice = -1;
