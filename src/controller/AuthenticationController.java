@@ -6,52 +6,89 @@ import repository.PersonnelFileType;
 import repository.PersonnelRepository;
 
 public class AuthenticationController {
-	public static SessionCookie cookie = new SessionCookie(null, null);
+    public static SessionCookie cookie = new SessionCookie(null, null);
 
     // Method to authenticate a user based on username and password
-	public static HMSPersonnel login(String username, String password, PersonnelFileType role) {
-	    // Determine the correct personnel map to check based on the role
-	    Map<String, ? extends HMSPersonnel> personnelMap = null;
+    public static HMSPersonnel login(String username, String password, PersonnelFileType role) {
+        Map<String, ? extends HMSPersonnel> personnelMap = null;
 
-	    switch (role.toString().toLowerCase()) {
-	        case "admins":
-	            personnelMap = PersonnelRepository.ADMINS;
-	            break;
-	        case "doctors":
-	            personnelMap = PersonnelRepository.DOCTORS;
-	            break;
-	        case "pharmacists":
-	            personnelMap = PersonnelRepository.PHARMACISTS;
-	            break;
-	        case "patients":
-	            personnelMap = PersonnelRepository.PATIENTS;
-	            break;
-	        default:
-	            System.out.println("Login failed: Invalid role provided.");
-	            return null;
-	    }
+        switch (role.toString().toLowerCase()) {
+            case "admins":
+                personnelMap = PersonnelRepository.ADMINS;
+                break;
+            case "doctors":
+                personnelMap = PersonnelRepository.DOCTORS;
+                break;
+            case "pharmacists":
+                personnelMap = PersonnelRepository.PHARMACISTS;
+                break;
+            case "patients":
+                personnelMap = PersonnelRepository.PATIENTS;
+                break;
+            default:
+                System.out.println("Login failed: Invalid role provided.");
+                return null;
+        }
 
-	    // If a valid role is provided, check the corresponding personnel map
-	    for (HMSPersonnel personnel : personnelMap.values()) {
-	        if (personnel.getUsername().equals(username) && verifyPassword(personnel, password)) {
-	            System.out.println(role + " " + personnel.getFullName() + " logged in successfully.");
-	            cookie.setRole(PersonnelFileType.toEnum(personnel.getRole()));
-	            cookie.setUid(personnel.getUID());
-	            
-	            return personnel;
-	        }
-	    }
+        for (HMSPersonnel personnel : personnelMap.values()) {
+            if (personnel.getUsername().equals(username) && verifyPassword(personnel, password)) {
+                System.out.println(role + " " + personnel.getFullName() + " logged in successfully.");
+                cookie.setRole(PersonnelFileType.toEnum(personnel.getRole()));
+                cookie.setUid(personnel.getUID());
+                return personnel;
+            }
+        }
 
-	    // If no user is found in the map for the provided role
-	    System.out.println("Login failed: Invalid username or password.");
-	    return null;
-	}
-
+        System.out.println("Login failed: Invalid username or password.");
+        return null;
+    }
 
     // Method to verify if the password matches the stored password hash
     private static boolean verifyPassword(HMSPersonnel personnel, String password) {
-        // For simplicity, we're directly comparing the password (in a real app, you'd hash the password)
         return personnel.getPasswordHash().equals(password);
+    }
+
+    // Method to update the password for a given personnel
+    public static boolean updatePassword(HMSPersonnel personnel, String newPassword) {
+        if (newPassword == null || newPassword.isEmpty()) {
+            System.out.println("Password update failed: New password cannot be empty.");
+            return false;
+        }
+
+        personnel.setPasswordHash(newPassword);  // Update the password in the personnel object
+
+        // Update the password in the repository
+        Map<String, ? extends HMSPersonnel> personnelMap = null;
+        String uid = personnel.getUID();
+
+        switch (PersonnelFileType.toEnum(personnel.getRole())) {
+            case ADMINS:
+                personnelMap = PersonnelRepository.ADMINS;
+                break;
+            case DOCTORS:
+                personnelMap = PersonnelRepository.DOCTORS;
+                break;
+            case PHARMACISTS:
+                personnelMap = PersonnelRepository.PHARMACISTS;
+                break;
+            case PATIENTS:
+                personnelMap = PersonnelRepository.PATIENTS;
+                break;
+            default:
+                System.out.println("Password update failed: Invalid role provided.");
+                return false;
+        }
+
+        // Cast to the appropriate type to allow modifications
+        if (personnelMap != null && personnelMap.containsKey(uid)) {
+            ((Map<String, HMSPersonnel>) personnelMap).put(uid, personnel);  // Update in the map
+            PersonnelRepository.saveAllPersonnelFiles();
+            System.out.println("Password updated successfully for " + personnel.getFullName());
+            return true;
+        } else {
+            System.out.println("Password update failed: Personnel not found in repository.");
+            return false;
+        }
     }
 
     // Optional: Implement a logout method if needed

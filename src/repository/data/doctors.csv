@@ -1,12 +1,13 @@
+DO-5611e326-d37c-46e7-9bdb-2586958a267b,Dr. John Smith,ID001234,john_smith,john.smith@example.com,1234567890,hashedpassword1,1975-04-12T00:00,Male,Doctors,Cardiology,MLN12345,2010-05-20T00:00,15
+DO-36f88092-ef90-4442-850a-f0529adf98f9,Dr. John Smith,ID001234,john_smith,john.smith@example.com,1234567890,hashedpassword1,1975-04-12T00:00,Male,Doctors,Cardiology,MLN12345,2010-05-20T00:00,15
+Test01,Dr. Test01,1234567890,test123,dummy@example.com,123-456-7890,test123,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:28:09.003530400,15
+DO-bc6f66af-4c50-4e73-9a21-92f559c36097,Dr. Emily Johnson,ID002345,emily_johnson,emily.johnson@example.com,0987654321,hashedpassword2,1980-08-22T00:00,Female,Doctors,Neurology,MLN23456,2012-06-15T00:00,12
 D002,Dr. Test Dummy2,1234567890,testdummy,dummy@example.com,123-456-7890,dummy_password_hash,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:27:14.815317200,15
 D001,Dr. Test Dummy,1234567890,testdummy,dummy@example.com,123-456-7890,dummy_password_hash,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:52:17.373800300,15
-Test01,Dr. Test01,1234567890,test123,dummy@example.com,123-456-7890,test123,1980-01-01T00:00,Male,Doctor,Cardiology,MED123456,2024-10-25T20:28:09.003530400,15
 DO-8a3f2ca9-4b81-4e72-932b-730c5f537775,Dr. Chong,ID001234,chong,john.smith@example.com,1234567890,chong,1975-04-12T00:00,Male,Doctors,Cardiology,MLN12345,2010-05-20T00:00,15
-DO-5611e326-d37c-46e7-9bdb-2586958a267b,Dr. John Smith,ID001234,john_smith,john.smith@example.com,1234567890,hashedpassword1,1975-04-12T00:00,Male,Doctors,Cardiology,MLN12345,2010-05-20T00:00,15
 DO-7cf1b538-0f88-4fe2-b6ee-28b5e49f3575,Dr. John Smith,ID001234,john_smith,john.smith@example.com,1234567890,hashedpassword1,1975-04-12T00:00,Male,Doctors,Cardiology,MLN12345,2010-05-20T00:00,15
 DO-321298ba-c748-4f15-ab37-584e5b19113c,Dr. Michael Lee,ID003456,michael_lee,michael.lee@example.com,1122334455,hashedpassword3,1982-01-05T00:00,Male,Doctors,Orthopedics,MLN34567,2015-07-10T00:00,9
 DO-c8b3a448-89df-4962-9cd8-cec900fb90c9,Dr. Emily Johnson,ID002345,emily_johnson,emily.johnson@example.com,0987654321,hashedpassword2,1980-08-22T00:00,Female,Doctors,Neurology,MLN23456,2012-06-15T00:00,12
-DO-36f88092-ef90-4442-850a-f0529adf98f9,Dr. John Smith,ID001234,john_smith,john.smith@example.com,1234567890,hashedpassword1,1975-04-12T00:00,Male,Doctors,Cardiology,MLN12345,2010-05-20T00:00,15
 DO-76724236-2256-465c-ba98-796907f71b4d,Dr. Michael Lee,ID003456,michael_lee,michael.lee@example.com,1122334455,hashedpassword3,1982-01-05T00:00,Male,Doctors,Orthopedics,MLN34567,2015-07-10T00:00,9
 DO-3375b5cc-1394-4bd0-b9a6-fdd3d6287ede,Dr. Michael Lee,ID003456,michael_lee,michael.lee@example.com,1122334455,hashedpassword3,1982-01-05T00:00,Male,Doctors,Orthopedics,MLN34567,2015-07-10T00:00,9
-DO-bc6f66af-4c50-4e73-9a21-92f559c36097,Dr. Emily Johnson,ID002345,emily_johnson,emily.johnson@example.com,0987654321,hashedpassword2,1980-08-22T00:00,Female,Doctors,Neurology,MLN23456,2012-06-15T00:00,12
+DO-f7478011-2420-4315-bb1a-ce130c18d72f,Chong Kwang Chen,S9776612F,chong,chong@gmail.com,88216108,defaultPassword,1997-08-19T12:12,M,Doctors,turn healthy person into unhealthy,4564845-5161d5-dafsd5,2024-05-11T15:55,2
