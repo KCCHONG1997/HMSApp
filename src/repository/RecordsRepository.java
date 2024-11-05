@@ -1,6 +1,12 @@
 package repository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+//import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,8 +29,10 @@ public class RecordsRepository {
      * Method to save all record files into CSV format
      */
     public static void saveAllRecordFiles() {
+//        loadAllRecordFiles(); //my added
+
         saveRecordsToCSV("medical_records.csv", MEDICAL_RECORDS);
-//        saveRecordsToCSV("appointment_records.csv", APPOINTMENT_RECORDS);
+        saveRecordsToCSV("appointment_records.csv", APPOINTMENT_RECORDS);
 //        saveRecordsToCSV("payment_records.csv", PAYMENT_RECORDS);
     }
 
@@ -62,17 +70,26 @@ public class RecordsRepository {
             medRecord.getPatientID(),
             medRecord.getDoctorID(),
             medRecord.getBloodType()
-            //medRecord.getDiagnosis()
+//            medRecord.getDiagnosis().toString() //my added
         );
     } else if (record instanceof AppointmentRecord) {
         AppointmentRecord appRecord = (AppointmentRecord) record;
+        AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();
+
         return String.join(",",
             appRecord.getRecordID(),
             appRecord.getCreatedDate().toString(),
             appRecord.getUpdatedDate().toString(),
             appRecord.getRecordStatus().toString(),
+            appRecord.getAppointmentTime().toString(),
+            appRecord.getlocation(),
+            appRecord.getAppointmentStatus().toString(),
+            (outcome != null) ? outcome.getAppointmentTime().toString() : null,
+            (outcome != null) ? outcome.getTypeOfService() : null,  // Type of Service
+            (outcome != null && outcome.getPrescription() != null) ? outcome.getPrescription().toString() : null,  // Prescription if not null
+            (outcome != null) ? outcome.getConsultationNotes() : null,  // Consultation notes
             appRecord.getPatientID(),
-            appRecord.getAppointmentTime().toString()
+            appRecord.getDoctorID()
         );
     } else if (record instanceof PaymentRecord) {
         PaymentRecord payRecord = (PaymentRecord) record;
@@ -95,7 +112,7 @@ public class RecordsRepository {
     public static void loadAllRecordFiles() {
     	if (!loadRepo)
         loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
-//        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
+        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
 //        loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS, PaymentRecord.class);
     }
     
@@ -155,44 +172,36 @@ public class RecordsRepository {
 //                        medRecord.getPatientID(),
 //                        medRecord.getDoctorID(),
 //                        medRecord.getBloodType()
-                    //fields[0],                                       // recordID (MRID)
+                    fields[0],                                       // recordID (MRID)
                     LocalDateTime.parse(fields[1]),                  // createdDate
                     LocalDateTime.parse(fields[2]),                  // updatedDate
                     toEnumRecordStatusType(fields[3]),             // recordStatus
                     fields[4],                                       // patientID
                     fields[5],                                       // doctorID
                     fields[6],                                       // blood type
-                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[4], new ArrayList<>())                               // bloodType
+                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[7], new ArrayList<>())                               
                 ));
-            } else if (type == AppointmentRecord.class) {
-                // Parse fields[10] into parts for AppointmentOutcomeRecord
-//                String[] outcomeFields = fields[10].split(";");  // Assuming ";" as delimiter for `typeOfService`, `prescription`, `consultationNotes`
-//                
-//                // Create AppointmentOutcomeRecord using parsed data
-//                AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord();
-//                if (outcomeFields.length >= 3) {  // Ensure we have enough fields for typeOfService, prescription, consultationNotes
-//                    outcomeRecord.setTypeOfService(outcomeFields[0]);            // Set typeOfService
-//                    outcomeRecord.setPrescription(new Prescription(outcomeFields[1])); // Create Prescription from string
-//                    outcomeRecord.setConsultationNotes(outcomeFields[2]);        // Set consultationNotes
-//                }
-//              
-//                
-//                return type.cast(new AppointmentRecord(
-////                        appRecord.getRecordID(),
-////                        appRecord.getCreatedDate().toString(),
-////                        appRecord.getUpdatedDate().toString(),
-////                        appRecord.getRecordStatus().toString(),
-////                        appRecord.getPatientID(),
-////                        appRecord.getAppointmentTime().toString()                    
-//                    LocalDateTime.parse(fields[1]),                  // createdDate
-//                    LocalDateTime.parse(fields[2]),                  // updatedDate
-//                    RecordStatusType.valueOf(fields[3]),             // recordStatus
-//                    fields[4],                                       // patientID
-//                    LocalDateTime.parse(fields[5]),                   // appointmentTime
-//                    fields[8],                                       // location
-//                    AppointmentStatus.valueOf(fields[9]),            // appointmentStatus
-//                    outcomeRecord                                    // appointmentOutcomeRecord
-//                ));
+            } else if (type == AppointmentRecord.class) {       
+                return type.cast(new AppointmentRecord(
+                		
+//                        appRecord.getRecordID(),
+//                        appRecord.getCreatedDate().toString(),
+//                        appRecord.getUpdatedDate().toString(),
+//                        appRecord.getRecordStatus().toString(),
+//                        appRecord.getPatientID(),
+//                        appRecord.getAppointmentTime().toString()
+                fields[0],                                       // recordID (MRID)
+                LocalDateTime.parse(fields[1]),                  // createdDate
+                LocalDateTime.parse(fields[2]),                  // updatedDate
+                toEnumRecordStatusType(fields[3]),             // recordStatus
+                LocalDateTime.parse(fields[4]),                   // appointmentTime
+                fields[5],                                       // location
+                AppointmentStatus.valueOf(fields[6]),            // appointmentStatus
+                AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(fields[7]),        //appointmentOutcome                      // bloodType
+                fields[8],                                       // patientID
+                fields[9]));                                    // doctorID
+          
+            	
             } else if (type == PaymentRecord.class) {
 //                return type.cast(new PaymentRecord(
 ////                        payRecord.getRecordID(),

@@ -12,7 +12,7 @@ public class HMSMain {
     	HMSAppUI hmsAppUI = new HMSAppUI();
     	PersonnelRepository.loadAllPersonnelFiles();
     	RecordsRepository.loadAllRecordFiles();
-    	
+
         printHMSWelcomeTitle();
         hmsAppUI.start();      
            

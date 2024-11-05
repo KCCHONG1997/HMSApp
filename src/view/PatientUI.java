@@ -1,10 +1,26 @@
 package view;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import HMSApp.HMSMain;
+import controller.DoctorController;
+import enums.AppointmentStatus;
+import model.AppointmentRecord;
+import model.Doctor;
+import model.Patient;
+import repository.PersonnelRepository;
+import repository.RecordsRepository;
 
-public class PatientUI {
-    public static void printMenu() {
+public class PatientUI extends MainUI{
+	
+	private static Patient patient;
+
+	public PatientUI(Patient patient) {
+		this.patient = patient;
+	}
+	
+	@Override
+    public void printChoice() {
         System.out.println("Patient Menu:");
         System.out.println("1. View Medical Record");
         System.out.println("2. Update Personal Information");
@@ -16,14 +32,17 @@ public class PatientUI {
         System.out.println("8. View Past Appointment Outcome Records");
         System.out.println("9. Logout");
     }
-    
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int choice = 0;
-        do {
-            printMenu();
-            choice = sc.nextInt();
-            switch(choice) {
+	public void start() {
+		showPatientDashboard();
+	}
+
+	public void showPatientDashboard() {
+		Scanner sc = new Scanner(System.in);
+		int choice = 0;
+		do {
+			printChoice();
+			choice = sc.nextInt();
+			switch (choice) {
                 case 1: 
                     // Code for viewing medical record
                     break;
@@ -32,6 +51,7 @@ public class PatientUI {
                     break;
                 case 3: 
                     // Code for viewing available appointment slots
+                	viewAvailableAppointmentSlots();
                     break;
                 case 4: 
                     // Code for scheduling an appointment
@@ -59,4 +79,47 @@ public class PatientUI {
         
         sc.close(); // Close the Scanner
     }
+    
+    
+    public static void viewAvailableAppointmentSlots() {
+        RecordsRepository.loadAllRecordFiles();
+
+    	System.out.println("\n--- Available Appointment Slots :  ---");
+
+    	boolean found = false;
+        for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
+            if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
+                found = true;
+                String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
+
+                System.out.println("Day: " + appointment.getAppointmentTime().getDayOfWeek() +
+                        ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) +
+                        ", Location: " + appointment.getlocation() +
+                        ", Doctor: " + doctorName);
+            }
+        }
+
+
+
+	    if (!found) {
+	        System.out.println("No appointments found");
+	    }
+
+	    System.out.println("---------------------------------------");
+    	
+    }
+
+
+    
+//    public static void patientChooseAppointment(String recordID, LocalDateTime chosenTime) {
+//        AppointmentRecord appointment = RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
+//        if (appointment != null && appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
+//            appointment.setAppointmentTime(chosenTime);
+//            appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
+//            System.out.println("Appointment has been confirmed for: " + chosenTime);
+//        } else {
+//            System.out.println("No available appointment found or it is already confirmed.");
+//        }
+//    }
+    
 }

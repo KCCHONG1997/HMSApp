@@ -1,78 +1,140 @@
 package repository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+
 import model.AppointmentOutcomeRecord;
+import model.Prescription;
 
 public class AppointmentOutcomeRecordRepository {
+    private static final String folder = "data";
 
-	 private static final String FILE_NAME = "./src/repository/data/appointment_outcomes.csv";
-	    private static final HashMap<String, AppointmentOutcomeRecord> OUTCOME_RECORDS = new HashMap<>();
+    // Static data collection for AppointmentOutcomeRecord records only (key = patientID)
+    public static HashMap<String,AppointmentOutcomeRecord> patientOutcomeRecords = new HashMap<>();
 
-	    // Method to save an outcome record to the CSV file after it's created
-	    public static void saveOutcomeRecord(String recordID, AppointmentOutcomeRecord outcomeRecord) {
-	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
-	            writer.write(outcomeRecordToCSV(outcomeRecord));
-	            writer.newLine();
-	            System.out.println("Outcome record saved to file: " + FILE_NAME);
-	        } catch (IOException e) {
-	            System.out.println("Error saving outcome record to CSV: " + e.getMessage());
-	        }
-	    }
+    /**
+     * Save AppointmentOutcomeRecord records map to a CSV file
+     */
+    private boolean checkDuplicateID(String id) {
+        return patientOutcomeRecords.get(id) != null;
+    }
 
-	    // Convert an AppointmentOutcomeRecord to a CSV line
-	    private static String outcomeRecordToCSV(AppointmentOutcomeRecord outcomeRecord) {
-	        return String.join(",",
-	                outcomeRecord.getTypeOfService(),
-	                outcomeRecord.getPrescription().toString(),  // Convert prescription to a suitable format
-	                outcomeRecord.getConsultationNotes()
-	        );
-	    }
+    public static void saveAppoinmentOutcomeRecordsToCSV(String fileName, HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+        String filePath = "./src/repository/" + folder + "/" + fileName;
 
-	    // Load outcome records from CSV file
-	    public static void loadOutcomeRecords() {
-	        // Ensure directory exists
-	        File directory = new File("./src/repository/data");
-	        if (!directory.exists()) {
-	            directory.mkdirs();
-	        }
+        // Ensure the directory exists
+        File directory = new File("./src/repository/" + folder);
+        if (!directory.exists()) {
+            directory.mkdirs();  // Create the directory if it doesn't exist
+        }
 
-	        File file = new File(FILE_NAME);
-	        if (!file.exists()) {
-	            try {
-	                file.createNewFile();
-	                System.out.println("Created empty file: " + FILE_NAME);
-	            } catch (IOException e) {
-	                System.out.println("Error creating file: " + e.getMessage());
-	            }
-	            return; // No data to load
-	        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (String patientID : patientOutcomeRecords.keySet()) {
+                AppointmentOutcomeRecord record = patientOutcomeRecords.get(patientID);
+                if(record != null)
+                {
+                	writer.write(appointmentOutcomeToCSV(patientID,record));
+                    writer.newLine();
+                }
+                
+            }
+            System.out.println("Appointment outcome records successfully saved to CSV.");
+        } catch (IOException e) {
+            System.out.println("Error saving appointment outcome records to CSV: " + e.getMessage());
+        }
+    }
 
-	        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-	            String line;
-	            while ((line = reader.readLine()) != null) {
-	                String[] fields = line.split(",");
-	                String recordID = fields[0];
-	                AppointmentOutcomeRecord outcomeRecord = csvToOutcomeRecord(fields);
-	                OUTCOME_RECORDS.put(recordID, outcomeRecord);
-	            }
-	            System.out.println("Loaded " + OUTCOME_RECORDS.size() + " outcome records from " + FILE_NAME);
-	        } catch (IOException e) {
-	            System.out.println("Error reading appointment outcome records: " + e.getMessage());
-	        }
-	    }
+    // Convert an AppointmentOutcomeRecord object to a CSV line
+    private static String appointmentOutcomeToCSV(String patientID, AppointmentOutcomeRecord record) {
+        return String.join(",",
+                record.getAppointmentTime().toString(),   // Appointment time
+                record.getTypeOfService(),                // Type of Service
+                record.getPrescription().toString(),      // prescription 
+                "\"" + record.getConsultationNotes() + "\"", // Consultation Notes
+                record.getPatientID() +                   // Patient ID
+                record.getDoctorID()                    //Doctor ID
+        );
+    }
+    
+    // Convert a TreatmentPlan object to a CSV line (using only LocalDate)
+    public static void loadAppointmentOutcomeRecordDB(){
+    	loadAppoinmentOutcomeRecordsFromCSV("appointment_outcome_records.csv",patientOutcomeRecords);
+    }
 
-	    // Convert CSV fields to AppointmentOutcomeRecord
-	    private static AppointmentOutcomeRecord csvToOutcomeRecord(String[] fields) {
-	        AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord();
-	        outcomeRecord.setTypeOfService(fields[1]);
-//	        outcomeRecord.setPrescription(new Prescription(fields[2])); // Assuming Prescription has an appropriate constructor
-	        outcomeRecord.setConsultationNotes(fields[3]);
-	        return outcomeRecord;
-	    }
+    /**
+     * Load AppointmentOutcomeRecord records from a CSV file, or create an empty file if it doesn't exist
+     */
+    public static void loadAppoinmentOutcomeRecordsFromCSV(String fileName, HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+        String filePath = "./src/repository/" + folder + "/" + fileName;
+        // Ensure the directory exists
+        File directory = new File("./src/repository/" + folder);
+        if (!directory.exists()) {
+            directory.mkdirs();  // Create the directory if it doesn't exist
+        }
+        File file = new File(filePath);
 
-	    // Retrieve an outcome record by ID
-	    public static AppointmentOutcomeRecord getOutcomeRecord(String recordID) {
-	        return OUTCOME_RECORDS.get(recordID);
-	    }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();  // Create an empty file if it doesn't exist
+                System.out.println("Created empty file: " + filePath);
+            } catch (IOException e) {
+                System.out.println("Error creating file: " + e.getMessage());
+            }
+            return;  // No data to load, as the file was just created
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                AppointmentOutcomeRecord record = csvToOutcomeRecord(line);
+                String patientID = getPatientIDFromCSV(line);
+                if (record != null && patientID != null) {
+                	patientOutcomeRecords.put(patientID, record);
+                }
+                
+            }
+            System.out.println("Successfully loaded " + patientOutcomeRecords.size() + " appointment outcome records from " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error reading appointment outcome records: " + e.getMessage());
+        }
+    }
+    private static String getPatientIDFromCSV(String csv) {
+        String[] fields = csv.split(",");
+        return fields[4];
+    }
+
+    // Convert a CSV line to an AppointmentOutcomeRecord object
+    private static AppointmentOutcomeRecord csvToOutcomeRecord(String csv) {
+        // Split by comma, ignoring commas within quotes
+        String[] fields = csv.split(",");
+        try {
+            LocalDateTime appointmentTime = LocalDateTime.parse(fields[0]);
+            String typeOfService = fields[1];
+            Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[2]);
+            String consultationNotes = fields[3].replace("\"", "");
+            String patientID = fields[4];
+            String doctorID = fields[5];
+            
+            return new AppointmentOutcomeRecord(appointmentTime,typeOfService,  prescription, consultationNotes,patientID, doctorID);
+        } catch (Exception e) {
+            System.out.println("Error parsing appointment outcome record data: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Clear all appointment outcome record data and save empty files
+     */
+    public static boolean clearOutcomeRecordDatabase() {
+        patientOutcomeRecords.clear();
+        saveAppoinmentOutcomeRecordsToCSV("appointment_outcome_records.csv", patientOutcomeRecords);
+        return true;
+    }
 }

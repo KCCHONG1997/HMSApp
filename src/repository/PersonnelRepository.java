@@ -1,5 +1,6 @@
 package repository;
 
+import java.io.BufferedWriter;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,7 +55,13 @@ public class PersonnelRepository {
             personnel instanceof Doctor ? ((Doctor) personnel).getSpecialty() : "",
             personnel instanceof Doctor ? ((Doctor) personnel).getMedicalLicenseNumber() : "",
             personnel instanceof Doctor ? ((Doctor) personnel).getDateJoin().toString() : "",
-            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : ""
+            personnel instanceof Doctor ? String.valueOf(((Doctor) personnel).getYearsOfExperiences()) : "",
+            // Additional fields for specific personnel types (like Patient)
+            personnel instanceof Patient ? ((Patient) personnel).getInsuranceInfo(): "",
+            personnel instanceof Patient ? ((Patient) personnel).getAllergies() : "",
+            personnel instanceof Patient ? ((Patient) personnel).getDateOfAdmission().toString(): ""
+           
+            	
         );
     }
 

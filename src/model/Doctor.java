@@ -51,4 +51,6 @@ public class Doctor extends HMSPersonnel {
     public void setYearsOfExperiences(int yearsOfExperiences) {
         this.yearsOfExperiences = yearsOfExperiences;
     }
+
+
 }

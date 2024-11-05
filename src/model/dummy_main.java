@@ -1,9 +1,14 @@
 package model;
 import repository.*;
+import view.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+
+import controller.HMSPersonnelController;
 
 import static repository.DiagnosisRepository.*;
 import static repository.RecordsRepository.*;
@@ -16,9 +21,23 @@ public class dummy_main {
 //        //RecordsRepository.loadAllRecordFiles();
 //        //RecordsRepository.
 //        System.out.println(doctorA.getUID());
+//    PersonnelRepository.loadAllPersonnelFiles();
+//    PersonnelRepository.loadAllPersonnelFiles();
+//    
+    // Print out all doctors' information
+  //  System.out.println("Doctor Information:");
+   // HMSPersonnelController.listAllPersonnel(PersonnelFileType.DOCTORS);
+	
+    
+    PersonnelRepository.loadAllPersonnelFiles();
+    System.out.println("Doctor Information:");
+    for (Map.Entry<String, Doctor> entry : PersonnelRepository.DOCTORS.entrySet()) {
+        Doctor doctor = entry.getValue();
+        System.out.println("UID: " + doctor.getUID() + ", Name: " + doctor.getFullName());
+    }
 
-
-
+    RecordsRepository.loadAllRecordFiles();	
+    PatientUI.viewAvailableAppointmentSlots();
 //
 //
 //    public Patient(String UID, String fullName, String idCard, String username, String email, String phoneNo,

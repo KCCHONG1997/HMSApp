@@ -7,19 +7,17 @@ public class PaymentRecord extends HMSRecords {
     private String patientID;
 
     // Constructor
-    public PaymentRecord(
+    public PaymentRecord(String recordID,
     		LocalDateTime createdDate, 
     		LocalDateTime updatedDate,
             RecordStatusType recordStatus, 
             String patientID,
             double paymentAmount) 
     {
-        super(createdDate, updatedDate, recordStatus);
+        super(recordID,createdDate, updatedDate, recordStatus);
         this.patientID = patientID;
         this.paymentAmount = paymentAmount;
     }
-	// TODO Auto-generated constructor stub
-	
 
 	// Getters and Setters
     public double getPaymentAmount() {

@@ -37,7 +37,7 @@ public class LoginUI extends MainUI {
 
             switch (role) {
                 case 1:
-//                    patientLogin(sc);
+                    patientLogin(sc);
                     break;
                 case 2:
                     doctorLogin(sc);
@@ -58,23 +58,23 @@ public class LoginUI extends MainUI {
         }
     }
 
-//    // Login for Patient
-//    public void patientLogin(Scanner sc) {
-//        String username = enterUsername(sc);
-//        String passwordHash = enterPassword(sc);
-//
-//        // Call the controller to verify login
-//        HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.PATIENTS);
-//
-//        if (personnel != null && personnel instanceof Patient) {
-//            Patient retrievedPatient = (Patient) personnel; // Cast to Patient
-//            System.out.println("Login Successful!");
-//            //TODO
-//            //PatientUI.showPatientDashboard(retrievedPatient);
-//        } else {
-//            System.out.println("Login failed. Invalid username or password.");
-//        }
-//    }
+    // Login for Patient
+    public void patientLogin(Scanner sc) {
+        String username = enterUsername(sc);
+        String passwordHash = enterPassword(sc);
+
+        // Call the controller to verify login
+        HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.PATIENTS);
+
+        if (personnel != null && personnel instanceof Patient) {
+            Patient retrievedPatient = (Patient) personnel; // Cast to Patient
+            PatientUI patUI = new PatientUI(retrievedPatient);
+            patUI.start();
+           
+        } else {
+            System.out.println("Login failed. Invalid username or password.");
+        }
+    }
 
     // Login for Doctor
     public void doctorLogin(Scanner sc) {

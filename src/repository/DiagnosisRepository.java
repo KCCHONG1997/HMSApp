@@ -1,6 +1,11 @@
 package repository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +58,8 @@ public class DiagnosisRepository {
                 record.getDiagnosisID(),                  // Diagnosis ID
                 record.getDiagnosisDate().toString(),     // Diagnosis date
                 record.getTreatmentPlans().toString(),    // Treatment plans
-                "\"" + record.getDiagnosisDescription() + "\""         // Diagnosis description
+                "\"" + record.getDiagnosisDescription() + "\""  +       // Diagnosis description
+                record.getPrescription().toString()
         );
     }
 
@@ -107,12 +113,12 @@ public class DiagnosisRepository {
             String patientID = fields[0];
             String diagnosisID = fields[1];
             LocalDateTime diagnosisDate = LocalDateTime.parse(fields[2]);
-            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
+            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[3]);
             
             // Remove leading and trailing quotes from Diagnosis Description if present
             String diagnosisDescription = fields[4].replace("\"", "");
 
-            Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[1]);
+            Prescription prescription = PrescriptionRepository.prescriptionMap.get(fields[5]);
 
             return new Diagnosis(patientID, diagnosisID, diagnosisDate, treatmentPlan, diagnosisDescription,prescription);
         } catch (Exception e) {

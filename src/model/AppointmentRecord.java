@@ -1,30 +1,33 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.Scanner;
+import java.util.ArrayList;
 import enums.AppointmentStatus;
-import repository.AppointmentOutcomeRecordRepository;
 
 public class AppointmentRecord extends HMSRecords {
 	private LocalDateTime appointmentTime;
 	private String location;
 	private AppointmentStatus appointmentStatus;
 	private AppointmentOutcomeRecord appointmentOutcomeRecord;
-	private String patientID;// ck
+	private String patientID;
+	private String doctorID; 
 
 	// Constructor
 	public AppointmentRecord(
-			String patientID,
+			String recordID,
 			LocalDateTime createdDate, 
 			LocalDateTime updatedDate, 
 			RecordStatusType recordStatus,
 			LocalDateTime appointmentTime, 
 			String location, 
 			AppointmentStatus appointmentStatus,
-			AppointmentOutcomeRecord appointmentOutcomeRecord) {
-		super(createdDate, updatedDate, recordStatus);
-
+			AppointmentOutcomeRecord appointmentOutcomeRecord,
+			String patientID,
+			String doctorID
+			) {
+		super(recordID, createdDate, updatedDate, recordStatus);
 		this.patientID = patientID;
+		this.doctorID = doctorID;
 		this.appointmentTime = appointmentTime;
 		this.location = location;
 		this.appointmentStatus = appointmentStatus;
@@ -54,52 +57,16 @@ public class AppointmentRecord extends HMSRecords {
 
 	public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
 		this.appointmentStatus = appointmentStatus;
-//
-//		Scanner scanner = new Scanner(System.in);
-//
-//		if (appointmentStatus == AppointmentStatus.COMPLETED) {
-//			System.out.println("The appointment is completed. Would you like to");
-//			System.out.println("1) Record Appointment Outcome");
-//
-//			int choice = scanner.nextInt();
-//
-//			switch (choice) {
-//
-//			case 1:
-//				System.out.println("Please enter the type of service:");
-//				String typeOfService = scanner.nextLine();
-//
-//				System.out.println("Please enter the prescription (as a string):");
-//				String prescriptionInput = scanner.nextLine();
-//
-//				System.out.println("Please enter the consultation notes:");
-//				String consultationNotes = scanner.nextLine();
-//
-//				AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord();
-//				outcomeRecord.setTypeOfService(typeOfService);
-//				// outcomeRecord.setPrescription(new Prescription(prescriptionInput)); //
-//				// Assuming Prescription has a constructor
-//				outcomeRecord.setConsultationNotes(consultationNotes);
-//
-//				AppointmentOutcomeRecordRepository.saveOutcomeRecord(recordID, outcomeRecord);
-//				System.out.println("Appointment outcome recorded successfully!");
-//				break;
-//
-//			default:
-//				System.out.println("Invalid choice. No action taken.");
-//				break;
-//			}
-//		}
 
 	}
 
-	public AppointmentOutcomeRecord getAppointmentOutcomeRecord() {
-		return appointmentOutcomeRecord;
-	}
+    public AppointmentOutcomeRecord getAppointmentOutcomeRecord() {
+        return appointmentOutcomeRecord;
+    }
 
-	public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
-		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
-	}
+    public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord AppointmentOutcomeRecord) {
+    	this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+    }
 
 	public String getPatientID() {
 		return patientID;
@@ -107,6 +74,14 @@ public class AppointmentRecord extends HMSRecords {
 
 	public void setPatientID(String patientID) {
 		this.patientID = patientID;
+	}
+	
+	public String getDoctorID() {
+		return doctorID;
+	}
+
+	public void setDoctorID(String doctorID) {
+		this.doctorID = doctorID;
 	}
 
 }
