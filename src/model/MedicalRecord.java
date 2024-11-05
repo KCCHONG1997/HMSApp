@@ -7,12 +7,12 @@ public class MedicalRecord extends HMSRecords {
     private String diagnosis;
     private String treatmentPlan;
     private String MRID;
-    private List<Medication> medicationList;
+    private List<PrescribedMedication> medicationList;
 
     // Constructor
     public MedicalRecord(String recordID, Doctor createdBy, LocalDateTime createdDate, LocalDateTime updatedDate,
                          RecordStatusType recordStatus, String description, Patient patient,
-                         String diagnosis, String treatmentPlan, String MRID, List<Medication> medicationList) {
+                         String diagnosis, String treatmentPlan, String MRID, List<PrescribedMedication> medicationList) {
         super(recordID, createdBy, createdDate, updatedDate, recordStatus, description, patient);
         this.diagnosis = diagnosis;
         this.treatmentPlan = treatmentPlan;

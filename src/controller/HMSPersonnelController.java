@@ -1,12 +1,33 @@
 package controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import model.*;
 import repository.*;
+import java.util.UUID;
 
 public class HMSPersonnelController {
 
+	
+	public static String generateUID (PersonnelFileType personnelFileType) {
+		UUID uuid = UUID.randomUUID();
+		String uuidAsString = uuid.toString();
+		
+        switch (personnelFileType) {
+        case ADMINS:
+            return "AD-" + uuidAsString;
+        case DOCTORS:
+            return "DO-" + uuidAsString;
+        case PATIENTS:
+            return "PA-" + uuidAsString;
+        case PHARMACISTS:
+            return "PH-" + uuidAsString;
+        default:
+            return "";
+    }
+	}
     // Add a new personnel (e.g., Doctor, Patient, etc.)
     public static boolean addPersonnel(HMSPersonnel personnel) {
         if (personnel == null || personnel.getUID() == null) {
@@ -170,17 +191,18 @@ public class HMSPersonnelController {
         }
     }
     
+//    public List<Patient> getListOfPatientByName(String name){
+//    	if (PersonnelRepository.is)
+//    }
+    
     public static void main(String[] args) {
-    	PersonnelRepository.loadAllPersonnelFiles();
-    	LocalDateTime DoB = AdminController.readDate();
-    	LocalDateTime dateOfCreation = DoB;
-    	Admin admin = new Admin("U0005", "Admin", "Admin2", "admin2", "admin1@gmail.com", "123456",
-                "default", DoB, "Male", "Admin", dateOfCreation);
+    	Repository.loadRepository(new PersonnelRepository());
+    	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		 LocalDateTime currentDateTime = LocalDateTime.now();
+		 String formattedDateTime = currentDateTime.format(formatter);
+		 LocalDateTime date = LocalDateTime.parse(formattedDateTime, formatter);
+    	 Admin admin = new  Admin("ADMIN", "1", "admin", "admin@gmail.com", "123456",
+                 "default", date, "Male", "Admin", date);
     	addPersonnel(admin);
-    	Admin a = (Admin) getPersonnelByUID("U0002", PersonnelFileType.ADMINS);
-    	Admin b = (Admin) getPersonnelByUID("U0005", PersonnelFileType.ADMINS);
-    	System.out.println(a.getFullName());
-    	System.out.println(b.getFullName());
-    	
     }
 }

@@ -9,7 +9,10 @@ import model.Doctor;
 import model.HMSPersonnel;
 import model.Medicine;
 import model.Pharmacist;
+import repository.MedicineRepository;
 import repository.PersonnelFileType;
+import repository.PersonnelRepository;
+import repository.Repository;
 import controller.*;
 import enums.ReplenishStatus;
 import helper.Helper;
@@ -115,8 +118,6 @@ public class AdminUI extends MainUI {
 	}
     
     public static void addPersonnel(String role) {
-    	System.out.println("Enter UID: " );
-    	String UID = Helper.readString();
         System.out.println("Enter Full Name: " );
         String fullName = Helper.readString();
         System.out.println("Enter ID Card: " );
@@ -140,7 +141,8 @@ public class AdminUI extends MainUI {
              LocalDateTime dateJoin = readDate();
              System.out.println("Enter Years of Experiences: " );
              int yearsOfExperiences = Helper.readInt();
-             Doctor doctor = new Doctor(UID,fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender, "Doctor", specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
+             Doctor doctor = new Doctor(fullName,idCard, username, email, phoneNo, "defaultPassword", 
+            		 DoB, gender, specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
              HMSPersonnel personnel = (HMSPersonnel) doctor;
              AdminController.addPersonnel(personnel);
         }      
@@ -150,7 +152,7 @@ public class AdminUI extends MainUI {
         	String pharmacistLicenseNumber = Helper.readString();
         	System.out.println("Enter Date Of Employment: " );
         	LocalDateTime dateOfEmployment = readDate();
-        	Pharmacist pharmacist = new Pharmacist(UID,fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender, "Pharmacist",pharmacistLicenseNumber , dateOfEmployment);
+        	Pharmacist pharmacist = new Pharmacist(fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender,pharmacistLicenseNumber , dateOfEmployment);
         	HMSPersonnel personnel = (HMSPersonnel) pharmacist;
         	AdminController.addPersonnel(personnel);
         }
@@ -246,11 +248,12 @@ public class AdminUI extends MainUI {
 		 System.out.print("Enter Low Stock Level: ");
 		 int lowStockLevel = Helper.readInt();  
 		 System.out.print("Enter Replenish Status: ");
-		 ReplenishStatus status = ReplenishStatus.valueOf(Helper.readString().trim().toUpperCase());
-		 System.out.print("Enter Approved Date (YYYY-MM-DDTHH:MM): ");
-		 LocalDateTime approvedDate = readDate();
+		 ReplenishStatus status = ReplenishStatus.NULL;
+		 String dateTimeString = "0001-01-01 00:00";
+	     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	     LocalDateTime date = LocalDateTime.parse(dateTimeString, formatter);
 		 Medicine medicine = new Medicine(medicineID, name, manufacturer, expiryDate, 
-		                                      inventoryStock, lowStockLevel, status, approvedDate);
+		                                      inventoryStock, lowStockLevel, status, date, date);
 		 AdminController.addMedicine(medicine);
     }
     public static void updateMedicine() {
@@ -296,8 +299,8 @@ public class AdminUI extends MainUI {
 		 medicine.setReplenishStatus(ReplenishStatus.APPROVED);
 		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		 LocalDateTime currentDateTime = LocalDateTime.now();
-	     String formattedDateTime = currentDateTime.format(formatter);
-	     LocalDateTime approvedDate = LocalDateTime.parse(formattedDateTime);
+		 String formattedDateTime = currentDateTime.format(formatter);
+		 LocalDateTime approvedDate = LocalDateTime.parse(formattedDateTime, formatter);
 		 medicine.setApprovedDate(approvedDate);
 		 AdminController.approveReplenishRequest(medicineID, medicine);
     }
@@ -316,6 +319,13 @@ public class AdminUI extends MainUI {
             }
         }
         return date;
+    }
+    
+    public static void main(String[] args) {
+    	Repository.loadRepository(new PersonnelRepository());
+		Repository.loadRepository(new MedicineRepository());
+		approveReplenishRequest();
+    	
     }
     
 }

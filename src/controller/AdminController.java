@@ -21,7 +21,7 @@ import repository.PersonnelRepository;
 
 public class AdminController extends HMSPersonnelController {
 	public static void listAllMedicine() {
-		MedicineController.listAllMedicine();
+		MedicineController.listAllMedicines();
 	}
 	public static void addMedicine(Medicine medicine) {
 		
@@ -159,8 +159,9 @@ public class AdminController extends HMSPersonnelController {
 
     
     public static void main(String[] args) {
-        PersonnelRepository.loadAllPersonnelFiles();
-        MedicineRepository.loadAllMedicines();
+        MedicineRepository mediRepository = new MedicineRepository();
+    	mediRepository.loadFromCSV();
+        MedicineController.listAllMedicines();
         
     }
 }

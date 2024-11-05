@@ -137,7 +137,6 @@ public class LoginUI extends MainUI {
     }
     
     public static void main(String[] args) {
-    	PersonnelRepository.loadAllPersonnelFiles();
     	LoginUI a = new LoginUI();
     	a.start();
     }

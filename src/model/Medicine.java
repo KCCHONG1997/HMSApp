@@ -1,5 +1,4 @@
 package model;
-
 import java.time.LocalDateTime;
 import enums.ReplenishStatus;
 
@@ -11,10 +10,11 @@ public class Medicine {
     private int inventoryStock;  
     private int lowStockLevel;
     private ReplenishStatus status;
+    private LocalDateTime replenishRequestDate;
     private LocalDateTime approvedDate;
 
     // Constructor
-    public Medicine(String medicineID, String name, String manufacturer, LocalDateTime expiryDate, int inventoryStock, int lowStockLevel, ReplenishStatus status, LocalDateTime approvedDate) {
+    public Medicine(String medicineID, String name, String manufacturer, LocalDateTime expiryDate, int inventoryStock, int lowStockLevel, ReplenishStatus status, LocalDateTime replenishRequestDate, LocalDateTime approvedDate) {
         this.medicineID = medicineID;
         this.name = name;
         this.manufacturer = manufacturer;
@@ -22,6 +22,7 @@ public class Medicine {
         this.inventoryStock = inventoryStock;
         this.lowStockLevel = lowStockLevel;
         this.status = status;
+        this.replenishRequestDate = replenishRequestDate;
         this.approvedDate = approvedDate;
     }
 
@@ -89,4 +90,13 @@ public class Medicine {
     public void setInventoryStock(int inventoryStock) {
         this.inventoryStock = inventoryStock;
     }
+
+	public LocalDateTime getReplenishRequestDate() {
+		return replenishRequestDate;
+	}
+
+	public void setReplenishRequestDate(LocalDateTime replenishRequestDate) {
+		this.replenishRequestDate = replenishRequestDate;
+	}
+      
 }
