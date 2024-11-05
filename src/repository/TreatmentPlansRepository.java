@@ -1,5 +1,6 @@
 package repository;
 
+import model.TreatmentPlans;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,24 +10,42 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import model.TreatmentPlans;
-
-public class TreatmentPlansRepository {
+public class TreatmentPlansRepository extends Repository {
     private static final String folder = "data";
+    private static final String fileName = "treatment_plans_records.csv";
+    private static boolean isRepoLoaded = false;
 
-    // Static data collection for Treatment Plan records  //key : diagnosisID
-    public static HashMap<String,TreatmentPlans> diagnosisToTreatmentPlansMap = new HashMap<>();
+    // Static data collection for Treatment Plan records (key: diagnosisID)
+    public static HashMap<String, TreatmentPlans> diagnosisToTreatmentPlansMap = new HashMap<>();
+
+    /**
+     * Specific loading logic for Treatment Plans from CSV.
+     *
+     * @return boolean indicating success or failure of the load operation
+     */
+    @Override
+    public boolean loadFromCSV() {
+        try {
+            loadTreatmentPlansFromCSV(fileName, diagnosisToTreatmentPlansMap);
+            setRepoLoaded(true);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error loading treatment plans repository: " + e.getMessage());
+            return false;
+        }
+    }
 
     /**
      * Save TreatmentPlans records map to a CSV file
      */
-    public static void saveTreatmentPlansToCSV(String fileName, HashMap<String, TreatmentPlans> diagnosisTreatmentPlansMap) {
+    public static void saveTreatmentPlansToCSV(String fileName,
+            HashMap<String, TreatmentPlans> diagnosisTreatmentPlansMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -43,41 +62,39 @@ public class TreatmentPlansRepository {
         }
     }
 
-    // Convert a TreatmentPlan object to a CSV line
+    // Convert a TreatmentPlans object to a CSV line
     private static String treatmentPlanToCSV(String diagnosisID, TreatmentPlans treatmentPlan) {
         return String.join(",",
-                treatmentPlan.getDiagnosisID(),                           // Diagnosis ID
-                treatmentPlan.getTreatmentDate().toString(),  // Treatment date
-                "\"" + treatmentPlan.getTreatmentDescription()+"\""       // Treatment description
+                treatmentPlan.getDiagnosisID(), // Diagnosis ID
+                treatmentPlan.getTreatmentDate().toString(), // Treatment date
+                "\"" + treatmentPlan.getTreatmentDescription() + "\"" // Treatment description
         );
-    }
-    // Convert a TreatmentPlan object to a CSV line (using only LocalDate)
-    public static void loadTreatmentPlanDB(){
-    	loadTreatmentPlansFromCSV("treatments_plans_records.csv",diagnosisToTreatmentPlansMap);
     }
 
     /**
-     * Load plans from a CSV file or create an empty file if it doesn't exist
+     * Load treatment plans from a CSV file or create an empty file if it doesn't
+     * exist
      */
-    private static void loadTreatmentPlansFromCSV(String fileName, HashMap<String, TreatmentPlans> diagnosisTreatmentPlansMap) {
+    private static void loadTreatmentPlansFromCSV(String fileName,
+            HashMap<String, TreatmentPlans> diagnosisTreatmentPlansMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         File file = new File(filePath);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();  // Create an empty file if it doesn't exist
+                file.createNewFile(); // Create an empty file if it doesn't exist
                 System.out.println("Created empty file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;  // No data to load, as the file was just created
+            return; // No data to load, as the file was just created
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -89,7 +106,8 @@ public class TreatmentPlansRepository {
                     diagnosisTreatmentPlansMap.put(diagnosisID, treatmentPlan);
                 }
             }
-            System.out.println("Successfully loaded " + diagnosisTreatmentPlansMap.size() + " treatment plans from " + fileName);
+            System.out.println(
+                    "Successfully loaded " + diagnosisTreatmentPlansMap.size() + " treatment plans from " + fileName);
         } catch (IOException e) {
             System.out.println("Error reading treatment plans: " + e.getMessage());
         }
@@ -100,26 +118,37 @@ public class TreatmentPlansRepository {
         String[] fields = csv.split(",");
         return fields[0];
     }
-    // Convert a CSV line to a TreatmentPlan object (using LocalDate)
+
+    // Convert a CSV line to a TreatmentPlans object
     private static TreatmentPlans csvToTreatmentPlan(String csv) {
         String[] fields = csv.split(",");
         try {
             return new TreatmentPlans(
-                    fields[0],                                // diagnosisID
-                    LocalDateTime.parse(fields[1]),           // Treatment date
-                    fields[2].replace("\"","")                                 //treatment Description
+                    fields[0], // diagnosisID
+                    LocalDateTime.parse(fields[1]), // Treatment date
+                    fields[2].replace("\"", "") // Treatment description
             );
         } catch (Exception e) {
             System.out.println("Error parsing treatment plan data: " + e.getMessage());
         }
         return null;
     }
+
     /**
-     * Clear all treatment plan data and save empty files
+     * Clear all treatment plan data and save an empty file
      */
     public static boolean clearTreatmentPlanDatabase() {
         diagnosisToTreatmentPlansMap.clear();
-        saveTreatmentPlansToCSV("treatments_plans_records.csv", diagnosisToTreatmentPlansMap);
+        saveTreatmentPlansToCSV(fileName, diagnosisToTreatmentPlansMap);
+        setRepoLoaded(false);
         return true;
+    }
+
+    public static boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
+
+    public static void setRepoLoaded(boolean isRepoLoaded) {
+        TreatmentPlansRepository.isRepoLoaded = isRepoLoaded;
     }
 }

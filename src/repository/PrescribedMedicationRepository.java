@@ -7,15 +7,40 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PrescribedMedicationRepository {
+public class PrescribedMedicationRepository extends Repository {
     private static final String folder = "data";
-
+    private static final String fileName = "prescribed_medications.csv";
+    private static boolean isRepoLoaded = false;
+    
+    
     // Static data collection for prescribed medications per diagnosis (key = diagnosisID)
     public static HashMap<String, ArrayList<PrescribedMedication>> diagnosisToMedicationsMap = new HashMap<>();
-    private boolean checkDuplicateID(String id) {
-        return diagnosisToMedicationsMap.get(id) != null;
+
+    /**
+     * Specific loading logic for Prescribed Medications from CSV.
+     *
+     * @return boolean indicating success or failure of the load operation
+     */
+    @Override
+	public boolean loadFromCSV() {
+        try {
+            loadMedicationsFromCSV(fileName, diagnosisToMedicationsMap);
+            setRepoLoaded(true);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error loading prescribed medications repository: " + e.getMessage());
+            return false;
+        }
+    }
+    public static boolean saveAlltoCSV() {
+    	PrescribedMedicationRepository.saveMedicationsToCSV(fileName,diagnosisToMedicationsMap);
+		return true;
     }
 
+    
+    /**
+     * Save prescribed medications to CSV
+     */
     public static void saveMedicationsToCSV(String fileName, HashMap<String, ArrayList<PrescribedMedication>> diagnosisToMedicationsMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
@@ -38,19 +63,22 @@ public class PrescribedMedicationRepository {
         }
     }
 
-
+    // Convert a PrescribedMedication object to a CSV line
     private static String medicationToCSV(String diagnosisID, PrescribedMedication medication) {
         return String.join(",",
-                medication.getDiagnosisID(),                       // Diagnosis ID
-                medication.getMedicineID(),                                 // Medication ID
-                medication.getMedicineQuantity(),                           // Medicine quantity
-                String.valueOf(medication.getPeriodDays()),                 // Period in days converted to String
-                medication.getPrescriptionStatus().toString(),              // enums.PrescriptionStatus PrescriptionStatus;
-                "\"" + medication.getDosage()+ "\""                         // dosage  Instructions (quotes fr safety)
-
+                medication.getDiagnosisID(),
+                medication.getMedicineID(),
+                medication.getMedicineQuantity(),
+                String.valueOf(medication.getPeriodDays()),
+                medication.getPrescriptionStatus().toString(),
+                "\"" + medication.getDosage() + "\""
         );
     }
-    public static void loadMedicationsFromCSV(String fileName, HashMap<String, ArrayList<PrescribedMedication>> diagnosisToMedicationsMap) {
+
+    /**
+     * Load medications from a CSV file or create an empty file if not found
+     */
+    private static void loadMedicationsFromCSV(String fileName, HashMap<String, ArrayList<PrescribedMedication>> diagnosisToMedicationsMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -64,7 +92,7 @@ public class PrescribedMedicationRepository {
         if (!file.exists()) {
             try {
                 file.createNewFile();  // Create an empty file if it doesn't exist
-                System.out.println("Created empty file: " + filePath);
+                System.out.println("CSV file not found. Created new file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
@@ -85,11 +113,13 @@ public class PrescribedMedicationRepository {
             System.out.println("Error reading medications: " + e.getMessage());
         }
     }
+
     public static void addMedication(String diagnosisID, PrescribedMedication medication) {
         ArrayList<PrescribedMedication> medications = diagnosisToMedicationsMap.getOrDefault(diagnosisID, new ArrayList<>());
         medications.add(medication);
         diagnosisToMedicationsMap.put(diagnosisID, medications);
     }
+
     private static String getDiagnosisIDFromCSV(String csv) {
         String[] fields = csv.split(",");
         return fields[0];
@@ -101,9 +131,9 @@ public class PrescribedMedicationRepository {
             String diagnosisID = fields[0];
             String medicineID = fields[1];
             String medicineQuantity = fields[2];
-            int periodDays = Integer.parseInt(fields[3]);  // Convert periodDays from String to int
-            PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[4]);  // Convert enum from String
-            String dosage = fields[5].replace("\"", "");  // Remove quotes from instructions
+            int periodDays = Integer.parseInt(fields[3]);
+            PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[4]);
+            String dosage = fields[5].replace("\"", "");
 
             return new PrescribedMedication(diagnosisID, medicineID, medicineQuantity, periodDays, prescriptionStatus, dosage);
         } catch (Exception e) {
@@ -112,7 +142,21 @@ public class PrescribedMedicationRepository {
         return null;
     }
 
+    /**
+     * Clear all prescribed medication data and save an empty file
+     */
+    public static boolean clearPrescribedMedicationDatabase() {
+        diagnosisToMedicationsMap.clear();
+        saveMedicationsToCSV(fileName, diagnosisToMedicationsMap);
+        setRepoLoaded(false);
+        return true;
+    }
 
+	public static boolean isRepoLoaded() {
+		return isRepoLoaded;
+	}
 
-
+	public static void setRepoLoaded(boolean isRepoLoaded) {
+		PrescribedMedicationRepository.isRepoLoaded = isRepoLoaded;
+	}
 }

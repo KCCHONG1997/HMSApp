@@ -2,7 +2,12 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import controller.RecordsController;
 import enums.AppointmentStatus;
+import repository.AppointmentOutcomeRecordRepository;
+import repository.RecordFileType;
 
 public class AppointmentRecord extends HMSRecords {
 	private LocalDateTime appointmentTime;
@@ -10,21 +15,40 @@ public class AppointmentRecord extends HMSRecords {
 	private AppointmentStatus appointmentStatus;
 	private AppointmentOutcomeRecord appointmentOutcomeRecord;
 	private String patientID;
-	private String doctorID; 
+	private String doctorID;
 
-	// Constructor
+	// Constructor when retrieving CSV to an object
+	public AppointmentRecord(
+			String recordID, // KC - we need this when retrieving from CSV
+			String patientID,
+			LocalDateTime createdDate,
+			LocalDateTime updatedDate,
+			RecordStatusType recordStatus,
+			LocalDateTime appointmentTime,
+			String location,
+			AppointmentStatus appointmentStatus,
+			ArrayList<AppointmentOutcomeRecord> appointmentOutcomeRecord) {
+		super(recordID, createdDate, updatedDate, recordStatus);
+
+		this.patientID = patientID;
+		this.appointmentTime = appointmentTime;
+		this.location = location;
+		this.appointmentStatus = appointmentStatus;
+		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+	}
+
+	// Constructor when generating a new AppointmentRecord
 	public AppointmentRecord(
 			String recordID,
-			LocalDateTime createdDate, 
-			LocalDateTime updatedDate, 
+			LocalDateTime createdDate,
+			LocalDateTime updatedDate,
 			RecordStatusType recordStatus,
-			LocalDateTime appointmentTime, 
-			String location, 
+			LocalDateTime appointmentTime,
+			String location,
 			AppointmentStatus appointmentStatus,
 			AppointmentOutcomeRecord appointmentOutcomeRecord,
 			String patientID,
-			String doctorID
-			) {
+			String doctorID) {
 		super(recordID, createdDate, updatedDate, recordStatus);
 		this.patientID = patientID;
 		this.doctorID = doctorID;
@@ -60,13 +84,13 @@ public class AppointmentRecord extends HMSRecords {
 
 	}
 
-    public AppointmentOutcomeRecord getAppointmentOutcomeRecord() {
-        return appointmentOutcomeRecord;
-    }
+	public AppointmentOutcomeRecord getAppointmentOutcomeRecord() {
+		return appointmentOutcomeRecord;
+	}
 
-    public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord AppointmentOutcomeRecord) {
-    	this.appointmentOutcomeRecord = appointmentOutcomeRecord;
-    }
+	public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord AppointmentOutcomeRecord) {
+		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+	}
 
 	public String getPatientID() {
 		return patientID;
@@ -75,7 +99,7 @@ public class AppointmentRecord extends HMSRecords {
 	public void setPatientID(String patientID) {
 		this.patientID = patientID;
 	}
-	
+
 	public String getDoctorID() {
 		return doctorID;
 	}

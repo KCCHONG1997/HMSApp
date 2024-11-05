@@ -106,7 +106,8 @@ public class dummy_main {
 //        patientDiagnosisRecords.put("P002",diagnosisRecordsA);
 //        saveDiagnosisRecordsToCSV("diagnosis_records.csv", patientDiagnosisRecords);
         DiagnosisRepository.loadDiagnosisRecordsFromCSV("diagnosis_records.csv", patientDiagnosisRecords);
-        loadAllRecordFiles();
+        Repository.loadRepository(new RecordsRepository());
+        
         MedicalRecord medicalRecord1 =  MEDICAL_RECORDS.get("MR002");
         System.out.println(medicalRecord1.getDiagnosis().getFirst().getDiagnosisID());
 
