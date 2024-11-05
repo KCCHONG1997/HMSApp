@@ -16,7 +16,7 @@ public class PrescriptionRepository extends Repository {
     private static final String folder = "data";
     private static final String fileName = "prescriptions_records.csv";
     private static boolean isRepoLoaded = false;
-    
+
     // Static data collection for Prescription records (key: diagnosis ID)
     public static HashMap<String, Prescription> PRESCRIPTION_MAP = new HashMap<>();
 
@@ -36,10 +36,10 @@ public class PrescriptionRepository extends Repository {
             return false;
         }
     }
-    
+
     public static boolean saveAlltoCSV() {
-    	PrescriptionRepository.savePrescriptionsToCSV(fileName, PRESCRIPTION_MAP);
-		return true;
+        PrescriptionRepository.savePrescriptionsToCSV(fileName, PRESCRIPTION_MAP);
+        return true;
     }
 
     /**
@@ -51,7 +51,7 @@ public class PrescriptionRepository extends Repository {
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -71,33 +71,35 @@ public class PrescriptionRepository extends Repository {
     // Convert a Prescription object to a CSV line
     private static String prescriptionToCSV(String diagnosisID, Prescription prescription) {
         return String.join(",",
-                prescription.getDiagnosisID(),                 // Diagnosis ID
-                prescription.getPrescriptionDate().toString()  // Prescription date
+                prescription.getDiagnosisID(), // Diagnosis ID
+                prescription.getPrescriptionDate().toString() // Prescription date
         );
     }
 
     /**
-     * Load prescriptions from a CSV file or create an empty file if it doesn't exist
+     * Load prescriptions from a CSV file or create an empty file if it doesn't
+     * exist
      */
-    private static void loadPrescriptionsFromCSV(String fileName, HashMap<String, Prescription> diagnosisPrescriptionMap) {
+    private static void loadPrescriptionsFromCSV(String fileName,
+            HashMap<String, Prescription> diagnosisPrescriptionMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         File file = new File(filePath);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();  // Create an empty file if it doesn't exist
+                file.createNewFile(); // Create an empty file if it doesn't exist
                 System.out.println("Created empty file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;  // No data to load, as the file was just created
+            return; // No data to load, as the file was just created
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -109,7 +111,8 @@ public class PrescriptionRepository extends Repository {
                     diagnosisPrescriptionMap.put(diagnosisID, prescription);
                 }
             }
-            System.out.println("Successfully loaded " + diagnosisPrescriptionMap.size() + " prescriptions from " + fileName);
+            System.out.println(
+                    "Successfully loaded " + diagnosisPrescriptionMap.size() + " prescriptions from " + fileName);
         } catch (IOException e) {
             System.out.println("Error reading prescriptions: " + e.getMessage());
         }
@@ -126,10 +129,10 @@ public class PrescriptionRepository extends Repository {
         String[] fields = csv.split(",");
         try {
             return new Prescription(
-                    fields[0],                               // diagnosisID
-                    LocalDateTime.parse(fields[1]),          // Prescription date
-                    PrescribedMedicationRepository.diagnosisToMedicationsMap.getOrDefault(fields[0], new ArrayList<>())
-            );
+                    fields[0], // diagnosisID
+                    LocalDateTime.parse(fields[1]), // Prescription date
+                    PrescribedMedicationRepository.diagnosisToMedicationsMap.getOrDefault(fields[0],
+                            new ArrayList<>()));
         } catch (Exception e) {
             System.out.println("Error parsing prescription data: " + e.getMessage());
         }
@@ -140,17 +143,17 @@ public class PrescriptionRepository extends Repository {
      * Clear all prescription data and save an empty file
      */
     public static boolean clearPrescriptionDatabase() {
-    	PRESCRIPTION_MAP.clear();
+        PRESCRIPTION_MAP.clear();
         savePrescriptionsToCSV(fileName, PRESCRIPTION_MAP);
         setRepoLoaded(false);
         return true;
     }
 
-	public static boolean isRepoLoaded() {
-		return isRepoLoaded;
-	}
+    public static boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
 
-	public static void setRepoLoaded(boolean isRepoLoaded) {
-		PrescriptionRepository.isRepoLoaded = isRepoLoaded;
-	}
+    public static void setRepoLoaded(boolean isRepoLoaded) {
+        PrescriptionRepository.isRepoLoaded = isRepoLoaded;
+    }
 }

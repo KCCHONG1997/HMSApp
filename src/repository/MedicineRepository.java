@@ -20,7 +20,7 @@ public class MedicineRepository extends Repository {
      * @return boolean indicating success or failure of the load operation
      */
     @Override
-	public boolean loadFromCSV() {
+    public boolean loadFromCSV() {
         try {
             loadMedicinesFromCSV(fileName, MEDICINES);
             isRepoLoaded = true;
@@ -47,7 +47,7 @@ public class MedicineRepository extends Repository {
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -72,12 +72,12 @@ public class MedicineRepository extends Repository {
                 String.valueOf(medicine.getLowStockLevel()),
                 medicine.getReplenishStatus().toString(),
                 medicine.getReplenishRequestDate().toString(),
-                medicine.getApprovedDate().toString()
-        );
+                medicine.getApprovedDate().toString());
     }
 
     /**
-     * Load Medicine records from a CSV file or create an empty file if it doesn't exist
+     * Load Medicine records from a CSV file or create an empty file if it doesn't
+     * exist
      */
     private static void loadMedicinesFromCSV(String fileName, HashMap<String, Medicine> medicinesMap) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
@@ -85,19 +85,19 @@ public class MedicineRepository extends Repository {
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         File file = new File(filePath);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();  // Create an empty file if it doesn't exist
+                file.createNewFile(); // Create an empty file if it doesn't exist
                 System.out.println("Created empty file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;  // No data to load, as the file was just created
+            return; // No data to load, as the file was just created
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -119,22 +119,22 @@ public class MedicineRepository extends Repository {
         String[] fields = csv.split(",");
         try {
             return new Medicine(
-                    fields[0],   // medicineID
-                    fields[1],   // name
-                    fields[2],   // manufacturer
-                    LocalDateTime.parse(fields[3]),  // expiryDate
-                    Integer.parseInt(fields[4]),  // inventoryStock
-                    Integer.parseInt(fields[5]),  // lowStockLevel
+                    fields[0], // medicineID
+                    fields[1], // name
+                    fields[2], // manufacturer
+                    LocalDateTime.parse(fields[3]), // expiryDate
+                    Integer.parseInt(fields[4]), // inventoryStock
+                    Integer.parseInt(fields[5]), // lowStockLevel
                     safeValueOf(fields[6]), // replenish status
-                    LocalDateTime.parse(fields[7]), //replenishRequestDate;
-                    LocalDateTime.parse(fields[8])  // approvedDate
+                    LocalDateTime.parse(fields[7]), // replenishRequestDate;
+                    LocalDateTime.parse(fields[8]) // approvedDate
             );
         } catch (Exception e) {
             System.out.println("Error parsing medicine data: " + e.getMessage());
         }
         return null;
     }
-    
+
     /**
      * Save parsing for ReplenishStatus
      */

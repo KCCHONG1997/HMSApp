@@ -1,7 +1,7 @@
 package repository;
 
 public abstract class Repository {
-	private static boolean isRepoLoad = false;
+    private static boolean isRepoLoad = false;
 
     /**
      * Static method to load the repository data.

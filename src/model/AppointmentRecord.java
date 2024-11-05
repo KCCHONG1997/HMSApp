@@ -7,9 +7,9 @@ public class AppointmentRecord extends HMSRecords {
     private String patientID;
 
     // Constructor
-    public AppointmentRecord(String recordID,  LocalDateTime createdDate, LocalDateTime updatedDate,
-                             RecordStatusType recordStatus, String patientID,
-                             LocalDateTime appointmentTime) {
+    public AppointmentRecord(String recordID, LocalDateTime createdDate, LocalDateTime updatedDate,
+            RecordStatusType recordStatus, String patientID,
+            LocalDateTime appointmentTime) {
         super(recordID, createdDate, updatedDate, recordStatus);
         this.patientID = patientID;
         this.appointmentTime = appointmentTime;
@@ -23,9 +23,11 @@ public class AppointmentRecord extends HMSRecords {
     public void setAppointmentTime(LocalDateTime appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
+
     public String getPatientID() {
         return patientID;
     }
+
     public void setPatientID(String patientID) {
         this.patientID = patientID;
     }

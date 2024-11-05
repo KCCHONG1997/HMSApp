@@ -23,7 +23,7 @@ public class RecordsRepository extends Repository {
      * @return boolean indicating success or failure of the load operation
      */
     @Override
-	public boolean loadFromCSV() {
+    public boolean loadFromCSV() {
         try {
             loadRecordsFromCSV(medicalFileName, MEDICAL_RECORDS, MedicalRecord.class);
             loadRecordsFromCSV(appointmentFileName, APPOINTMENT_RECORDS, AppointmentRecord.class);
@@ -54,7 +54,7 @@ public class RecordsRepository extends Repository {
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -73,34 +73,31 @@ public class RecordsRepository extends Repository {
         if (record instanceof MedicalRecord) {
             MedicalRecord medRecord = (MedicalRecord) record;
             return String.join(",",
-                medRecord.getRecordID(),
-                medRecord.getCreatedDate().toString(),
-                medRecord.getUpdatedDate().toString(),
-                medRecord.getRecordStatus().toString(),
-                medRecord.getPatientID(),
-                medRecord.getDoctorID(),
-                medRecord.getBloodType()
-            );
+                    medRecord.getRecordID(),
+                    medRecord.getCreatedDate().toString(),
+                    medRecord.getUpdatedDate().toString(),
+                    medRecord.getRecordStatus().toString(),
+                    medRecord.getPatientID(),
+                    medRecord.getDoctorID(),
+                    medRecord.getBloodType());
         } else if (record instanceof AppointmentRecord) {
             AppointmentRecord appRecord = (AppointmentRecord) record;
             return String.join(",",
-                appRecord.getRecordID(),
-                appRecord.getCreatedDate().toString(),
-                appRecord.getUpdatedDate().toString(),
-                appRecord.getRecordStatus().toString(),
-                appRecord.getPatientID(),
-                appRecord.getAppointmentTime().toString()
-            );
+                    appRecord.getRecordID(),
+                    appRecord.getCreatedDate().toString(),
+                    appRecord.getUpdatedDate().toString(),
+                    appRecord.getRecordStatus().toString(),
+                    appRecord.getPatientID(),
+                    appRecord.getAppointmentTime().toString());
         } else if (record instanceof PaymentRecord) {
             PaymentRecord payRecord = (PaymentRecord) record;
             return String.join(",",
-                payRecord.getRecordID(),
-                payRecord.getCreatedDate().toString(),
-                payRecord.getUpdatedDate().toString(),
-                payRecord.getRecordStatus().toString(),
-                payRecord.getPatientID(),
-                String.valueOf(payRecord.getPaymentAmount())
-            );
+                    payRecord.getRecordID(),
+                    payRecord.getCreatedDate().toString(),
+                    payRecord.getUpdatedDate().toString(),
+                    payRecord.getRecordStatus().toString(),
+                    payRecord.getPatientID(),
+                    String.valueOf(payRecord.getPaymentAmount()));
         }
         return "";
     }
@@ -108,25 +105,26 @@ public class RecordsRepository extends Repository {
     /**
      * Load records from a CSV file or create an empty file if it doesn't exist
      */
-    private static <T extends HMSRecords> void loadRecordsFromCSV(String fileName, HashMap<String, T> recordsMap, Class<T> type) {
+    private static <T extends HMSRecords> void loadRecordsFromCSV(String fileName, HashMap<String, T> recordsMap,
+            Class<T> type) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         File file = new File(filePath);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();  // Create an empty file if it doesn't exist
+                file.createNewFile(); // Create an empty file if it doesn't exist
                 System.out.println("Created empty file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;  // No data to load, as the file was just created
+            return; // No data to load, as the file was just created
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -150,32 +148,31 @@ public class RecordsRepository extends Repository {
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
-                    fields[0],                                        // recordID
-                    LocalDateTime.parse(fields[1]),                   // createdDate
-                    LocalDateTime.parse(fields[2]),                   // updatedDate
-                    RecordStatusType.toEnumRecordStatusType(fields[3]),              // recordStatus
-                    fields[4],                                        // patientID
-                    fields[5],                                        // doctorID
-                    fields[6],                                        // bloodType
-                    DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())
-                ));
+                        fields[0], // recordID
+                        LocalDateTime.parse(fields[1]), // createdDate
+                        LocalDateTime.parse(fields[2]), // updatedDate
+                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                        fields[4], // patientID
+                        fields[5], // doctorID
+                        fields[6], // bloodType
+                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
                 return type.cast(new AppointmentRecord(
-                    fields[0],                                        // recordID
-                    LocalDateTime.parse(fields[1]),                   // createdDate
-                    LocalDateTime.parse(fields[2]),                   // updatedDate
-                    RecordStatusType.toEnumRecordStatusType(fields[3]),              // recordStatus
-                    fields[4],                                        // patientID
-                    LocalDateTime.parse(fields[5])                    // appointmentTime
+                        fields[0], // recordID
+                        LocalDateTime.parse(fields[1]), // createdDate
+                        LocalDateTime.parse(fields[2]), // updatedDate
+                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                        fields[4], // patientID
+                        LocalDateTime.parse(fields[5]) // appointmentTime
                 ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
-                    fields[0],                                        // recordID
-                    LocalDateTime.parse(fields[1]),                   // createdDate
-                    LocalDateTime.parse(fields[2]),                   // updatedDate
-                    RecordStatusType.toEnumRecordStatusType(fields[3]),              // recordStatus
-                    fields[4],                                        // patientID
-                    Double.parseDouble(fields[5])                     // paymentAmount
+                        fields[0], // recordID
+                        LocalDateTime.parse(fields[1]), // createdDate
+                        LocalDateTime.parse(fields[2]), // updatedDate
+                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                        fields[4], // patientID
+                        Double.parseDouble(fields[5]) // paymentAmount
                 ));
             }
         } catch (Exception e) {
@@ -197,11 +194,11 @@ public class RecordsRepository extends Repository {
         return true;
     }
 
-	public static Boolean isRepoLoaded() {
-		return isRepoLoaded;
-	}
+    public static Boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
 
-	public static void setRepoLoaded(Boolean isRepoLoaded) {
-		RecordsRepository.isRepoLoaded = isRepoLoaded;
-	}
+    public static void setRepoLoaded(Boolean isRepoLoaded) {
+        RecordsRepository.isRepoLoaded = isRepoLoaded;
+    }
 }

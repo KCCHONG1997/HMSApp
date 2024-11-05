@@ -15,9 +15,9 @@ public class RecordsController {
 
     private static final System.Logger logger = System.getLogger(RecordsController.class.getName());
 
-    public static String generateRecordID(RecordFileType recType) {		
-    	UUID uuid = UUID.randomUUID();
-    	String uuidAsString = uuid.toString();
+    public static String generateRecordID(RecordFileType recType) {
+        UUID uuid = UUID.randomUUID();
+        String uuidAsString = uuid.toString();
         switch (recType) {
             case APPOINTMENT_RECORDS:
                 return "A-" + uuidAsString;
@@ -31,7 +31,7 @@ public class RecordsController {
     }
 
     public Boolean checkRecordsDuplication(String UID, RecordFileType recType) {
-        switch(recType){
+        switch (recType) {
             case MEDICAL_RECORDS:
                 return RecordsRepository.MEDICAL_RECORDS.get(UID) != null;
             case APPOINTMENT_RECORDS:
@@ -45,9 +45,10 @@ public class RecordsController {
 
     public void addMedicalRecord(MedicalRecord mr) {
         RecordsRepository.MEDICAL_RECORDS.put(mr.getRecordID(), mr);
-    }    
+    }
 
-    public Boolean updateRecord(String recordID, RecordFileType recType, String status, String doctorID, String patientID, LocalDateTime updatedDate) {
+    public Boolean updateRecord(String recordID, RecordFileType recType, String status, String doctorID,
+            String patientID, LocalDateTime updatedDate) {
         if (!RecordsRepository.isRepoLoad()) {
             logger.log(System.Logger.Level.WARNING, "Repository not loaded. Cannot update record.");
             return false;
@@ -66,12 +67,16 @@ public class RecordsController {
         }
     }
 
-    private Boolean updateMedicalRecord(String recordID, String status, String doctorID, String patientID, LocalDateTime updatedDate) {
+    private Boolean updateMedicalRecord(String recordID, String status, String doctorID, String patientID,
+            LocalDateTime updatedDate) {
         MedicalRecord record = RecordsRepository.MEDICAL_RECORDS.get(recordID);
         if (record != null) {
-            if (status != null) record.setRecordStatus(RecordStatusType.valueOf(status));
-            if (doctorID != null) record.setDoctorID(doctorID);
-            if (patientID != null) record.setPatientID(patientID);
+            if (status != null)
+                record.setRecordStatus(RecordStatusType.valueOf(status));
+            if (doctorID != null)
+                record.setDoctorID(doctorID);
+            if (patientID != null)
+                record.setPatientID(patientID);
             record.setUpdatedDate(updatedDate);
 
             RecordsRepository.saveAllRecordFiles();
@@ -82,7 +87,7 @@ public class RecordsController {
         return false;
     }
 
-    //FIXME
+    // FIXME
     private Boolean updateAppointmentRecord(String recordID, LocalDateTime updatedDate) {
         AppointmentRecord record = RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
         if (record != null) {
@@ -161,38 +166,60 @@ public class RecordsController {
         return null;
     }
 
-public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
-    ArrayList<MedicalRecord> recordsByDoctor = new ArrayList<>(); // Initialize an empty list
-    
-    if (RecordsRepository.isRepoLoaded()) {
-        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
-            if (record.getDoctorID().equals(doctorID)) {
-                recordsByDoctor.add(record); // Add matching records to the list
+    public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
+        ArrayList<MedicalRecord> recordsByDoctor = new ArrayList<>(); // Initialize an empty list
+
+        if (RecordsRepository.isRepoLoaded()) {
+            for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+                if (record.getDoctorID().equals(doctorID)) {
+                    recordsByDoctor.add(record); // Add matching records to the list
+                }
             }
         }
+        return recordsByDoctor; // Return the list, even if it might be empty
     }
-    return recordsByDoctor; // Return the list, even if it might be empty
-}
-
 
     public MedicalRecord getMedicalRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())
             return RecordsRepository.MEDICAL_RECORDS.get(recordID);
-        else 
+        else
             return null;
     }
 
     public AppointmentRecord getDiagnosisRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())
             return RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
-        else 
+        else
             return null;
     }
 
     public PaymentRecord getPaymentRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())
             return RecordsRepository.PAYMENT_RECORDS.get(recordID);
-        else 
+        else
+            return null;
+    }
+
+}
+
+    public MedicalRecord getMedicalRecordbyID(String recordID) {
+        if (RecordsRepository.isRepoLoad())
+            return RecordsRepository.MEDICAL_RECORDS.get(recordID);
+        else
+            return null;
+    }
+
+    public AppointmentRecord getDiagnosisRecordbyID(String recordID) {
+        if (RecordsRepository.isRepoLoad())
+            return RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
+        else
+            return null;
+    }
+
+    public PaymentRecord getPaymentRecordbyID(String recordID) {
+        if (RecordsRepository.isRepoLoad())
+            return RecordsRepository.PAYMENT_RECORDS.get(recordID);
+        else
             return null;
     }
 }

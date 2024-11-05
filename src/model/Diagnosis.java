@@ -1,6 +1,5 @@
 package model;
 
-
 import java.time.LocalDateTime;
 
 public class Diagnosis {
@@ -9,23 +8,21 @@ public class Diagnosis {
     private String doctorID;
     private String medicalRecordID;
     private LocalDateTime diagnosisDate;
-//    private TreatmentPlans TreatmentPlans;
+    // private TreatmentPlans TreatmentPlans;
     private String diagnosisDescription;
     private Prescription prescription;
 
-
-    public Diagnosis(String patientID, String diagnosisID, String doctorID, String medicalRecordID, LocalDateTime diagnosisDate, String diagnosisDescription, Prescription prescription) {
+    public Diagnosis(String patientID, String diagnosisID, String doctorID, String medicalRecordID,
+            LocalDateTime diagnosisDate, String diagnosisDescription, Prescription prescription) {
         this.patientID = patientID;
         this.diagnosisID = diagnosisID;
         this.doctorID = doctorID;
         this.medicalRecordID = medicalRecordID;
         this.diagnosisDate = diagnosisDate;
-//        TreatmentPlans = treatmentPlans;
+        // TreatmentPlans = treatmentPlans;
         this.diagnosisDescription = diagnosisDescription;
         this.prescription = prescription;
     }
-
-
 
     public String getPatientID() {
         return patientID;
@@ -51,13 +48,13 @@ public class Diagnosis {
         this.diagnosisDate = diagnosisDate;
     }
 
-//    public model.TreatmentPlans getTreatmentPlans() {
-//        return TreatmentPlans;
-//    }
-//
-//    public void setTreatmentPlans(model.TreatmentPlans treatmentPlans) {
-//        TreatmentPlans = treatmentPlans;
-//    }
+    // public model.TreatmentPlans getTreatmentPlans() {
+    // return TreatmentPlans;
+    // }
+    //
+    // public void setTreatmentPlans(model.TreatmentPlans treatmentPlans) {
+    // TreatmentPlans = treatmentPlans;
+    // }
 
     public String getDiagnosisDescription() {
         return diagnosisDescription;
@@ -75,28 +72,20 @@ public class Diagnosis {
         this.prescription = prescription;
     }
 
+    public String getDoctorID() {
+        return doctorID;
+    }
 
+    public void setDoctorID(String doctorID) {
+        this.doctorID = doctorID;
+    }
 
-	public String getDoctorID() {
-		return doctorID;
-	}
+    public String getMedicalRecordID() {
+        return medicalRecordID;
+    }
 
-
-
-	public void setDoctorID(String doctorID) {
-		this.doctorID = doctorID;
-	}
-
-
-
-	public String getMedicalRecordID() {
-		return medicalRecordID;
-	}
-
-
-
-	public void setMedicalRecordID(String medicalRecordID) {
-		this.medicalRecordID = medicalRecordID;
-	}
+    public void setMedicalRecordID(String medicalRecordID) {
+        this.medicalRecordID = medicalRecordID;
+    }
 
 }

@@ -10,24 +10,24 @@ import java.util.UUID;
 
 public class HMSPersonnelController {
 
-	
-	public static String generateUID (PersonnelFileType personnelFileType) {
-		UUID uuid = UUID.randomUUID();
-		String uuidAsString = uuid.toString();
-		
+    public static String generateUID(PersonnelFileType personnelFileType) {
+        UUID uuid = UUID.randomUUID();
+        String uuidAsString = uuid.toString();
+
         switch (personnelFileType) {
-        case ADMINS:
-            return "AD-" + uuidAsString;
-        case DOCTORS:
-            return "DO-" + uuidAsString;
-        case PATIENTS:
-            return "PA-" + uuidAsString;
-        case PHARMACISTS:
-            return "PH-" + uuidAsString;
-        default:
-            return "";
+            case ADMINS:
+                return "AD-" + uuidAsString;
+            case DOCTORS:
+                return "DO-" + uuidAsString;
+            case PATIENTS:
+                return "PA-" + uuidAsString;
+            case PHARMACISTS:
+                return "PH-" + uuidAsString;
+            default:
+                return "";
+        }
     }
-	}
+
     // Add a new personnel (e.g., Doctor, Patient, etc.)
     public static boolean addPersonnel(HMSPersonnel personnel) {
         if (personnel == null || personnel.getUID() == null) {
@@ -190,10 +190,10 @@ public class HMSPersonnelController {
             System.out.println("No personnel found for type: " + type);
         }
     }
-    
-//    public List<Patient> getListOfPatientByName(String name){
-//    	if (PersonnelRepository.is)
-//    }
-    
-    
-}
+
+    // public List<Patient> getListOfPatientByName(String name){
+    // if (PersonnelRepository.is)
+    // }
+    <<<<<<<HEAD
+
+}=======}>>>>>>>ck/MedicalRecord

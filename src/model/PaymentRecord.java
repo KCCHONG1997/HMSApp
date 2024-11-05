@@ -6,12 +6,10 @@ public class PaymentRecord extends HMSRecords {
     private double paymentAmount;
     private String patientID;
 
-
-
     // Constructor
     public PaymentRecord(String recordID, LocalDateTime createdDate, LocalDateTime updatedDate,
-                         RecordStatusType recordStatus, String patientID,
-                         double paymentAmount) {
+            RecordStatusType recordStatus, String patientID,
+            double paymentAmount) {
         super(recordID, createdDate, updatedDate, recordStatus);
         this.patientID = patientID;
         this.paymentAmount = paymentAmount;
@@ -25,6 +23,7 @@ public class PaymentRecord extends HMSRecords {
     public void setPaymentAmount(double paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
+
     public String getPatientID() {
         return patientID;
     }

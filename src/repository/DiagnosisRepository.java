@@ -33,19 +33,21 @@ public class DiagnosisRepository extends Repository {
         }
         return false;
     }
+
     public static boolean saveAlltoCSV() {
-    	DiagnosisRepository.saveDiagnosisRecordsToCSV(fileName, patientDiagnosisRecords);
-		return true;
+        DiagnosisRepository.saveDiagnosisRecordsToCSV(fileName, patientDiagnosisRecords);
+        return true;
     }
 
     // Save and load methods, and any other methods in DiagnosisRepository
-    public static void saveDiagnosisRecordsToCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
+    public static void saveDiagnosisRecordsToCSV(String fileName,
+            HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -63,34 +65,36 @@ public class DiagnosisRepository extends Repository {
 
     private static String diagnosisToCSV(Diagnosis record) {
         return String.join(",",
-                record.getPatientID(),                    // Patient ID
-                record.getDiagnosisID(),                  // Diagnosis ID
-                record.getDoctorID(),					  // Doctor ID
-                record.getMedicalRecordID(),			  // MedicalRecord ID
-                record.getDiagnosisDate().toString(),     // Diagnosis date
-//                record.getTreatmentPlans().toString(),    // FIXME You get Treatment plans from medical Record...
-                "\"" + record.getDiagnosisDescription() + "\""         // Diagnosis description
+                record.getPatientID(), // Patient ID
+                record.getDiagnosisID(), // Diagnosis ID
+                record.getDoctorID(), // Doctor ID
+                record.getMedicalRecordID(), // MedicalRecord ID
+                record.getDiagnosisDate().toString(), // Diagnosis date
+                // record.getTreatmentPlans().toString(), // FIXME You get Treatment plans from
+                // medical Record...
+                "\"" + record.getDiagnosisDescription() + "\"" // Diagnosis description
         );
     }
 
-    public static void loadDiagnosisRecordsFromCSV(String fileName, HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
+    public static void loadDiagnosisRecordsFromCSV(String fileName,
+            HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         File file = new File(filePath);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();  // Create an empty file if it doesn't exist
+                file.createNewFile(); // Create an empty file if it doesn't exist
                 System.out.println("Created empty file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;  // No data to load, as the file was just created
+            return; // No data to load, as the file was just created
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -101,7 +105,8 @@ public class DiagnosisRepository extends Repository {
                     addDiagnosis(record.getMedicalRecordID(), record);
                 }
             }
-            System.out.println("Successfully loaded " + patientDiagnosisRecords.size() + " diagnosis records from " + fileName);
+            System.out.println(
+                    "Successfully loaded " + patientDiagnosisRecords.size() + " diagnosis records from " + fileName);
         } catch (IOException e) {
             System.out.println("Error reading diagnosis records: " + e.getMessage());
         }
@@ -121,22 +126,24 @@ public class DiagnosisRepository extends Repository {
             String doctorID = fields[2];
             String medicalRecordID = fields[3];
             LocalDateTime diagnosisDate = LocalDateTime.parse(fields[4]);
-//            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
+            // TreatmentPlans treatmentPlan =
+            // TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
             String diagnosisDescription = fields[5].replace("\"", "");
             Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[1]);
 
-            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate, diagnosisDescription, prescription);
+            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate, diagnosisDescription,
+                    prescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
         }
         return null;
     }
 
-	public static boolean isRepoLoaded() {
-		return isRepoLoaded;
-	}
+    public static boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
 
-	public static void setRepoLoaded(boolean isRepoLoaded) {
-		DiagnosisRepository.isRepoLoaded = isRepoLoaded;
-	}
+    public static void setRepoLoaded(boolean isRepoLoaded) {
+        DiagnosisRepository.isRepoLoaded = isRepoLoaded;
+    }
 }

@@ -6,17 +6,17 @@ import enums.AppointmentStatus;
 
 public class AppointmentOutcomeRecord {
 	private LocalDateTime appointmentTime;
-    private String typeOfService;
-    private Prescription prescription;
-    private String consultationNotes;
-    private String patientID; 
-    private String doctorID;
+	private String typeOfService;
+	private Prescription prescription;
+	private String consultationNotes;
+	private String patientID;
+	private String doctorID;
 
 	public AppointmentOutcomeRecord(
-			LocalDateTime appointmentTime, 
-			String typeOfService, 
+			LocalDateTime appointmentTime,
+			String typeOfService,
 			Prescription prescription,
-			String consultationNotes, 
+			String consultationNotes,
 			String patientID,
 			String doctorID) {
 		this.appointmentTime = appointmentTime;
@@ -34,39 +34,39 @@ public class AppointmentOutcomeRecord {
 	public void setAppointmentTime(LocalDateTime appointmentTime) {
 		this.appointmentTime = appointmentTime;
 	}
-	
-    public String getTypeOfService() {
-        return typeOfService;
-    }
 
-    public void setTypeOfService(String typeOfService) {
-        this.typeOfService = typeOfService;
-    }
+	public String getTypeOfService() {
+		return typeOfService;
+	}
 
-    public Prescription getPrescription() {
-        return prescription;
-    }
+	public void setTypeOfService(String typeOfService) {
+		this.typeOfService = typeOfService;
+	}
 
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
-    }
+	public Prescription getPrescription() {
+		return prescription;
+	}
 
-    public String getConsultationNotes() { 
-        return consultationNotes;
-    }
+	public void setPrescription(Prescription prescription) {
+		this.prescription = prescription;
+	}
 
-    public void setConsultationNotes(String consultationNotes) {
-        this.consultationNotes = consultationNotes;
-    }
-    
-    public String getPatientID() {
+	public String getConsultationNotes() {
+		return consultationNotes;
+	}
+
+	public void setConsultationNotes(String consultationNotes) {
+		this.consultationNotes = consultationNotes;
+	}
+
+	public String getPatientID() {
 		return patientID;
 	}
 
 	public void setPatientID(String patientID) {
 		this.patientID = patientID;
 	}
-	
+
 	public String getDoctorID() {
 		return doctorID;
 	}
