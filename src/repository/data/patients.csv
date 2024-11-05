@@ -1,5 +1,0 @@
-UIDP001,John Doe,ID001,johndoe,johndoe@example.com,1234567890,hashedPassword123,1985-05-15T00:00,Male,Patient,P001,O+,Aetna,None,2023-10-01T09:00
-UIDP002,Jane Smith,ID002,janesmith,janesmith@example.com,0987654321,hashedPassword456,1990-03-22T00:00,Female,Patient,P002,A-,BlueCross,Peanuts,2023-10-02T10:00
-UIDP003,Michael Brown,ID003,michaelbrown,michaelbrown@example.com,1122334455,hashedPassword789,1978-08-30T00:00,Male,Patient,P003,B+,Cigna,None,2023-10-03T11:00
-UIDP004,Emily Johnson,ID004,emilyjohnson,emily.johnson@example.com,5566778899,hashedPassword321,1995-07-12T00:00,Female,Patient,P004,AB+,UnitedHealth,Shellfish,2023-10-04T12:00
-UIDP005,David Wilson,ID005,davidwilson,davidwilson@example.com,6677889900,hashedPassword654,1988-11-10T00:00,Male,Patient,P005,O-,Humana,Latex,2023-10-05T13:00
