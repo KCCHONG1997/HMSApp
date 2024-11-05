@@ -49,13 +49,13 @@ public class AdminUI extends MainUI {
                 	viewAndManageStaff();
                     break;
                 case 2: 
-                    // Code for updating patient medical records
+                    // Code for viewing appointment record
                     break;
                 case 3: 
-                    // Code for viewing personal schedule
+                	viewAndManageMedicationInventory();
                     break;
                 case 4: 
-                    // Code for setting availability for appointments
+                	approveReplenishRequest();
                     break;
                 case 5: 
                     System.out.println("Logging out...");
