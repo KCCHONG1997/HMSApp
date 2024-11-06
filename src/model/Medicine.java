@@ -52,7 +52,6 @@ public class Medicine {
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
     }
-
     public LocalDateTime getExpiryDate() {
         return expiryDate;
     }
@@ -92,7 +91,6 @@ public class Medicine {
     public void setInventoryStock(int inventoryStock) {
         this.inventoryStock = inventoryStock;
     }
-
     public LocalDateTime getReplenishRequestDate() {
         return replenishRequestDate;
     }
@@ -100,5 +98,6 @@ public class Medicine {
     public void setReplenishRequestDate(LocalDateTime replenishRequestDate) {
         this.replenishRequestDate = replenishRequestDate;
     }
+
 
 }
