@@ -6,7 +6,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DateTimePicker {
-
+	
+	
+	//main only here for testing purpose
     public static void main(String[] args) {
         LocalDateTime selectedDateTime = pickDateTime("Please select a date and time");
         System.out.println("You selected: " + selectedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));

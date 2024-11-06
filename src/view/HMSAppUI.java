@@ -23,7 +23,8 @@ public class HMSAppUI extends MainUI {
 		printBreadCrumbs("HMS App UI");
 		System.out.println("Would you like to? :");
 		System.out.println("1. Login");
-		System.out.println("2. Close App");
+		System.out.println("2. Register an account");
+		System.out.println("3. Close App");
 	}
 
 	@Override
@@ -44,6 +45,9 @@ public class HMSAppUI extends MainUI {
 					loginUI.start();
 					break;
 				case 2:
+					
+					break;
+				case 3:
 					System.exit(0);
 					break;
 				default:

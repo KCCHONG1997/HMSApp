@@ -45,7 +45,7 @@ public class AdminController extends HMSPersonnelController {
     	LocalDateTime date = null;
         boolean valid = false;
         while (!valid) {
-            String input = Helper.readString();
+            String input = Helper.readString("");
 
             try {
                 // Parse the input into LocalDateTime
@@ -57,6 +57,7 @@ public class AdminController extends HMSPersonnelController {
         }
         return date;
     }
+    
     public static void printPersonnelDetails(HMSPersonnel personnel) {
         System.out.println("--------------------------------------------------");
         System.out.println("Personnel Details:");

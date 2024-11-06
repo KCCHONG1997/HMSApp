@@ -15,6 +15,7 @@ import repository.PersonnelRepository;
 import repository.Repository;
 import controller.*;
 import enums.ReplenishStatus;
+import helper.DateTimePicker;
 import helper.Helper;
 
 public class AdminUI extends MainUI {
@@ -22,6 +23,28 @@ public class AdminUI extends MainUI {
     public AdminUI(Admin admin) {
         this.admin = admin;
     }
+    
+// For testing:
+//    public static void main (String[]args) {
+//        // Creating a dummy Admin with sample data
+//        String fullName = "John Doe";
+//        String idCard = "123456789";
+//        String username = "adminUser";
+//        String email = "admin@example.com";
+//        String phoneNo = "123-456-7890";
+//        String passwordHash = "adminPass123"; // This should ideally be hashed
+//        LocalDateTime DoB = LocalDateTime.of(1980, 1, 1, 0, 0);
+//        String gender = "Male";
+//        String role = "Admins";
+//        LocalDateTime dateOfCreation = LocalDateTime.now();
+//
+//        // Initializing the Admin object
+//        Admin admin = new Admin(fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, role, dateOfCreation);
+//
+//        // Creating and starting AdminUI with the dummy admin
+//        AdminUI testing = new AdminUI(admin);
+//        testing.start();
+//    }
     
 	@Override
     protected void printChoice() {
@@ -43,7 +66,7 @@ public class AdminUI extends MainUI {
         int choice = 0;
         do {
         	printChoice();
-            choice = Helper.readInt();
+            choice = Helper.readInt("");
             switch(choice) {
                 case 1: 
                 	viewAndManageStaff();
@@ -79,7 +102,7 @@ public class AdminUI extends MainUI {
 	    System.out.println("7. Update Pharmacist");
 	    System.out.println("8. Remove Doctor");
 	    System.out.println("9. Remove Pharmacist");
-	    int choice = Helper.readInt();
+	    int choice = Helper.readInt("");
 
 	    switch (choice) {
 	        case 1:
@@ -118,92 +141,81 @@ public class AdminUI extends MainUI {
 	}
     
     public static void addPersonnel(String role) {
-        System.out.println("Enter Full Name: " );
-        String fullName = Helper.readString();
-        System.out.println("Enter ID Card: " );
-        String idCard = Helper.readString();
-        System.out.println("Enter Username: " );
-        String username = Helper.readString();
-        System.out.println("Enter Email: "  );
-        String email = Helper.readString();
-        System.out.println("Enter Phone No: " );
-        String phoneNo = Helper.readString();
-        System.out.println("Enter DOB (YYYY-MM-DD HH:MM): : " );
-        LocalDateTime DoB = readDate();
-        System.out.println("Enter Gender: " );
-        String gender = Helper.readString();
-        if (role == "Doctor" ) {
-        	 System.out.println("Enter Speciality: " );
-             String specialty = Helper.readString();
-             System.out.println("Enter Medical License Number: " );
-             String medicalLicenseNumber = Helper.readString();
-             System.out.println("Enter Date Join: (YYYY-MM-DD HH:MM): : " );
-             LocalDateTime dateJoin = readDate();
-             System.out.println("Enter Years of Experiences: " );
-             int yearsOfExperiences = Helper.readInt();
-             Doctor doctor = new Doctor(fullName,idCard, username, email, phoneNo, "defaultPassword", 
-            		 DoB, gender, specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
-             HMSPersonnel personnel = (HMSPersonnel) doctor;
-             AdminController.addPersonnel(personnel);
-        }      
+        String fullName = Helper.readString("Enter Full Name: ");
+        String idCard = Helper.readString("Enter ID Card: ");
+        String username = Helper.readString("Enter Username: ");
+        String email = Helper.readString("Enter Email: ");
+        String phoneNo = Helper.readString("Enter Phone No: ");
+        System.out.println("Enter DOB (YYYY-MM-DD HH:MM): ");
+        LocalDateTime DoB = Helper.readDate();
+        String gender = Helper.readString("Enter Gender: ");
         
-        else {
-        	System.out.println("Enter Pharmacist License Number: " );
-        	String pharmacistLicenseNumber = Helper.readString();
-        	System.out.println("Enter Date Of Employment: " );
-        	LocalDateTime dateOfEmployment = readDate();
-        	Pharmacist pharmacist = new Pharmacist(fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender,pharmacistLicenseNumber , dateOfEmployment);
-        	HMSPersonnel personnel = (HMSPersonnel) pharmacist;
-        	AdminController.addPersonnel(personnel);
+        if (role.equals("Doctor")) {
+            String specialty = Helper.readString("Enter Specialty: ");
+            String medicalLicenseNumber = Helper.readString("Enter Medical License Number: ");
+            System.out.println("Enter Date Join (YYYY-MM-DD HH:MM): ");
+            LocalDateTime dateJoin = Helper.readDate();
+            int yearsOfExperiences = Helper.readInt("Enter Years of Experience: ");
+            
+            Doctor doctor = new Doctor(fullName, idCard, username, email, phoneNo, "defaultPassword", 
+                                       DoB, gender, specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
+            HMSPersonnel personnel = doctor;
+            AdminController.addPersonnel(personnel);
+        } else {
+            String pharmacistLicenseNumber = Helper.readString("Enter Pharmacist License Number: ");
+            System.out.println("Enter Date Of Employment (YYYY-MM-DD HH:MM): ");
+            LocalDateTime dateOfEmployment = Helper.readDate();
+            
+            Pharmacist pharmacist = new Pharmacist(fullName, idCard, username, email, phoneNo, "defaultPassword", 
+                                                   DoB, gender, pharmacistLicenseNumber, dateOfEmployment);
+            HMSPersonnel personnel = pharmacist;
+            AdminController.addPersonnel(personnel);
         }
     }
+
     public static void updatePersonnel(String role) {
-    	System.out.println("Enter UID: " );
-    	String UID = Helper.readString();
-    	Doctor doctor = (Doctor) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.DOCTORS);
-    	Pharmacist pharmacist = (Pharmacist) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.PHARMACISTS);
+        String UID = Helper.readString("Enter UID: ");
+        Doctor doctor = (Doctor) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.DOCTORS);
+        Pharmacist pharmacist = (Pharmacist) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.PHARMACISTS);
+
         if (doctor == null && pharmacist == null) {
-       	System.out.println("Doctor does not exist!");
-       	return ;
+            System.out.println("Personnel does not exist!");
+            return;
         }
-        System.out.println("Enter New Username: " );
-        String username = Helper.readString();
-        System.out.println("Enter New Email: "  );
-        String email = Helper.readString();
-        System.out.println("Enter New Phone No: " );
-        String phoneNo = Helper.readString();
-        System.out.println("Enter New Password " );
-        String hashedPassword = Helper.readString();
-        if (role == "Doctor" ) {
-        	
-        	 System.out.println("Enter New Speciality: " );
-             String specialty = Helper.readString();
-             System.out.println("Enter New Medical License Number: " );
-             String medicalLicenseNumber = Helper.readString();
-             System.out.println("Enter New Years of Experiences: " );
-             int yearsOfExperiences = Helper.readInt();
-             
-             doctor.setUsername(username);
-             doctor.setEmail(email);
-             doctor.setPhoneNo(phoneNo);
-             doctor.setPasswordHash(hashedPassword);
-             doctor.setSpecialty(specialty);
-             doctor.setMedicalLicenseNumber(medicalLicenseNumber);
-             doctor.setYearsOfExperiences(yearsOfExperiences);
-             AdminController.updatePersonnel(doctor.getUID(), doctor);
-        }      
-        
-        else {
-            System.out.println("Enter New Pharmacist License Number: " );
-            String pharmacistLicenseNumber = Helper.readString();
+
+        String username = Helper.readString("Enter New Username: ");
+        String email = Helper.readString("Enter New Email: ");
+        String phoneNo = Helper.readString("Enter New Phone No: ");
+        String hashedPassword = Helper.readString("Enter New Password: ");
+
+        if (role.equals("Doctor")) {
+            String specialty = Helper.readString("Enter New Specialty: ");
+            String medicalLicenseNumber = Helper.readString("Enter New Medical License Number: ");
+            int yearsOfExperiences = Helper.readInt("Enter New Years of Experience: ");
+            
+            doctor.setUsername(username);
+            doctor.setEmail(email);
+            doctor.setPhoneNo(phoneNo);
+            doctor.setPasswordHash(hashedPassword);
+            doctor.setSpecialty(specialty);
+            doctor.setMedicalLicenseNumber(medicalLicenseNumber);
+            doctor.setYearsOfExperiences(yearsOfExperiences);
+
+            AdminController.updatePersonnel(doctor.getUID(), doctor);
+        } else {
+            String pharmacistLicenseNumber = Helper.readString("Enter New Pharmacist License Number: ");
+            
             pharmacist.setUsername(username);
             pharmacist.setEmail(email);
             pharmacist.setPhoneNo(phoneNo);
             pharmacist.setPasswordHash(hashedPassword);
             pharmacist.setPharmacistLicenseNumber(pharmacistLicenseNumber);
+
             AdminController.updatePersonnel(pharmacist.getUID(), pharmacist);
         }
     }
+
+    
     public static void removePersonnel(String role) {
     	if(role == "Doctor") {
     		String uidDoctor = Helper.readString();
@@ -220,7 +232,7 @@ public class AdminUI extends MainUI {
 	    System.out.println("2. Add Medicine");
 	    System.out.println("3. Update Medicine");
 	    System.out.println("4. Remove Medicine");
-	    int choice = Helper.readInt();
+	    int choice = Helper.readInt("");
 	    switch(choice) {
 	    	case 1: AdminController.listAllMedicine();
 	    	break;
@@ -235,18 +247,12 @@ public class AdminUI extends MainUI {
 	    }
 	}
     public static void addMedicine() {
-    	 System.out.print("Enter Medicine ID: ");
-		 String medicineID = Helper.readString();	    
-		 System.out.print("Enter Medicine Name: ");
-		 String name = Helper.readString();		    
-		 System.out.print("Enter Manufacturer: ");
-		 String manufacturer = Helper.readString();
-		 System.out.print("Enter Expiry Date (YYYY-MM-DDTHH:MM:): ");
-		 LocalDateTime expiryDate = readDate();
-		 System.out.print("Enter Inventory Stock: ");
-		 int inventoryStock = Helper.readInt();		    
-		 System.out.print("Enter Low Stock Level: ");
-		 int lowStockLevel = Helper.readInt();  
+		 String medicineID = Helper.readString("Enter Medicine ID: ");	    
+		 String name = Helper.readString("Enter Medicine Name: ");		    
+		 String manufacturer = Helper.readString("Enter Manufacturer: ");
+		 LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter Expiry Date (YYYY-MM-DDTHH:MM:): ");
+		 int inventoryStock = Helper.readInt("Enter Inventory Stock: ");		    
+		 int lowStockLevel = Helper.readInt("Enter Low Stock Level: ");  
 		 System.out.print("Enter Replenish Status: ");
 		 ReplenishStatus status = ReplenishStatus.NULL;
 		 String dateTimeString = "0001-01-01 00:00";
@@ -257,45 +263,41 @@ public class AdminUI extends MainUI {
 		 AdminController.addMedicine(medicine);
     }
     public static void updateMedicine() {
-		 System.out.print("Enter Medicine ID: ");
-		 String medicineID = Helper.readString();
+		 String medicineID = Helper.readString("Enter Medicine ID: ");
 		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);	    
-		 System.out.print("Enter New Manufacturer: ");
-		 String manufacturer = Helper.readString();
+		 String manufacturer = Helper.readString("Enter New Manufacturer: ");
 		 medicine.setManufacturer(manufacturer);
-		 System.out.print("Enter New Expiry Date (YYYY-MM-DD HH:MM:): ");
-		 LocalDateTime expiryDate = readDate();
+		 LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter New Expiry Date (YYYY-MM-DD HH:MM:): ");
 		 medicine.setExpiryDate(expiryDate);
-		 System.out.print("Enter New Inventory Stock: ");
-		 int inventoryStock = Helper.readInt();
+		 int inventoryStock = Helper.readInt("Enter New Inventory Stock: ");
 		 medicine.setInventoryStock(inventoryStock);
-		 System.out.print("Enter New Low Stock Level: ");
-		 int lowStockLevel = Helper.readInt();
+		 int lowStockLevel = Helper.readInt("Enter New Low Stock Level: ");
 		 medicine.setLowStockLevel(lowStockLevel);
 		 AdminController.updateMedicine(medicineID, medicine);		
 	}
     public static void removeMedicine() {
-		 System.out.print("Enter Medicine ID: ");
-		 String medicineID = Helper.readString();	
+		 String medicineID = Helper.readString("Enter Medicine ID: ");	
 		 AdminController.removeMedicine(medicineID);
 	}
 	
     public static void approveReplenishRequest() {
-    	 System.out.print("Enter Medicine ID: ");
-		 String medicineID = Helper.readString();
-		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);	    
-		 System.out.print("Enter New Manufacturer: ");
-		 String manufacturer = Helper.readString();
+    	
+    	
+		 String medicineID = Helper.readString("Enter Medicine ID: ");
+		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);
+		
+		 String manufacturer = Helper.readString("Enter New Manufacturer: ");
 		 medicine.setManufacturer(manufacturer);
-		 System.out.print("Enter New Expiry Date (YYYY-MM-DD HH:MM:): ");
-		 LocalDateTime expiryDate = readDate();
+		 
+		 LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter New Expiry Date (YYYY-MM-DD HH:MM:): ");
 		 medicine.setExpiryDate(expiryDate);
-		 System.out.print("Enter New Inventory Stock: ");
-		 int inventoryStock = Helper.readInt();
+		 
+		 int inventoryStock = Helper.readInt("Enter New Inventory Stock: ");
 		 medicine.setInventoryStock(inventoryStock);
-		 System.out.print("Enter New Low Stock Level: ");
-		 int lowStockLevel = Helper.readInt();
+		 
+		 int lowStockLevel = Helper.readInt("Enter New Low Stock Level: ");
 		 medicine.setLowStockLevel(lowStockLevel);
+		 
 		 medicine.setReplenishStatus(ReplenishStatus.APPROVED);
 		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		 LocalDateTime currentDateTime = LocalDateTime.now();
@@ -304,22 +306,8 @@ public class AdminUI extends MainUI {
 		 medicine.setApprovedDate(approvedDate);
 		 AdminController.approveReplenishRequest(medicineID, medicine);
     }
-    public static LocalDateTime readDate() {
-    	LocalDateTime date = null;
-        boolean valid = false;
-        while (!valid) {
-            String input = Helper.readString();
+    
 
-            try {
-                // Parse the input into LocalDateTime
-                date = LocalDateTime.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-                valid = true; // Input is valid, exit the loop
-            } catch (DateTimeParseException e) {
-                System.out.println("Invalid date format. Please use YYYY-MM-DD HH:MM.");
-            }
-        }
-        return date;
-    }
     
     
 }
