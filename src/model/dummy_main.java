@@ -29,7 +29,6 @@ public class dummy_main {
    // HMSPersonnelController.listAllPersonnel(PersonnelFileType.DOCTORS);
 	
     
-    PersonnelRepository.loadAllPersonnelFiles();
     System.out.println("Doctor Information:");
     for (Map.Entry<String, Doctor> entry : PersonnelRepository.DOCTORS.entrySet()) {
         Doctor doctor = entry.getValue();

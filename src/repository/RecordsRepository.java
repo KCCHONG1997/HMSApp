@@ -128,15 +128,11 @@ public class RecordsRepository extends Repository {
      * Load all record files from CSV format, or create them if they don't exist
      */
     public static void loadAllRecordFiles() {
-        if (!loadRepo)
+        if (!isRepoLoaded)
             loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
         loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
         // loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS,
         // PaymentRecord.class);
-    }
-
-    public static Boolean isRepoLoad() {
-        return RecordsRepository.loadRepo;
     }
 
     /**
@@ -195,17 +191,17 @@ public class RecordsRepository extends Repository {
                         fields[6], // bloodType
                         DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
-                return type.cast(new AppointmentRecord(
-                        fields[0], // recordID
-                        fields[1], // patientID
-                        LocalDateTime.parse(fields[2]), // createdDate
-                        LocalDateTime.parse(fields[3]), // updatedDate
-                        RecordStatusType.toEnumRecordStatusType(fields[4]), // recordStatus
-                        LocalDateTime.parse(fields[5]), // appointmentTime
-                        fields[6], // location
-                        AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
-                        rc.getAppointmentOutcomeRecordByPatientId(fields[1]) // appointmentOutcomeRecord
-                ));
+//                return type.cast(new AppointmentRecord(
+//                        fields[0], // recordID
+//                        fields[1], // patientID
+//                        LocalDateTime.parse(fields[2]), // createdDate
+//                        LocalDateTime.parse(fields[3]), // updatedDate
+//                        RecordStatusType.toEnumRecordStatusType(fields[4]), // recordStatus
+//                        LocalDateTime.parse(fields[5]), // appointmentTime
+//                        fields[6], // location
+//                        AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
+//                        rc.getAppointmentOutcomeRecordByPatientId(fields[1]) // appointmentOutcomeRecord
+//                ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
                         fields[0], // recordID

@@ -1,25 +1,28 @@
 package view;
-import java.time.format.DateTimeFormatter;
+
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 import HMSApp.HMSMain;
+import controller.AuthenticationController;
 import controller.DoctorController;
-import enums.AppointmentStatus;
+import controller.HMSPersonnelController;
+import controller.RecordsController;
 import model.AppointmentRecord;
-import model.Doctor;
+import model.MedicalRecord;
 import model.Patient;
-import repository.PersonnelRepository;
 import repository.RecordsRepository;
+import enums.AppointmentStatus;
 
-public class PatientUI extends MainUI{
-	
-	private static Patient patient;
+public class PatientUI extends MainUI {
+    
+    private static Patient patient;
 
-	public PatientUI(Patient patient) {
-		this.patient = patient;
-	}
-	
-	@Override
+    public PatientUI(Patient patient) {
+        this.patient = patient;
+    }
+    
+    @Override
     public void printChoice() {
         System.out.println("Patient Menu:");
         System.out.println("1. View Medical Record");
@@ -32,26 +35,27 @@ public class PatientUI extends MainUI{
         System.out.println("8. View Past Appointment Outcome Records");
         System.out.println("9. Logout");
     }
-	public void start() {
-		showPatientDashboard();
-	}
 
-	public void showPatientDashboard() {
-		Scanner sc = new Scanner(System.in);
-		int choice = 0;
-		do {
-			printChoice();
-			choice = sc.nextInt();
-			switch (choice) {
+    public void start() {
+        showPatientDashboard();
+    }
+
+    public void showPatientDashboard() {
+        String patientUID = AuthenticationController.cookie.getUid();
+        Scanner sc = new Scanner(System.in);
+        int choice = 0;
+        do {
+            printChoice();
+            choice = sc.nextInt();
+            switch (choice) {
                 case 1: 
-                    // Code for viewing medical record
+                    viewPatientMedicalRecord(patientUID);
                     break;
                 case 2: 
-                    // Code for updating personal information
+                    updatePatientParticularView();
                     break;
                 case 3: 
-                    // Code for viewing available appointment slots
-                	viewAvailableAppointmentSlots();
+                    viewAvailableAppointmentSlots();
                     break;
                 case 4: 
                     // Code for scheduling an appointment
@@ -75,18 +79,43 @@ public class PatientUI extends MainUI{
                 default: 
                     System.out.println("Invalid choice!");
             }
-        } while(choice != 9);
+        } while (choice != 9);
         
-        sc.close(); // Close the Scanner
+        sc.close();
+    }
+
+    // Method to view a patient's medical record using MedicalRecordUI
+    public static void viewPatientMedicalRecord(String patientID) {
+        RecordsController rc = new RecordsController();
+        MedicalRecord medicalRecord = rc.getMedicalRecordsByPatientID(patientID);
+
+        if (medicalRecord != null) {
+            MedicalRecordUI recordUI = new MedicalRecordUI(medicalRecord);
+            recordUI.displayMedicalRecordInBox();
+        } else {
+            System.out.println("\n=====================================");
+            System.out.println("No medical record found for this patient.");
+            System.out.println("=====================================\n");
+        }
     }
     
-    
+    public static void updatePatientParticularView() {
+        // Fetch the patient object using UID
+        String patientUID = AuthenticationController.cookie.getUid();
+        Patient patient = HMSPersonnelController.getPatientById(patientUID);
+
+        if (patient != null) {
+            UpdatePatientParticularsUI updateView = new UpdatePatientParticularsUI(patient);
+            updateView.start();
+        } else {
+            System.out.println("Patient not found. Unable to update particulars.");
+        }
+    }
+
     public static void viewAvailableAppointmentSlots() {
-        RecordsRepository.loadAllRecordFiles();
+        System.out.println("\n--- Available Appointment Slots ---");
 
-    	System.out.println("\n--- Available Appointment Slots :  ---");
-
-    	boolean found = false;
+        boolean found = false;
         for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
             if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
                 found = true;
@@ -99,27 +128,10 @@ public class PatientUI extends MainUI{
             }
         }
 
+        if (!found) {
+            System.out.println("No appointments found");
+        }
 
-
-	    if (!found) {
-	        System.out.println("No appointments found");
-	    }
-
-	    System.out.println("---------------------------------------");
-    	
+        System.out.println("---------------------------------------");
     }
-
-
-    
-//    public static void patientChooseAppointment(String recordID, LocalDateTime chosenTime) {
-//        AppointmentRecord appointment = RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
-//        if (appointment != null && appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
-//            appointment.setAppointmentTime(chosenTime);
-//            appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
-//            System.out.println("Appointment has been confirmed for: " + chosenTime);
-//        } else {
-//            System.out.println("No available appointment found or it is already confirmed.");
-//        }
-//    }
-    
 }

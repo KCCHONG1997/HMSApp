@@ -27,7 +27,7 @@ public class AppointmentRecord extends HMSRecords {
 			LocalDateTime appointmentTime,
 			String location,
 			AppointmentStatus appointmentStatus,
-			ArrayList<AppointmentOutcomeRecord> appointmentOutcomeRecord) {
+			AppointmentOutcomeRecord appointmentOutcomeRecord) {
 		super(recordID, createdDate, updatedDate, recordStatus);
 
 		this.patientID = patientID;

@@ -10,7 +10,7 @@ public class PaymentRecord extends HMSRecords {
     private String patientID;
 
     // Constructor
-    public PaymentRecord(String recordID,
+    public PaymentRecord(
             LocalDateTime createdDate,
             LocalDateTime updatedDate,
             RecordStatusType recordStatus,
