@@ -16,7 +16,7 @@ public class Patient extends HMSPersonnel {
     public Patient(String fullName, String idCard, String username, String email, String phoneNo,
                    String passwordHash, LocalDateTime DoB, String gender,
                     String insuranceInfo, String allergies, LocalDateTime dateOfAdmission) {
-        super(HMSPersonnelController.generateUID(PersonnelFileType.PATIENTS), fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, "Patient");
+        super(HMSPersonnelController.generateUID(PersonnelFileType.PATIENTS), fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, "Patients");
 
 
         this.insuranceInfo = insuranceInfo;
