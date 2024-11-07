@@ -1,12 +1,20 @@
 package repository;
 
 import model.*;
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import helper.Helper;
+import controller.RecordsController;
+import enums.AppointmentStatus;
 
 public class RecordsRepository extends Repository {
     private static final String folder = "data";
@@ -81,16 +89,28 @@ public class RecordsRepository extends Repository {
                     medRecord.getRecordStatus().toString(),
                     medRecord.getPatientID(),
                     medRecord.getDoctorID(),
-                    medRecord.getBloodType());
+                    medRecord.getBloodType()
+            // medRecord.getDiagnosis().toString() //my added
+            );
         } else if (record instanceof AppointmentRecord) {
             AppointmentRecord appRecord = (AppointmentRecord) record;
+            AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();
+
             return String.join(",",
                     appRecord.getRecordID(),
                     appRecord.getCreatedDate().toString(),
                     appRecord.getUpdatedDate().toString(),
                     appRecord.getRecordStatus().toString(),
+                    appRecord.getAppointmentTime().toString(),
+                    appRecord.getlocation(),
+                    appRecord.getAppointmentStatus().toString(),
+                    (outcome != null) ? outcome.getAppointmentTime().toString() : null,
+                    (outcome != null) ? outcome.getTypeOfService() : null, // Type of Service
+                    (outcome != null && outcome.getPrescription() != null) ? outcome.getPrescription().toString()
+                            : null, // Prescription if not null
+                    (outcome != null) ? outcome.getConsultationNotes() : null, // Consultation notes
                     appRecord.getPatientID(),
-                    appRecord.getAppointmentTime().toString());
+                    appRecord.getDoctorID());
         } else if (record instanceof PaymentRecord) {
             PaymentRecord payRecord = (PaymentRecord) record;
             return String.join(",",
@@ -99,9 +119,21 @@ public class RecordsRepository extends Repository {
                     payRecord.getUpdatedDate().toString(),
                     payRecord.getRecordStatus().toString(),
                     payRecord.getPatientID(),
-                    String.valueOf(payRecord.getPaymentAmount()));
+                    String.valueOf(payRecord.getPaymentAmount()) // Payment Amount
+            );
         }
         return "";
+    }
+
+    /**
+     * Load all record files from CSV format, or create them if they don't exist
+     */
+    public static void loadAllRecordFiles() {
+        if (!isRepoLoaded)
+            loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
+        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
+        // loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS,
+        // PaymentRecord.class);
     }
 
     /**
@@ -146,7 +178,7 @@ public class RecordsRepository extends Repository {
     // Convert a CSV line to a record object
     private static <T extends HMSRecords> T csvToRecord(String csv, Class<T> type) {
         String[] fields = csv.split(",");
-        
+
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
@@ -154,28 +186,28 @@ public class RecordsRepository extends Repository {
                         Helper.parseDateTimeOrNull(fields, 1), // createdDate
                         Helper.parseDateTimeOrNull(fields, 2), // updatedDate
                         fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                		Helper.getFieldOrNull(fields, 4), // patientID
-                		Helper.getFieldOrNull(fields, 5), // doctorID
-                		Helper.getFieldOrNull(fields, 6), // bloodType
-                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(Helper.getFieldOrNull(fields, 0), new ArrayList<>())
-                ));
+                        Helper.getFieldOrNull(fields, 4), // patientID
+                        Helper.getFieldOrNull(fields, 5), // doctorID
+                        Helper.getFieldOrNull(fields, 6), // bloodType
+                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(Helper.getFieldOrNull(fields, 0),
+                                new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
                 return type.cast(new AppointmentRecord(
-                		Helper.getFieldOrNull(fields, 0), // recordID
-                		Helper.parseDateTimeOrNull(fields, 1), // createdDate
-                		Helper.parseDateTimeOrNull(fields, 2), // updatedDate
+                        Helper.getFieldOrNull(fields, 0), // recordID
+                        Helper.parseDateTimeOrNull(fields, 1), // createdDate
+                        Helper.parseDateTimeOrNull(fields, 2), // updatedDate
                         fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                		Helper.getFieldOrNull(fields, 4), // patientID
-                		Helper.parseDateTimeOrNull(fields, 5) // appointmentTime
+                        Helper.getFieldOrNull(fields, 4), // patientID
+                        Helper.parseDateTimeOrNull(fields, 5) // appointmentTime
                 ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
-                		Helper.getFieldOrNull(fields, 0), // recordID
-                		Helper.parseDateTimeOrNull(fields, 1), // createdDate
-                		Helper.parseDateTimeOrNull(fields, 2), // updatedDate
+                        Helper.getFieldOrNull(fields, 0), // recordID
+                        Helper.parseDateTimeOrNull(fields, 1), // createdDate
+                        Helper.parseDateTimeOrNull(fields, 2), // updatedDate
                         fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                		Helper.getFieldOrNull(fields, 4), // patientID
-                		Helper.parseDoubleOrNull(fields, 5) // paymentAmount
+                        Helper.getFieldOrNull(fields, 4), // patientID
+                        Helper.parseDoubleOrNull(fields, 5) // paymentAmount
                 ));
             }
         } catch (Exception e) {
@@ -184,7 +216,6 @@ public class RecordsRepository extends Repository {
 
         return null;
     }
-
 
     /**
      * Clear all record data and save empty files
