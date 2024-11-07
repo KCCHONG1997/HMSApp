@@ -97,6 +97,26 @@ public class Helper {
     public static String readString() {
         return sc.nextLine();
     }
+    
+    public static String readEmail(String prompt) {
+        System.out.println(prompt);
+        String email = sc.nextLine();
+        while(!Helper.isValidEmail(email)) {
+    		System.out.println("The email '" + email + "' is invalid. Please enter a new email:");
+    		email = Helper.readString("Enter a new email: ");
+        }
+        return email;
+    }
+    
+    public static String readGender(String prompt) {
+        System.out.println(prompt);
+        String gender = sc.nextLine();
+        while(!Helper.isValidGender(gender)) {
+       		System.out.println(gender + " is invalid genderType. Please enter again");
+       		gender = Helper.readString("Enter your gender again: ");
+        }
+        return gender;
+    }
 
     public static boolean promptConfirmation(String message) {
         System.out.println("Are you sure you want to " + message + "? (yes/no)");
@@ -148,5 +168,49 @@ public class Helper {
                 System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
             }
         }
+    }
+    
+    
+    
+    public static String getFieldOrNull(String[] fields, int index) {
+        return index < fields.length && !fields[index].isEmpty() ? fields[index] : null;
+    }
+
+    public static LocalDateTime parseDateTimeOrNull(String[] fields, int index) {
+        try {
+            return index < fields.length && !fields[index].isEmpty() ? LocalDateTime.parse(fields[index]) : null;
+        } catch (Exception e) {
+            return null; // return null if parsing fails or field is empty
+        }
+    }
+
+    public static Double parseDoubleOrNull(String[] fields, int index) {
+        try {
+            return index < fields.length && !fields[index].isEmpty() ? Double.parseDouble(fields[index]) : null;
+        } catch (Exception e) {
+            return null; // return null if parsing fails or field is empty
+        }
+    }
+    
+    /**
+     * Checks if the provided email matches a valid email format.
+     *
+     * @param email The email address to validate.
+     * @return True if the email is valid, false otherwise.
+     */
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return email.matches(emailRegex);
+    }
+
+    /**
+     * Checks if the provided gender input is valid (either "M" or "F").
+     *
+     * @param gender The gender input to validate.
+     * @return True if the gender is "M" or "F", false otherwise.
+     */
+    public static boolean isValidGender(String gender) {
+        String genderRegex = "^[MF]$";
+        return gender.matches(genderRegex);
     }
 }

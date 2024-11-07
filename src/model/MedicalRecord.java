@@ -23,7 +23,6 @@ public class MedicalRecord extends HMSRecords {
 			this.doctorID = doctorID;
 			this.bloodType = bloodType;
 			this.Diagnosis= diagnosis;
-
     }
     
     public MedicalRecord(String recordID, // This Constructor is for converting CSV to a MedicalRecord

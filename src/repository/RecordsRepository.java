@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import helper.Helper;
+
 public class RecordsRepository extends Repository {
     private static final String folder = "data";
     private static final String medicalFileName = "medical_records.csv";
@@ -144,35 +146,36 @@ public class RecordsRepository extends Repository {
     // Convert a CSV line to a record object
     private static <T extends HMSRecords> T csvToRecord(String csv, Class<T> type) {
         String[] fields = csv.split(",");
-
+        
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
-                        fields[0], // recordID
-                        LocalDateTime.parse(fields[1]), // createdDate
-                        LocalDateTime.parse(fields[2]), // updatedDate
-                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        fields[4], // patientID
-                        fields[5], // doctorID
-                        fields[6], // bloodType
-                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
+                        Helper.getFieldOrNull(fields, 0), // recordID
+                        Helper.parseDateTimeOrNull(fields, 1), // createdDate
+                        Helper.parseDateTimeOrNull(fields, 2), // updatedDate
+                        fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                		Helper.getFieldOrNull(fields, 4), // patientID
+                		Helper.getFieldOrNull(fields, 5), // doctorID
+                		Helper.getFieldOrNull(fields, 6), // bloodType
+                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(Helper.getFieldOrNull(fields, 0), new ArrayList<>())
+                ));
             } else if (type == AppointmentRecord.class) {
                 return type.cast(new AppointmentRecord(
-                        fields[0], // recordID
-                        LocalDateTime.parse(fields[1]), // createdDate
-                        LocalDateTime.parse(fields[2]), // updatedDate
-                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        fields[4], // patientID
-                        LocalDateTime.parse(fields[5]) // appointmentTime
+                		Helper.getFieldOrNull(fields, 0), // recordID
+                		Helper.parseDateTimeOrNull(fields, 1), // createdDate
+                		Helper.parseDateTimeOrNull(fields, 2), // updatedDate
+                        fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                		Helper.getFieldOrNull(fields, 4), // patientID
+                		Helper.parseDateTimeOrNull(fields, 5) // appointmentTime
                 ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
-                        fields[0], // recordID
-                        LocalDateTime.parse(fields[1]), // createdDate
-                        LocalDateTime.parse(fields[2]), // updatedDate
-                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        fields[4], // patientID
-                        Double.parseDouble(fields[5]) // paymentAmount
+                		Helper.getFieldOrNull(fields, 0), // recordID
+                		Helper.parseDateTimeOrNull(fields, 1), // createdDate
+                		Helper.parseDateTimeOrNull(fields, 2), // updatedDate
+                        fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                		Helper.getFieldOrNull(fields, 4), // patientID
+                		Helper.parseDoubleOrNull(fields, 5) // paymentAmount
                 ));
             }
         } catch (Exception e) {
@@ -181,6 +184,7 @@ public class RecordsRepository extends Repository {
 
         return null;
     }
+
 
     /**
      * Clear all record data and save empty files

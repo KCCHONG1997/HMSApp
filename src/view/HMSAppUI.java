@@ -45,7 +45,8 @@ public class HMSAppUI extends MainUI {
 					loginUI.start();
 					break;
 				case 2:
-					
+					RegisterUI registerUI = new RegisterUI();
+					registerUI.start();
 					break;
 				case 3:
 					System.exit(0);
