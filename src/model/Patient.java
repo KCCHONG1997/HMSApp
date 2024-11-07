@@ -2,6 +2,9 @@ package model;
 
 import java.time.LocalDateTime;
 
+import controller.HMSPersonnelController;
+import repository.PersonnelFileType;
+
 public class Patient extends HMSPersonnel {
 
 
@@ -9,7 +12,19 @@ public class Patient extends HMSPersonnel {
     private String allergies;
     private LocalDateTime dateOfAdmission;
 
-    // Constructor
+    // Constructor for creation of Patient
+    public Patient(String fullName, String idCard, String username, String email, String phoneNo,
+                   String passwordHash, LocalDateTime DoB, String gender,
+                    String insuranceInfo, String allergies, LocalDateTime dateOfAdmission) {
+        super(HMSPersonnelController.generateUID(PersonnelFileType.PATIENTS), fullName, idCard, username, email, phoneNo, passwordHash, DoB, gender, "Patients");
+
+
+        this.insuranceInfo = insuranceInfo;
+        this.allergies = allergies;
+        this.dateOfAdmission = dateOfAdmission;
+    }
+    
+    // Constructor for creation of Patient from CSV
     public Patient(String UID, String fullName, String idCard, String username, String email, String phoneNo,
                    String passwordHash, LocalDateTime DoB, String gender, String role,
                     String insuranceInfo, String allergies, LocalDateTime dateOfAdmission) {
