@@ -73,6 +73,7 @@ public class AdminUI extends MainUI {
     }
     
     public static void viewAndManageStaff() {
+    	System.out.println("Enter your choice");
 	    System.out.println("1. View Staff By Role");
 	    System.out.println("2. View Staff By Gender");
 	    System.out.println("3. View Staff By Age");
@@ -222,6 +223,7 @@ public class AdminUI extends MainUI {
     }  
     
     public static void viewAndManageMedicationInventory() {
+    	System.out.println("Enter your choice");
 		System.out.println("1. View All Medicine");
 	    System.out.println("2. Add Medicine");
 	    System.out.println("3. Update Medicine");
