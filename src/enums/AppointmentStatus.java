@@ -3,11 +3,13 @@ package enums;
 import model.RecordStatusType;
 
 public enum AppointmentStatus {
-    CONFIRMED, CANCELED, COMPLETED, AVAILABLE;
+    CONFIRMED, CANCELED, COMPLETED, AVAILABLE, PENDING;
 
     @Override
     public String toString() {
         switch (this) {
+        	case PENDING:
+        		return "Pending";
             case CONFIRMED:
                 return "Confirmed";
             case CANCELED:
@@ -23,6 +25,8 @@ public enum AppointmentStatus {
 
     public static AppointmentStatus toEnumAppointmentStatus(String status) {
         switch (status) {
+        	case "Pending":
+        		return PENDING;
             case "Confirmed":
                 return CONFIRMED;
             case "Canceled":

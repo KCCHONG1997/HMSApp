@@ -10,14 +10,18 @@ import repository.AppointmentOutcomeRecordRepository;
 import repository.RecordFileType;
 
 public class AppointmentRecord extends HMSRecords {
+
+	private String appointmentOutcomeRecordID;
+	private String patientID;
+	private String doctorID;
 	private LocalDateTime appointmentTime;
 	private String location;
 	private AppointmentStatus appointmentStatus;
 	private AppointmentOutcomeRecord appointmentOutcomeRecord;
-	private String patientID;
-	private String doctorID;
 
-	// Constructor when retrieving CSV to an object
+
+
+	 //Constructor when retrieving CSV to an object
 	public AppointmentRecord(
 			String recordID, // KC - we need this when retrieving from CSV
 			String patientID,
@@ -27,7 +31,7 @@ public class AppointmentRecord extends HMSRecords {
 			LocalDateTime appointmentTime,
 			String location,
 			AppointmentStatus appointmentStatus,
-			ArrayList<AppointmentOutcomeRecord> appointmentOutcomeRecord) {
+			AppointmentOutcomeRecord appointmentOutcomeRecord) {
 		super(recordID, createdDate, updatedDate, recordStatus);
 
 		this.patientID = patientID;
@@ -37,19 +41,20 @@ public class AppointmentRecord extends HMSRecords {
 		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
 	}
 
-	// Constructor when generating a new AppointmentRecord
-	public AppointmentRecord(
-			String recordID,
-			LocalDateTime createdDate,
-			LocalDateTime updatedDate,
-			RecordStatusType recordStatus,
-			LocalDateTime appointmentTime,
-			String location,
-			AppointmentStatus appointmentStatus,
-			AppointmentOutcomeRecord appointmentOutcomeRecord,
-			String patientID,
-			String doctorID) {
+
+	public AppointmentRecord(String recordID,
+							 LocalDateTime createdDate,
+							 LocalDateTime updatedDate,
+							 RecordStatusType recordStatus,
+							 String appointmentOutcomeRecordID,
+							 String patientID,
+							 String doctorID,
+							 LocalDateTime appointmentTime,
+							 String location,
+							 AppointmentStatus appointmentStatus,
+							 AppointmentOutcomeRecord appointmentOutcomeRecord) {
 		super(recordID, createdDate, updatedDate, recordStatus);
+		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
 		this.patientID = patientID;
 		this.doctorID = doctorID;
 		this.appointmentTime = appointmentTime;
@@ -57,39 +62,12 @@ public class AppointmentRecord extends HMSRecords {
 		this.appointmentStatus = appointmentStatus;
 		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
 	}
-
-	// Getters and Setters
-	public LocalDateTime getAppointmentTime() {
-		return appointmentTime;
+	public String getAppointmentOutcomeRecordID() {
+		return appointmentOutcomeRecordID;
 	}
 
-	public void setAppointmentTime(LocalDateTime appointmentTime) {
-		this.appointmentTime = appointmentTime;
-	}
-
-	public String getlocation() {
-		return location;
-	}
-
-	public void setlocation(String location) {
-		this.location = location;
-	}
-
-	public AppointmentStatus getAppointmentStatus() {
-		return appointmentStatus;
-	}
-
-	public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
-		this.appointmentStatus = appointmentStatus;
-
-	}
-
-	public AppointmentOutcomeRecord getAppointmentOutcomeRecord() {
-		return appointmentOutcomeRecord;
-	}
-
-	public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord AppointmentOutcomeRecord) {
-		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+	public void setAppointmentOutcomeRecordID(String appointmentOutcomeRecordID) {
+		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
 	}
 
 	public String getPatientID() {
@@ -108,4 +86,37 @@ public class AppointmentRecord extends HMSRecords {
 		this.doctorID = doctorID;
 	}
 
+	public LocalDateTime getAppointmentTime() {
+		return appointmentTime;
+	}
+
+	public void setAppointmentTime(LocalDateTime appointmentTime) {
+		this.appointmentTime = appointmentTime;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public AppointmentStatus getAppointmentStatus() {
+		return appointmentStatus;
+	}
+
+	public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
+		this.appointmentStatus = appointmentStatus;
+	}
+
+	public AppointmentOutcomeRecord getAppointmentOutcomeRecord() {
+		return appointmentOutcomeRecord;
+	}
+
+	public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
+		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
+	}
 }
+
+	// Constructor when generating a new AppointmentRecord

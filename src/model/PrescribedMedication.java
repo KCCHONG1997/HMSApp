@@ -4,12 +4,12 @@ import enums.PrescriptionStatus;
 public class PrescribedMedication {
     private String diagnosisID;
     private String medicineID;
-    private String medicineQuantity;
+    private int medicineQuantity;
     private int periodDays;
     private PrescriptionStatus PrescriptionStatus;
     private String dosage;
 
-    public PrescribedMedication(String diagnosisID, String medicineID, String medicineQuantity, int periodDays, enums.PrescriptionStatus prescriptionStatus, String dosage) {
+    public PrescribedMedication(String diagnosisID, String medicineID, int medicineQuantity, int periodDays, enums.PrescriptionStatus prescriptionStatus, String dosage) {
         this.diagnosisID = diagnosisID;
         this.medicineID = medicineID;
         this.medicineQuantity = medicineQuantity;
@@ -33,11 +33,11 @@ public class PrescribedMedication {
         this.medicineID = medicineID;
     }
 
-    public String getMedicineQuantity() {
+    public int getMedicineQuantity() {
         return medicineQuantity;
     }
 
-    public void setMedicineQuantity(String medicineQuantity) {
+    public void setMedicineQuantity(int medicineQuantity) {
         this.medicineQuantity = medicineQuantity;
     }
 

@@ -22,10 +22,21 @@ public class RecordsRepository extends Repository {
     private static final String paymentFileName = "payment_records.csv";
     private static Boolean isRepoLoaded = false;
     // Static data collections for different record types
-    public static HashMap<String, MedicalRecord> MEDICAL_RECORDS = new HashMap<>();
-    public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS = new HashMap<>();
-    public static HashMap<String, PaymentRecord> PAYMENT_RECORDS = new HashMap<>();
-
+    //key value = doctorID
+    public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_DOCTORID= new HashMap<>();
+    public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_DOCTORID = new HashMap<>();
+    public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_DOCTORID = new HashMap<>();
+    
+    
+    //key value = patientID
+    public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_PATIENTID = new HashMap<>();
+    public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_PATIENTID = new HashMap<>();
+    public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_PATIENTID = new HashMap<>();
+    
+  //key value = recordID
+    public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_RECORDID = new HashMap<>();
+    public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_RECORDID = new HashMap<>();
+    public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_RECORDID = new HashMap<>();
     /**
      * Specific loading logic for all records from CSV files.
      *
@@ -34,9 +45,9 @@ public class RecordsRepository extends Repository {
     @Override
     public boolean loadFromCSV() {
         try {
-            loadRecordsFromCSV(medicalFileName, MEDICAL_RECORDS, MedicalRecord.class);
-            loadRecordsFromCSV(appointmentFileName, APPOINTMENT_RECORDS, AppointmentRecord.class);
-            loadRecordsFromCSV(paymentFileName, PAYMENT_RECORDS, PaymentRecord.class);
+            loadRecordsFromCSV(medicalFileName, MEDICAL_RECORDS_DOCTORID,MEDICAL_RECORDS_PATIENTID ,MEDICAL_RECORDS_RECORDID, MedicalRecord.class);
+            loadRecordsFromCSV(appointmentFileName,APPOINTMENT_RECORDS_DOCTORID,APPOINTMENT_RECORDS_PATIENTID, APPOINTMENT_RECORDS_RECORDID, AppointmentRecord.class);
+            loadRecordsFromCSV(paymentFileName, PAYMENT_RECORDS_DOCTORID,PAYMENT_RECORDS_PATIENTID,PAYMENT_RECORDS_RECORDID, PaymentRecord.class);
             setRepoLoaded(true);
             return true;
         } catch (Exception e) {
@@ -49,15 +60,15 @@ public class RecordsRepository extends Repository {
      * Save all record files into CSV format
      */
     public static void saveAllRecordFiles() {
-        saveRecordsToCSV(medicalFileName, MEDICAL_RECORDS);
-        saveRecordsToCSV(appointmentFileName, APPOINTMENT_RECORDS);
-        saveRecordsToCSV(paymentFileName, PAYMENT_RECORDS);
+        saveRecordsToCSV(medicalFileName, MEDICAL_RECORDS_RECORDID);
+        saveRecordsToCSV(appointmentFileName, APPOINTMENT_RECORDS_RECORDID);
+        saveRecordsToCSV(paymentFileName, PAYMENT_RECORDS_RECORDID);
     }
 
     /**
      * Save a specific record map to a CSV file
      */
-    private static <T extends HMSRecords> void saveRecordsToCSV(String fileName, HashMap<String, T> recordsMap) {
+    private static <T extends HMSRecords> void saveRecordsToCSV(String fileName, HashMap<String, T> recordsMapRecordID) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -67,7 +78,7 @@ public class RecordsRepository extends Repository {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (T record : recordsMap.values()) {
+            for (T record : recordsMapRecordID.values()) {
                 writer.write(recordToCSV(record));
                 writer.newLine();
             }
@@ -89,27 +100,22 @@ public class RecordsRepository extends Repository {
                     medRecord.getPatientID(),
                     medRecord.getDoctorID(),
                     medRecord.getBloodType()
-            // medRecord.getDiagnosis().toString() //my added
             );
         } else if (record instanceof AppointmentRecord) {
             AppointmentRecord appRecord = (AppointmentRecord) record;
-            AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();
-
-            return String.join(",",
+            AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();return String.join(",",
                     appRecord.getRecordID(),
                     appRecord.getCreatedDate().toString(),
                     appRecord.getUpdatedDate().toString(),
                     appRecord.getRecordStatus().toString(),
-                    appRecord.getAppointmentTime().toString(),
-                    appRecord.getlocation(),
-                    appRecord.getAppointmentStatus().toString(),
-                    (outcome != null) ? outcome.getAppointmentTime().toString() : null,
-                    (outcome != null) ? outcome.getTypeOfService() : null, // Type of Service
-                    (outcome != null && outcome.getPrescription() != null) ? outcome.getPrescription().toString()
-                            : null, // Prescription if not null
-                    (outcome != null) ? outcome.getConsultationNotes() : null, // Consultation notes
+                    appRecord.getAppointmentOutcomeRecordID(),
                     appRecord.getPatientID(),
-                    appRecord.getDoctorID());
+                    appRecord.getDoctorID(),
+                    appRecord.getAppointmentTime().toString(),
+                    appRecord.getLocation(),
+                    appRecord.getAppointmentStatus().toString()
+                    );
+//                    AppointmentOutcomeRecord appointmentOutcomeRecord,
         } else if (record instanceof PaymentRecord) {
             PaymentRecord payRecord = (PaymentRecord) record;
             return String.join(",",
@@ -124,26 +130,16 @@ public class RecordsRepository extends Repository {
         return "";
     }
 
-    /**
-     * Load all record files from CSV format, or create them if they don't exist
-     */
-    public static void loadAllRecordFiles() {
-        if (!loadRepo)
-            loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
-        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
-        // loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS,
-        // PaymentRecord.class);
-    }
 
-    public static Boolean isRepoLoad() {
-        return RecordsRepository.loadRepo;
-    }
 
     /**
      * Load records from a CSV file or create an empty file if it doesn't exist
      */
-    private static <T extends HMSRecords> void loadRecordsFromCSV(String fileName, HashMap<String, T> recordsMap,
-            Class<T> type) {
+    private static <T extends HMSRecords> void loadRecordsFromCSV(String fileName, 
+    															HashMap<String, T> recordsMapPatientID,
+    															HashMap<String,T>recordsMapDoctorID,
+    															HashMap<String, T> recordsMapRecordID,
+                                                                  Class<T> type) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -168,11 +164,16 @@ public class RecordsRepository extends Repository {
             String line;
             while ((line = reader.readLine()) != null) {
                 T record = csvToRecord(line, type);
+                //MedicalRecord medicalrecord = csvToRecord(line, type);
+                //String[] fields = line.split(",");
+                
                 if (record != null) {
-                    recordsMap.put(record.getRecordID(), record);
+                    //recordsMapPatientID.put(fields[4], record);
+                    //recordsMapDoctorID.put(fields[4], record);
+                    recordsMapRecordID.put(record.getRecordID(), record);
                 }
             }
-            System.out.println("Successfully loaded " + recordsMap.size() + " records from " + fileName);
+            System.out.println("Successfully loaded " + recordsMapRecordID.size() + " records from " + fileName);
         } catch (IOException e) {
             System.out.println("Error reading record data: " + e.getMessage());
         }
@@ -182,7 +183,6 @@ public class RecordsRepository extends Repository {
     private static <T extends HMSRecords> T csvToRecord(String csv, Class<T> type) {
         String[] fields = csv.split(",");
         RecordsController rc = new RecordsController();
-
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
@@ -196,16 +196,29 @@ public class RecordsRepository extends Repository {
                         DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
                 return type.cast(new AppointmentRecord(
-                        fields[0], // recordID
-                        fields[1], // patientID
-                        LocalDateTime.parse(fields[2]), // createdDate
-                        LocalDateTime.parse(fields[3]), // updatedDate
-                        RecordStatusType.toEnumRecordStatusType(fields[4]), // recordStatus
-                        LocalDateTime.parse(fields[5]), // appointmentTime
-                        fields[6], // location
-                        AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
-                        rc.getAppointmentOutcomeRecordByPatientId(fields[1]) // appointmentOutcomeRecord
-                ));
+//                        fields[0], // recordID
+//                        fields[1], // patientID
+//                        LocalDateTime.parse(fields[2]), // createdDate
+//                        LocalDateTime.parse(fields[3]), // updatedDate
+//                        RecordStatusType.toEnumRecordStatusType(fields[4]), // recordStatus
+//                        LocalDateTime.parse(fields[5]), // appointmentTime
+//                        fields[6], // location
+//                        AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
+//                        rc.getAppointmentOutcomeRecordByPatientId(fields[1]) // appointmentOutcomeRecord
+                        fields[0],                                       // recordID (MRID)
+                       
+                        LocalDateTime.parse(fields[1]),                  // createdDate
+                        LocalDateTime.parse(fields[2]),                  // updatedDate
+                        RecordStatusType.toEnumRecordStatusType(fields[3]),             // recordStatus
+                        fields[4],
+                        fields[5],
+                        fields[6],
+                        LocalDateTime.parse(fields[7]),                   // appointmentTime
+                        fields[8],                                  
+                        AppointmentStatus.toEnumAppointmentStatus(fields[9]),            // appointmentStatus
+                        AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(fields[4]))        //appointmentOutcome, look up for appointment outcome ID
+                        );                                    // doctorID
+
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
                         fields[0], // recordID
@@ -227,13 +240,14 @@ public class RecordsRepository extends Repository {
      * Clear all record data and save empty files
      */
     public static boolean clearRecordDatabase() {
-        MEDICAL_RECORDS.clear();
-        APPOINTMENT_RECORDS.clear();
-        PAYMENT_RECORDS.clear();
+        MEDICAL_RECORDS_RECORDID.clear();
+        APPOINTMENT_RECORDS_RECORDID.clear();
+        PAYMENT_RECORDS_RECORDID.clear();
         saveAllRecordFiles();
         setRepoLoaded(false);
         return true;
     }
+
 
     public static Boolean isRepoLoaded() {
         return isRepoLoaded;

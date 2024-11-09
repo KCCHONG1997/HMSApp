@@ -5,26 +5,63 @@ import java.time.LocalDateTime;
 import enums.AppointmentStatus;
 
 public class AppointmentOutcomeRecord {
-	private LocalDateTime appointmentTime;
-    private String typeOfService;
-    private Prescription prescription;
-    private String consultationNotes;
-    private String patientID; 
-    private String doctorID;
 
-	public AppointmentOutcomeRecord(
-			LocalDateTime appointmentTime, 
-			String typeOfService, 
-			Prescription prescription,
-			String consultationNotes, 
-			String patientID,
-			String doctorID) {
-		this.appointmentTime = appointmentTime;
-		this.typeOfService = typeOfService;
-		this.prescription = prescription;
-		this.consultationNotes = consultationNotes;
+	private String patientID;
+	private String doctorID;
+	private String diagnosisID;
+	private String appointmentOutcomeRecordID;
+	private LocalDateTime appointmentTime;
+	private Prescription prescription;
+	private String typeOfService;
+	private String consultationNotes;
+
+	public AppointmentOutcomeRecord(String patientID,
+									String doctorID,
+									String diagnosisID,
+									String appointmentOutcomeRecordID,
+									LocalDateTime appointmentTime,
+									Prescription prescription,
+									String typeOfService,
+									String consultationNotes) {
 		this.patientID = patientID;
 		this.doctorID = doctorID;
+		this.diagnosisID = diagnosisID;
+		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
+		this.appointmentTime = appointmentTime;
+		this.prescription = prescription;
+		this.typeOfService = typeOfService;
+		this.consultationNotes = consultationNotes;
+	}
+	public String getPatientID() {
+		return patientID;
+	}
+
+	public void setPatientID(String patientID) {
+		this.patientID = patientID;
+	}
+
+	public String getDoctorID() {
+		return doctorID;
+	}
+
+	public void setDoctorID(String doctorID) {
+		this.doctorID = doctorID;
+	}
+
+	public String getDiagnosisID() {
+		return diagnosisID;
+	}
+
+	public void setDiagnosisID(String diagnosisID) {
+		this.diagnosisID = diagnosisID;
+	}
+
+	public String getAppointmentOutcomeRecordID() {
+		return appointmentOutcomeRecordID;
+	}
+
+	public void setAppointmentOutcomeRecordID(String appointmentOutcomeRecordID) {
+		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
 	}
 
 	public LocalDateTime getAppointmentTime() {
@@ -34,45 +71,30 @@ public class AppointmentOutcomeRecord {
 	public void setAppointmentTime(LocalDateTime appointmentTime) {
 		this.appointmentTime = appointmentTime;
 	}
-	
-    public String getTypeOfService() {
-        return typeOfService;
-    }
 
-    public void setTypeOfService(String typeOfService) {
-        this.typeOfService = typeOfService;
-    }
-
-    public Prescription getPrescription() {
-        return prescription;
-    }
-
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
-    }
-
-    public String getConsultationNotes() { 
-        return consultationNotes;
-    }
-
-    public void setConsultationNotes(String consultationNotes) {
-        this.consultationNotes = consultationNotes;
-    }
-    
-    public String getPatientID() {
-		return patientID;
+	public Prescription getPrescription() {
+		return prescription;
 	}
 
-	public void setPatientID(String patientID) {
-		this.patientID = patientID;
-	}
-	
-	public String getDoctorID() {
-		return doctorID;
+	public void setPrescription(Prescription prescription) {
+		this.prescription = prescription;
 	}
 
-	public void setDoctorID(String doctorID) {
-		this.doctorID = doctorID;
+	public String getTypeOfService() {
+		return typeOfService;
 	}
+
+	public void setTypeOfService(String typeOfService) {
+		this.typeOfService = typeOfService;
+	}
+
+	public String getConsultationNotes() {
+		return consultationNotes;
+	}
+
+	public void setConsultationNotes(String consultationNotes) {
+		this.consultationNotes = consultationNotes;
+	}
+
 
 }

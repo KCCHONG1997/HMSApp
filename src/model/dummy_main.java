@@ -29,15 +29,20 @@ public class dummy_main {
    // HMSPersonnelController.listAllPersonnel(PersonnelFileType.DOCTORS);
 	
     
-    PersonnelRepository.loadAllPersonnelFiles();
-    System.out.println("Doctor Information:");
-    for (Map.Entry<String, Doctor> entry : PersonnelRepository.DOCTORS.entrySet()) {
-        Doctor doctor = entry.getValue();
-        System.out.println("UID: " + doctor.getUID() + ", Name: " + doctor.getFullName());
-    }
-
-    RecordsRepository.loadAllRecordFiles();	
+//    PersonnelRepository.loadAllPersonnelFiles();
+//    System.out.println("Doctor Information:");
+//    for (Map.Entry<String, Doctor> entry : PersonnelRepository.DOCTORS.entrySet()) {
+//        Doctor doctor = entry.getValue();
+//        System.out.println("UID: " + doctor.getUID() + ", Name: " + doctor.getFullName());
+//    }
+    	HMSAppUI hmsui = new HMSAppUI();
+    	hmsui.startTestingEnv();
+    //RecordsRepository.loadAllRecordFiles();	
+    	//DoctorUI.availabilityForAppointments(null);
     PatientUI.viewAvailableAppointmentSlots();
+    
+   
+    	
 //
 //
 //    public Patient(String UID, String fullName, String idCard, String username, String email, String phoneNo,
@@ -105,12 +110,12 @@ public class dummy_main {
         //HashMap<String, ArrayList<DiagnosisRecord>> patientDiagnosisRecords = new HashMap<>();
 //        patientDiagnosisRecords.put("P002",diagnosisRecordsA);
 //        saveDiagnosisRecordsToCSV("diagnosis_records.csv", patientDiagnosisRecords);
-        DiagnosisRepository.loadDiagnosisRecordsFromCSV("diagnosis_records.csv", patientDiagnosisRecords);
-        Repository.loadRepository(new RecordsRepository());
-        
-        MedicalRecord medicalRecord1 =  MEDICAL_RECORDS.get("MR002");
-        System.out.println(medicalRecord1.getDiagnosis().getFirst().getDiagnosisID());
-
+//        DiagnosisRepository.loadDiagnosisRecordsFromCSV("diagnosis_records.csv", patientDiagnosisRecords);
+//        Repository.loadRepository(new RecordsRepository());
+//        
+//        MedicalRecord medicalRecord1 =  MEDICAL_RECORDS.get("MR002");
+//        System.out.println(medicalRecord1.getDiagnosis().getFirst().getDiagnosisID());
+//
 
 
 

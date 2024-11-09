@@ -131,12 +131,11 @@ public class DiagnosisRepository extends Repository {
             String doctorID = fields[2];
             String medicalRecordID = fields[3];
             LocalDateTime diagnosisDate = LocalDateTime.parse(fields[4]);
-            // TreatmentPlans treatmentPlan =
-            // TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
+            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
             String diagnosisDescription = fields[5].replace("\"", "");
             Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[1]);
 
-            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate, diagnosisDescription,
+            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate,treatmentPlan, diagnosisDescription,
                     prescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
@@ -151,4 +150,20 @@ public class DiagnosisRepository extends Repository {
     public static void setRepoLoaded(boolean isRepoLoaded) {
         DiagnosisRepository.isRepoLoaded = isRepoLoaded;
     }
+    
+    public static ArrayList<Diagnosis> getDiagnosesByPatientID(String patientID) {
+        ArrayList<Diagnosis> diagnosesForPatient = new ArrayList<>();
+        
+        for (ArrayList<Diagnosis> diagnoses : patientDiagnosisRecords.values()) {
+            for (Diagnosis diagnosis : diagnoses) {
+                if (diagnosis.getPatientID().equals(patientID)) {
+                    diagnosesForPatient.add(diagnosis);
+                }
+            }
+        }
+
+        return diagnosesForPatient;
+    }
+
+
 }

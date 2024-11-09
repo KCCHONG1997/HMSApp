@@ -57,6 +57,11 @@ public class MedicalRecord extends HMSRecords {
         this.Diagnosis= diagnosis;
                          }
 
+	public void addDiagnosis(model.Diagnosis newDiagnosis) {
+		// TODO Auto-generated method stub
+		this.Diagnosis.add(newDiagnosis);
+	}
+
 
 
 }

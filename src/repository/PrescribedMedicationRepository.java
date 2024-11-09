@@ -68,7 +68,7 @@ public class PrescribedMedicationRepository extends Repository {
         return String.join(",",
                 medication.getDiagnosisID(),
                 medication.getMedicineID(),
-                medication.getMedicineQuantity(),
+                String.valueOf(medication.getMedicineQuantity()),
                 String.valueOf(medication.getPeriodDays()),
                 medication.getPrescriptionStatus().toString(),
                 "\"" + medication.getDosage() + "\""
@@ -130,7 +130,7 @@ public class PrescribedMedicationRepository extends Repository {
         try {
             String diagnosisID = fields[0];
             String medicineID = fields[1];
-            String medicineQuantity = fields[2];
+            int medicineQuantity = Integer.parseInt(fields[2]);
             int periodDays = Integer.parseInt(fields[3]);
             PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[4]);
             String dosage = fields[5].replace("\"", "");
@@ -159,4 +159,5 @@ public class PrescribedMedicationRepository extends Repository {
 	public static void setRepoLoaded(boolean isRepoLoaded) {
 		PrescribedMedicationRepository.isRepoLoaded = isRepoLoaded;
 	}
+
 }

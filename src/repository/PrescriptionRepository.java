@@ -1,6 +1,7 @@
 package repository;
 
 import model.Prescription;
+import model.TreatmentPlans;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -153,4 +154,11 @@ public class PrescriptionRepository extends Repository {
 	public static void setRepoLoaded(boolean isRepoLoaded) {
 		PrescriptionRepository.isRepoLoaded = isRepoLoaded;
 	}
+	
+    public static void addPrescriptionRecord(Prescription prescription) {
+        // Add the record to the repository
+    	PRESCRIPTION_MAP.put(prescription.getDiagnosisID(), prescription);
+
+    	saveAlltoCSV();
+    }
 }

@@ -24,11 +24,14 @@ public class AppointmentOutcomeRecordRepository extends Repository {
     public boolean loadFromCSV() {
         loadAppoinmentOutcomeRecordsFromCSV(AppointmentOutcomeRecordsfileName, patientOutcomeRecords);
         setRepoLoaded(true);
-        return false;
+        return true;
+    }
+    public static void saveAppointmentOutcomeRecordRepository() {
+        saveAppoinmentOutcomeRecordsToCSV(AppointmentOutcomeRecordsfileName, patientOutcomeRecords);
     }
 
     public static void saveAppoinmentOutcomeRecordsToCSV(String fileName,
-            HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+                                                         HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -38,10 +41,10 @@ public class AppointmentOutcomeRecordRepository extends Repository {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String patientID : patientOutcomeRecords.keySet()) {
-                AppointmentOutcomeRecord record = patientOutcomeRecords.get(patientID);
+            for (String appointmentOutcomeRecordID : patientOutcomeRecords.keySet()) {
+                AppointmentOutcomeRecord record = patientOutcomeRecords.get(appointmentOutcomeRecordID);
                 if (record != null) {
-                    writer.write(appointmentOutcomeToCSV(patientID, record));
+                    writer.write(appointmentOutcomeToCSV(record));
                     writer.newLine();
                 }
 
@@ -53,14 +56,15 @@ public class AppointmentOutcomeRecordRepository extends Repository {
     }
 
     // Convert an AppointmentOutcomeRecord object to a CSV line
-    private static String appointmentOutcomeToCSV(String patientID, AppointmentOutcomeRecord record) {
+    private static String appointmentOutcomeToCSV( AppointmentOutcomeRecord record) {
         return String.join(",",
+                record.getPatientID(), // Patient ID
+                record.getDoctorID(), // Doctor ID
+                record.getDiagnosisID(),
+                record.getAppointmentOutcomeRecordID(),
                 record.getAppointmentTime().toString(), // Appointment time
-                record.getTypeOfService(), // Type of Service
-                record.getPrescription().toString(), // prescription
-                "\"" + record.getConsultationNotes() + "\"", // Consultation Notes
-                record.getPatientID() + // Patient ID
-                        record.getDoctorID() // Doctor ID
+                "\"" + record.getTypeOfService() + "\"",
+                "\"" + record.getConsultationNotes() + "\"" // Consultation Notes
         );
     }
 
@@ -69,7 +73,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
      * file if it doesn't exist
      */
     public static void loadAppoinmentOutcomeRecordsFromCSV(String fileName,
-            HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+                                                           HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
@@ -87,7 +91,6 @@ public class AppointmentOutcomeRecordRepository extends Repository {
             }
             return; // No data to load, as the file was just created
         }
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -107,7 +110,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
 
     private static String getPatientIDFromCSV(String csv) {
         String[] fields = csv.split(",");
-        return fields[4];
+        return fields[0];
     }
 
     // Convert a CSV line to an AppointmentOutcomeRecord object
@@ -115,15 +118,24 @@ public class AppointmentOutcomeRecordRepository extends Repository {
         // Split by comma, ignoring commas within quotes
         String[] fields = csv.split(",");
         try {
-            LocalDateTime appointmentTime = LocalDateTime.parse(fields[0]);
-            String typeOfService = fields[1];
-            Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[2]);
+            String patientID = fields[0];
+            String doctorID = fields[1];
+            String diagnosisID = fields[2];
+            String appointmentOutcomeRecordID = fields[3];
+            LocalDateTime appointmentTime = LocalDateTime.parse(fields[4]);
+            Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[2]);//diagnosisID
+            String typeOfService = fields[5];
             String consultationNotes = fields[3].replace("\"", "");
-            String patientID = fields[4];
-            String doctorID = fields[5];
 
-            return new AppointmentOutcomeRecord(appointmentTime, typeOfService, prescription, consultationNotes,
-                    patientID, doctorID);
+            return new AppointmentOutcomeRecord(patientID,
+                                                doctorID,
+                                                diagnosisID,
+                                                appointmentOutcomeRecordID,
+                                                appointmentTime,
+                                                prescription,
+                                                typeOfService,
+                                                consultationNotes
+            );
         } catch (Exception e) {
             System.out.println("Error parsing appointment outcome record data: " + e.getMessage());
         }
@@ -145,6 +157,12 @@ public class AppointmentOutcomeRecordRepository extends Repository {
 
     public static void setRepoLoaded(boolean isRepoLoaded) {
         AppointmentOutcomeRecordRepository.isRepoLoaded = isRepoLoaded;
+    }
+    public static void addOutcomeRecord(AppointmentOutcomeRecord outcomeRecord) {
+        // Add the record to the repository
+    	patientOutcomeRecords.put(outcomeRecord.getAppointmentOutcomeRecordID(), outcomeRecord);
+
+    	saveAppointmentOutcomeRecordRepository();
     }
 
 }
