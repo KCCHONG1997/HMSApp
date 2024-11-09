@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 import HMSApp.HMSMain;
 import controller.PharmacistController;
+import repository.MedicineRepository;
 
 public class PharmacistUI {
     public static void printMenu() {

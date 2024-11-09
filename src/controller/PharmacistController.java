@@ -164,7 +164,8 @@ public class PharmacistController extends HMSPersonnelController{
     	do{
             System.out.println("Submit Replenishment Request:");
             System.out.println("1. Enter a Medicine ID to submit a replenishment request.");
-            System.out.println("2. Exit to Main Menu.");
+            System.out.println("2. Check Replenishment Requests and Status.");
+            System.out.println("3. Exit to Main Menu.");
             System.out.print("Choose an option: ");
             
             choice = Helper.readInt();
@@ -184,13 +185,6 @@ public class PharmacistController extends HMSPersonnelController{
                         }
                     }
 
-//                    // Check if the medicine needs replenishment based on stock level and expiration date
-//                    LocalDateTime now = LocalDateTime.now();
-//                    if (medicine.getInventoryStock() >= medicine.getLowStockLevel() && medicine.getExpiryDate().isAfter(now.plusMonths(1))) {
-//                        System.out.println("No replenishment needed for " + medicine.getName() + ". Stock is sufficient and expiration date is not near.");
-//                        return;
-//                    }
-
                     // Proceed with replenishment request
                     System.out.print("Enter Requested Quantity: ");
                     int requestedQuantity = Helper.readInt();
@@ -201,11 +195,32 @@ public class PharmacistController extends HMSPersonnelController{
 
                     System.out.println("Replenishment request submitted for " + medicine.getName() + " with quantity " + requestedQuantity);
                     break;
+                    
+                case 2:
+                    System.out.println("Replenishment Requests and Status:");
+                    boolean requestFound = false;
+
+                    for (Medicine med : MedicineRepository.MEDICINES.values()) {
+                        if (med.getReplenishStatus() != ReplenishStatus.NULL) {
+                            requestFound = true;
+                            System.out.println("Medicine ID: " + med.getMedicineID());
+                            System.out.println("Name: " + med.getName());
+                            System.out.println("Replenish Status: " + med.getReplenishStatus());
+                            System.out.println("Replenishment Request Date: " + med.getReplenishRequestDate());
+                            System.out.println();
+                        }
+                    }
+
+                    if (!requestFound) {
+                        System.out.println("No replenishment requests found.");
+                    }
+                    break;
+
                 default:
                     System.out.println("Invalid choice. Please select a valid option.");
                     break;
             }
-        }while(choice != 2);
+        }while(choice != 3);
     }
 
     /**

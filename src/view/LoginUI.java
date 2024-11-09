@@ -43,7 +43,7 @@ public class LoginUI extends MainUI {
                     doctorLogin(sc);
                     break;
                 case 3:
-//                    pharmacistLogin(sc);
+                    pharmacistLogin(sc);
                     break;
                 case 4:
 //                    administratorLogin(sc);
@@ -92,22 +92,22 @@ public class LoginUI extends MainUI {
         }
     }
 
-//    // Login for Pharmacist
-//    public void pharmacistLogin(Scanner sc) {
-//        String username = enterUsername(sc);
-//        String passwordHash = enterPassword(sc);
-//
-//        HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.PHARMACISTS);
-//
-//        if (personnel != null && personnel instanceof Pharmacist) {
-//            Pharmacist retrievedPharmacist = (Pharmacist) personnel; // Cast to Pharmacist
-//            System.out.println("Login Successful!");
-//            //TODO
-////            PharmacistUI.showPharmacistDashboard(retrievedPharmacist);
-//        } else {
-//            System.out.println("Login failed. Invalid username or password.");
-//        }
-//    }
+    // Login for Pharmacist
+    public void pharmacistLogin(Scanner sc) {
+        String username = enterUsername(sc);
+        String passwordHash = enterPassword(sc);
+
+        HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.PHARMACISTS);
+
+        if (personnel != null && personnel instanceof Pharmacist) {
+            Pharmacist retrievedPharmacist = (Pharmacist) personnel; // Cast to Pharmacist
+            System.out.println("Login Successful!");
+            //TODO
+//            PharmacistUI.showPharmacistDashboard(retrievedPharmacist);
+        } else {
+            System.out.println("Login failed. Invalid username or password.");
+        }
+    }
 
 //    // Login for Administrator
 //    public void administratorLogin(Scanner sc) {

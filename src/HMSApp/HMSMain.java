@@ -11,7 +11,8 @@ import view.*;
 public class HMSMain {
     public static void main(String[] args) {
     	HMSAppUI hmsAppUI = new HMSAppUI();
-    	PersonnelRepository.loadAllPersonnelFiles();
+    	PersonnelRepository personnelRepository = new PersonnelRepository();
+    	personnelRepository.loadFromCSV();
 
         printHMSWelcomeTitle();
         hmsAppUI.start();      
