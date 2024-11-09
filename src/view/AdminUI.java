@@ -46,15 +46,18 @@ public class AdminUI extends MainUI {
             choice = Helper.readInt();
             switch(choice) {
                 case 1: 
+                	printBreadCrumbs("HMS App UI > Admin Dashboard > View and Manage Staff");
                 	viewAndManageStaff();
                     break;
                 case 2: 
-                    // Code for viewing appointment record
+                	printBreadCrumbs("HMS App UI > Admin Dashboard > View Appointments");
                     break;
                 case 3: 
+                	printBreadCrumbs("HMS App UI > Admin Dashboard > View And Manage Medication Inventory");
                 	viewAndManageMedicationInventory();
                     break;
                 case 4: 
+                	printBreadCrumbs("HMS App UI > Admin Dashboard > Approve Replenish Request");
                 	approveReplenishRequest();
                     break;
                 case 5: 
@@ -79,7 +82,9 @@ public class AdminUI extends MainUI {
 	    System.out.println("7. Update Pharmacist");
 	    System.out.println("8. Remove Doctor");
 	    System.out.println("9. Remove Pharmacist");
-	    int choice = Helper.readInt();
+	    
+	    AdminUI adminUI = new AdminUI(null);
+	    int choice = adminUI.getUserChoice(9);
 
 	    switch (choice) {
 	        case 1:
@@ -172,7 +177,7 @@ public class AdminUI extends MainUI {
         String email = Helper.readString();
         System.out.println("Enter New Phone No: " );
         String phoneNo = Helper.readString();
-        System.out.println("Enter New Password " );
+        System.out.println("Enter New Password: " );
         String hashedPassword = Helper.readString();
         if (role == "Doctor" ) {
         	
@@ -205,6 +210,7 @@ public class AdminUI extends MainUI {
         }
     }
     public static void removePersonnel(String role) {
+    	System.out.println("Enter Staff UID");
     	if(role == "Doctor") {
     		String uidDoctor = Helper.readString();
             AdminController.removePersonnel(uidDoctor, PersonnelFileType.DOCTORS);
