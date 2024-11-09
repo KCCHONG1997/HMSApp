@@ -1,9 +1,16 @@
 package view;
 
 import helper.Helper;
+import model.MedicalRecord;
+import model.RecordStatusType;
 import repository.PersonnelRepository;
+import repository.RecordFileType;
+import repository.RecordsRepository;
 import controller.AuthenticationController;
+import controller.RecordsController;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class RegisterUI extends MainUI {
 	
@@ -44,7 +51,7 @@ public class RegisterUI extends MainUI {
         }
     }
 
-    // Registration for Patient
+ // Registration for Patient
     public void patientRegister() {
         String fullName = Helper.readString("Enter full name:");
         String idCard = Helper.readString("Enter ID card number:");
@@ -54,20 +61,45 @@ public class RegisterUI extends MainUI {
         String gender = Helper.readGender("Enter gender (M/F):");
         String insuranceInfo = Helper.readString("Enter insurance information:");
         String allergies = Helper.readString("Enter allergies (if any):");
+        String bloodType = Helper.readString("Enter BloodType (Leave blank if unsure):");
         LocalDateTime dateOfAdmission = Helper.readDate("Enter date of admission (yyyy-MM-dd):");
         String username = Helper.readString("Enter desired username:");
         
-		while (AuthenticationController.isUsernameTaken(username, PersonnelRepository.PATIENTS)) {
-		System.out.println("The username '" + username + "' is already taken. Please enter a new username:");
-		username = Helper.readString("Enter a new username: ");
-		}
-		
+        // Ensure username is unique
+        while (AuthenticationController.isUsernameTaken(username, PersonnelRepository.PATIENTS)) {
+            System.out.println("The username '" + username + "' is already taken. Please enter a new username:");
+            username = Helper.readString("Enter a new username: ");
+        }
+
         String password = Helper.readString("Enter desired password:");
-        
-        
-        //FIXME: Upon creation of patient, it should create Medical Record.
-        boolean success = AuthenticationController.registerPatient(fullName, idCard, username, email, phoneNo, password, DoB, gender, insuranceInfo, allergies, dateOfAdmission);
-        System.out.println(success ? "Patient registered successfully!" : "Registration failed. Username may already exist.");
+
+        // Register the patient
+        String patientUID = AuthenticationController.registerPatient(fullName, idCard, username, email, phoneNo, password, DoB, gender, insuranceInfo, allergies, dateOfAdmission);
+        if (patientUID != null) {
+            System.out.println("Patient registered successfully!");
+
+            // Generate a new medical record ID (assuming RecordsController has a method for this)
+            String recordID = RecordsController.generateRecordID(RecordFileType.MEDICAL_RECORDS);
+
+            // Create the MedicalRecord for the new patient
+            MedicalRecord mr = new MedicalRecord(
+                LocalDateTime.now(), // Created date
+                LocalDateTime.now(), // Updated date
+                RecordStatusType.ACTIVE, // Record status
+                patientUID,              // patientID
+                null,                // doctorID (can be assigned later)
+                bloodType,
+                new ArrayList<>()    // Empty diagnosis list
+            );
+
+            // Add the new MedicalRecord to the repository
+            RecordsRepository.MEDICAL_RECORDS.put(recordID, mr);
+            RecordsRepository.saveAllRecordFiles();
+
+            System.out.println("Medical record created successfully for patient " + fullName);
+        } else {
+            System.out.println("Registration failed. Username may already exist.");
+        }
     }
 
     // Registration for Doctor

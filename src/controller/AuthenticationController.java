@@ -95,7 +95,7 @@ public class AuthenticationController {
     }
 
     // Register Patient
-    public static boolean registerPatient(String fullName, String idCard, String username, String email, 
+    public static String registerPatient(String fullName, String idCard, String username, String email, 
             String phoneNo, String passwordHash, LocalDateTime DoB, 
             String gender, String insuranceInfo, String allergies, 
 	            LocalDateTime dateOfAdmission) {
@@ -105,7 +105,7 @@ public class AuthenticationController {
 		PersonnelRepository.PATIENTS.put(patient.getUID(), patient);
 		PersonnelRepository.saveAllPersonnelFiles();
 		System.out.println("Patient registered successfully with username: " + username);
-		return true;
+		return patient.getUID();
     }
 
 

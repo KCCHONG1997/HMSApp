@@ -16,11 +16,6 @@ import enums.AppointmentStatus;
 
 public class PatientUI extends MainUI {
     
-    private static Patient patient;
-
-    public PatientUI(Patient patient) {
-        this.patient = patient;
-    }
     
     @Override
     public void printChoice() {

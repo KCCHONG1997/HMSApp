@@ -50,7 +50,9 @@ public class LoginUI extends MainUI {
                 changePassword(personnel);
             }
             System.out.println("Login Successful!");
-            // TODO: PatientUI.showPatientDashboard((Patient) personnel);
+            // TODO: 
+            PatientUI patui = new PatientUI(); 
+            patui.showPatientDashboard();
         } else {
             System.out.println("Login failed. Invalid username or password.");
         }

@@ -178,36 +178,39 @@ public class RecordsRepository extends Repository {
     // Convert a CSV line to a record object
     private static <T extends HMSRecords> T csvToRecord(String csv, Class<T> type) {
         String[] fields = csv.split(",");
+        RecordsController rc = new RecordsController();
 
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
-                        Helper.getFieldOrNull(fields, 0), // recordID
-                        Helper.parseDateTimeOrNull(fields, 1), // createdDate
-                        Helper.parseDateTimeOrNull(fields, 2), // updatedDate
-                        fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        Helper.getFieldOrNull(fields, 4), // patientID
-                        Helper.getFieldOrNull(fields, 5), // doctorID
-                        Helper.getFieldOrNull(fields, 6), // bloodType
-                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(Helper.getFieldOrNull(fields, 0),
-                                new ArrayList<>())));
+                        fields[0], // recordID
+                        LocalDateTime.parse(fields[1]), // createdDate
+                        LocalDateTime.parse(fields[2]), // updatedDate
+                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                        fields[4], // patientID
+                        fields[5], // doctorID
+                        fields[6], // bloodType
+                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
-                return type.cast(new AppointmentRecord(
-                        Helper.getFieldOrNull(fields, 0), // recordID
-                        Helper.parseDateTimeOrNull(fields, 1), // createdDate
-                        Helper.parseDateTimeOrNull(fields, 2), // updatedDate
-                        fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        Helper.getFieldOrNull(fields, 4), // patientID
-                        Helper.parseDateTimeOrNull(fields, 5) // appointmentTime
-                ));
+//                return type.cast(new AppointmentRecord(
+//                        fields[0], // recordID
+//                        fields[1], // patientID
+//                        LocalDateTime.parse(fields[2]), // createdDate
+//                        LocalDateTime.parse(fields[3]), // updatedDate
+//                        RecordStatusType.toEnumRecordStatusType(fields[4]), // recordStatus
+//                        LocalDateTime.parse(fields[5]), // appointmentTime
+//                        fields[6], // location
+//                        AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
+//                        rc.getAppointmentOutcomeRecordByPatientId(fields[1]) // appointmentOutcomeRecord
+//                ));
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
-                        Helper.getFieldOrNull(fields, 0), // recordID
-                        Helper.parseDateTimeOrNull(fields, 1), // createdDate
-                        Helper.parseDateTimeOrNull(fields, 2), // updatedDate
-                        fields[3].isEmpty() ? null : RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        Helper.getFieldOrNull(fields, 4), // patientID
-                        Helper.parseDoubleOrNull(fields, 5) // paymentAmount
+                        fields[0], // recordID
+                        LocalDateTime.parse(fields[1]), // createdDate
+                        LocalDateTime.parse(fields[2]), // updatedDate
+                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                        fields[4], // patientID
+                        Double.parseDouble(fields[5]) // paymentAmount
                 ));
             }
         } catch (Exception e) {
@@ -216,7 +219,6 @@ public class RecordsRepository extends Repository {
 
         return null;
     }
-
     /**
      * Clear all record data and save empty files
      */
