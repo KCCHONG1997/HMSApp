@@ -62,6 +62,7 @@ public class RegisterUI extends MainUI {
         String insuranceInfo = Helper.readString("Enter insurance information:");
         String allergies = Helper.readString("Enter allergies (if any):");
         String bloodType = Helper.readString("Enter BloodType (Leave blank if unsure):");
+        bloodType = (bloodType=="") ? null : bloodType;
         LocalDateTime dateOfAdmission = Helper.readDate("Enter date of admission (yyyy-MM-dd):");
         String username = Helper.readString("Enter desired username:");
         
@@ -89,7 +90,8 @@ public class RegisterUI extends MainUI {
                 patientUID,              // patientID
                 null,                // doctorID (can be assigned later)
                 bloodType,
-                new ArrayList<>()    // Empty diagnosis list
+                new ArrayList<>(),    // Empty diagnosis list
+                allergies
             );
 
             // Add the new MedicalRecord to the repository
