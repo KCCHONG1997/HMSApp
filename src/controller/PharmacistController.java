@@ -9,7 +9,7 @@ import model.Medicine;
 //import repository.AppointmentRepository;
 import repository.MedicineRepository;
 
-public class PharmacistController extends HMSPersonnelController{
+public class PharmacistController{
 
 //    /**
 //     * View Appointment Outcome Records to fulfill prescription orders from doctors.
