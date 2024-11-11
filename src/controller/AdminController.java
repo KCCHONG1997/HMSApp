@@ -175,12 +175,6 @@ public class AdminController extends HMSPersonnelController {
 
 
     
-    public static void main(String[] args) {
-        MedicineRepository mediRepository = new MedicineRepository();
-    	mediRepository.loadFromCSV();
-        MedicineController.listAllMedicines();
-        
-    }
 }
 
 	    
