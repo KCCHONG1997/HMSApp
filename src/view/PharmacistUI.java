@@ -21,8 +21,8 @@ import helper.Helper;
 public class PharmacistUI extends MainUI{
 	private Pharmacist pharmacist;
 	
-    public PharmacistUI(Pharmacist pharmacist) {
-        this.pharmacist = pharmacist;
+    public PharmacistUI() {
+    	this.pharmacist = (Pharmacist) HMSPersonnelController.getPersonnelByUID(AuthenticationController.cookie.getUid(), PersonnelFileType.PHARMACISTS);
     }
     
 	@Override
@@ -48,7 +48,7 @@ public class PharmacistUI extends MainUI{
         int choice = 0;
         do {
         	printChoice();
-            choice = Helper.readInt();
+            choice = Helper.readInt("");
             switch(choice) {
 //          case 1:
 //          // Call the method to view appointment outcome records

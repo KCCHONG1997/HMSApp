@@ -110,7 +110,7 @@ public class PharmacistController{
 	            System.out.println("1. Yes");
 	            System.out.println("2. No");
 	            System.out.print("Enter your choice: ");
-	            response = Helper.readInt();
+	            response = Helper.readInt("");
 	            
 	            switch (response) {
 	                case 1:
@@ -168,7 +168,7 @@ public class PharmacistController{
             System.out.println("3. Exit to Main Menu.");
             System.out.print("Choose an option: ");
             
-            choice = Helper.readInt();
+            choice = Helper.readInt("");
 
             switch (choice) {
                 case 1:
@@ -187,7 +187,7 @@ public class PharmacistController{
 
                     // Proceed with replenishment request
                     System.out.print("Enter Requested Quantity: ");
-                    int requestedQuantity = Helper.readInt();
+                    int requestedQuantity = Helper.readInt("");
 
                     medicine.setReplenishStatus(ReplenishStatus.REQUESTED);
                     medicine.setReplenishRequestDate(LocalDateTime.now());
@@ -241,7 +241,7 @@ public class PharmacistController{
             System.out.println("4. Submit Replenishment Request");
             System.out.println("0. Exit");
             
-            choice = Helper.readInt();
+            choice = Helper.readInt("");
             
             switch (choice) {
                 case 1:
