@@ -244,7 +244,7 @@ public class AdminUI extends MainUI {
         int choice = Helper.readInt("");
         switch (choice) {
             case 1:
-                AdminController.listAllMedicine();
+                MedicineController.listAllMedicines();
                 break;
             case 2:
                 addMedicine();
@@ -275,7 +275,7 @@ public class AdminUI extends MainUI {
         LocalDateTime date = LocalDateTime.parse(dateTimeString, formatter);
         Medicine medicine = new Medicine(medicineID, name, manufacturer, expiryDate,
                 inventoryStock, lowStockLevel, status, date, date);
-        AdminController.addMedicine(medicine);
+        MedicineController.addMedicine(medicine);
     }
 
     public static void updateMedicine() {
@@ -289,12 +289,12 @@ public class AdminUI extends MainUI {
         medicine.setInventoryStock(inventoryStock);
         int lowStockLevel = Helper.readInt("Enter New Low Stock Level: ");
         medicine.setLowStockLevel(lowStockLevel);
-        AdminController.updateMedicine(medicineID, medicine);
+        MedicineController.updateMedicine(medicineID, medicine);
     }
 
     public static void removeMedicine() {
         String medicineID = Helper.readString("Enter Medicine ID: ");
-        AdminController.removeMedicine(medicineID);
+        MedicineController.removeMedicine(medicineID);
     }
 
     public static void approveReplenishRequest() {

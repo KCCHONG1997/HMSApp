@@ -20,21 +20,21 @@ import repository.PersonnelFileType;
 import repository.PersonnelRepository;
 
 public class AdminController extends HMSPersonnelController {
-	public static void listAllMedicine() {
-		MedicineController.listAllMedicines();
-	}
-	public static void addMedicine(Medicine medicine) {
-		
-		 MedicineController.addMedicine(medicine);
-	}
-	
-	public static void updateMedicine(String medicineID, Medicine medicine) {
-		 MedicineController.updateMedicine(medicineID, medicine);		
-	}
-	
-	public static void removeMedicine(String medicineID) {
-		 MedicineController.removeMedicine(medicineID);
-	}
+//	public static void listAllMedicine() {
+//		MedicineController.listAllMedicines();
+//	}
+//	public static void addMedicine(Medicine medicine) {
+//		
+//		 MedicineController.addMedicine(medicine);
+//	}
+//	
+//	public static void updateMedicine(String medicineID, Medicine medicine) {
+//		 MedicineController.updateMedicine(medicineID, medicine);		
+//	}
+//	
+//	public static void removeMedicine(String medicineID) {
+//		 MedicineController.removeMedicine(medicineID);
+//	}
 	
 	public static void approveReplenishRequest(String medicineID, Medicine medicine ) {
 		
