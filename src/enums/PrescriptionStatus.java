@@ -1,5 +1,6 @@
 package enums;
 
 public enum PrescriptionStatus {
-	PENDING, DISPENSED;
+    PENDING,
+    DISPENSED
 }

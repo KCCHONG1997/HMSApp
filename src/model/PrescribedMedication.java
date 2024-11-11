@@ -11,7 +11,8 @@ public class PrescribedMedication {
     private PrescriptionStatus PrescriptionStatus;
     private String dosage;
 
-    public PrescribedMedication(String diagnosisID, String medicineID, String medicineQuantity, int periodDays, enums.PrescriptionStatus prescriptionStatus, String dosage) {
+    public PrescribedMedication(String diagnosisID, String medicineID, String medicineQuantity, int periodDays,
+            enums.PrescriptionStatus prescriptionStatus, String dosage) {
         this.diagnosisID = diagnosisID;
         this.medicineID = medicineID;
         this.medicineQuantity = medicineQuantity;
@@ -19,6 +20,7 @@ public class PrescribedMedication {
         PrescriptionStatus = prescriptionStatus;
         this.dosage = dosage;
     }
+
     public String getDiagnosisID() {
         return diagnosisID;
     }
@@ -68,4 +70,3 @@ public class PrescribedMedication {
     }
 
 }
-
