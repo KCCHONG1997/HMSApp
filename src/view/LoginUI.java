@@ -101,30 +101,28 @@ public class LoginUI extends MainUI {
 
         if (personnel != null && personnel instanceof Pharmacist) {
             Pharmacist retrievedPharmacist = (Pharmacist) personnel; // Cast to Pharmacist
-            System.out.println("Login Successful!");
-            //TODO
-//            PharmacistUI.showPharmacistDashboard(retrievedPharmacist);
-        } else {
-            System.out.println("Login failed. Invalid username or password.");
+            PharmacistUI pharmacistUI = new PharmacistUI(retrievedPharmacist);
+            pharmacistUI.start();
+            } else {
+                System.out.println("Login failed. Invalid username or password.");
+            }
         }
-    }
-
-//    // Login for Administrator
-//    public void administratorLogin(Scanner sc) {
-//        String username = enterUsername(sc);
-//        String passwordHash = enterPassword(sc);
-//
-//        HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.ADMINS);
-//
-//        if (personnel != null && personnel instanceof Admin) {
-//            Admin retrievedAdmin = (Admin) personnel; // Cast to Admin
-//            //TODO
-//            System.out.println("Login Successful!");
-////            AdminUI.showAdminDashboard(retrievedAdmin);
+            
+//    Login for Administrator
+//   public void administratorLogin(Scanner sc) {
+//   String username = enterUsername(sc);
+//   String passwordHash = enterPassword(sc);
+//   HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.ADMINS);
+//   
+//   if (personnel != null && personnel instanceof Admin) {
+//	   	Admin retrievedAdmin = (Admin) personnel;     
+//        AdminUI adminUI = new AdminUI(retrievedAdmin);
+//		adminUI.start();
 //        } else {
 //            System.out.println("Login failed. Invalid username or password.");
 //        }
 //    }
+
 
     // Utility methods for username and password input
     public static String enterUsername(Scanner sc) {
@@ -136,4 +134,8 @@ public class LoginUI extends MainUI {
         System.out.print("Please enter your password: ");
         return sc.nextLine();
     }
+    
+   
 }
+
+
