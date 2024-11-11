@@ -3,15 +3,14 @@ import java.time.LocalDateTime;
 import enums.PrescriptionStatus;
 public class PrescribedMedication {
     private String diagnosisID;
-    private String medicineID;
+
     private int medicineQuantity;
     private int periodDays;
     private PrescriptionStatus PrescriptionStatus;
     private String dosage;
 
-    public PrescribedMedication(String diagnosisID, String medicineID, int medicineQuantity, int periodDays, enums.PrescriptionStatus prescriptionStatus, String dosage) {
+    public PrescribedMedication(String diagnosisID, int medicineQuantity, int periodDays, enums.PrescriptionStatus prescriptionStatus, String dosage) {
         this.diagnosisID = diagnosisID;
-        this.medicineID = medicineID;
         this.medicineQuantity = medicineQuantity;
         this.periodDays = periodDays;
         PrescriptionStatus = prescriptionStatus;
@@ -25,13 +24,6 @@ public class PrescribedMedication {
         this.diagnosisID = diagnosisID;
     }
 
-    public String getMedicineID() {
-        return medicineID;
-    }
-
-    public void setMedicineID(String medicineID) {
-        this.medicineID = medicineID;
-    }
 
     public int getMedicineQuantity() {
         return medicineQuantity;

@@ -51,13 +51,13 @@ public class Diagnosis {
         this.diagnosisDate = diagnosisDate;
     }
 
-//    public model.TreatmentPlans getTreatmentPlans() {
-//        return TreatmentPlans;
-//    }
-//
-//    public void setTreatmentPlans(model.TreatmentPlans treatmentPlans) {
-//        TreatmentPlans = treatmentPlans;
-//    }
+    public model.TreatmentPlans getTreatmentPlans() {
+        return TreatmentPlans;
+    }
+
+    public void setTreatmentPlans(model.TreatmentPlans treatmentPlans) {
+        TreatmentPlans = treatmentPlans;
+    }
 
     public String getDiagnosisDescription() {
         return diagnosisDescription;
@@ -96,5 +96,8 @@ public class Diagnosis {
 	public void setMedicalRecordID(String medicalRecordID) {
 		this.medicalRecordID = medicalRecordID;
 	}
+
+
+
 
 }

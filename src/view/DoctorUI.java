@@ -20,16 +20,7 @@ import controller.DoctorController;
 import controller.PatientController;
 import controller.RecordsController;
 import enums.AppointmentStatus;
-import model.AppointmentOutcomeRecord;
-import model.AppointmentRecord;
-import model.Diagnosis;
-import model.Doctor;
-import model.MedicalRecord;
-import model.Patient;
-import model.PrescribedMedication;
-import model.Prescription;
-import model.RecordStatusType;
-import model.TreatmentPlans;
+import model.*;
 import repository.AppointmentOutcomeRecordRepository;
 import repository.DiagnosisRepository;
 import repository.PersonnelRepository;
@@ -128,7 +119,119 @@ public class DoctorUI extends MainUI {
 //            recordUI.displayMedicalRecordInBox(); // Display the medical record
 //        }
 //    }
-	
+	/////////////////////////////CKHAI
+	public Diagnosis updateDiagnosis( String patientId,
+									  String diagnosisDescription,
+									  String doctorId,
+									  String medicalRecordID,
+									  TreatmentPlans treatmentPlans,
+									  Prescription prescription,
+									  MedicalRecord medicalRecord){
+
+		//	    System.out.println("Enter new diagnosis description:");
+//	    String diagnosisDescription = scanner.nextLine();
+//	    String medid = getMedicalRecordID(doctor.getUID(), patient.getUID());
+		String newDiagnosisID = AppointmentController.generateRecordID(RecordFileType.DIAGNOSIS_RECORDS); // Method to generate unique IDs
+		Diagnosis newDiagnosis = new Diagnosis(patientId,newDiagnosisID,doctorId,medicalRecordID , LocalDateTime.now(), null, diagnosisDescription, null);
+		DiagnosisRepository.addDiagnosis(newDiagnosisID, newDiagnosis); // Add to repository
+		medicalRecord.addDiagnosis(newDiagnosis);
+
+		//savecsv
+		RecordsRepository.saveAllRecordFiles();
+		return newDiagnosis;
+
+	}
+
+	public TreatmentPlans addTreatmentPlans(Diagnosis newDiagnosis, String treatmentDescription){
+		// String treatmentDescription = scanner.nextLine();
+		TreatmentPlans newTreatmentPlan = new TreatmentPlans(newDiagnosis.getDiagnosisID(), LocalDateTime.now(), treatmentDescription);
+		newDiagnosis.setTreatmentPlans(newTreatmentPlan);
+		TreatmentPlansRepository.saveAlltoCSV(); // Add to repository
+		RecordsRepository.saveAllRecordFiles();
+		return newTreatmentPlan;
+
+	}
+
+	public Prescription addPrescription(Diagnosis newDiagnosis, PrescribedMedication newPrescribedMedication){
+
+		if (newDiagnosis.getPrescription()!=null){
+			newDiagnosis.getPrescription().addPrescribedMedication(newPrescribedMedication);
+
+		}
+		else{newDiagnosis.getPrescription().addPrescribedMedication(newPrescribedMedication);}
+		return newDiagnosis.getPrescription();
+	}
+
+	public PrescribedMedication addPrescribedMedication(Diagnosis newDiagnosis, String toBePrescribedMedication, int quantity,int periodDays,String dosage){
+		//	    System.out.println("Do you want to prescribe medication? (yes/no)");
+//	    String response/toBePrescribedMedication = scanner.nextLine();
+//	    if (response.equalsIgnoreCase("yes")) {
+//	        while (true) {
+//	            System.out.println("Enter Quantity:");
+//	            int quantity = Integer.parseInt(scanner.nextLine());
+//	            System.out.println("Enter Period (Days):");
+//	            int periodDays = Integer.parseInt( scanner.nextLine());
+//	            System.out.println("Enter Dosage:");
+//	            String dosage =  scanner.nextLine();
+//
+		PrescribedMedication newPrescribedMedication = new PrescribedMedication(newDiagnosis.getDiagnosisID(),  quantity, periodDays,null , dosage);
+		PrescriptionRepository.PRESCRIPTION_MAP.get(newDiagnosis.getDiagnosisID());
+		PrescribedMedicationRepository.saveAlltoCSV(); // Add to repository
+//
+//	            System.out.println("Do you want to add another medication? (yes/no)");
+//	            response =scanner.nextLine();
+//	            if (!response.equalsIgnoreCase("yes")) {
+//	                break;
+//	            }
+//	        }
+//	    }
+		RecordsRepository.saveAllRecordFiles();
+		return newPrescribedMedication;
+
+	}
+	public String retrieveMedicalRecordID(String doctorID, String patientID){
+		String medicalRecordID = getMedicalRecordID(doctorID, patientID);
+		MedicalRecord medicalRecord = RecordsRepository.MEDICAL_RECORDS_RECORDID.get(medicalRecordID);
+
+		return medicalRecord.getRecordID();
+	}
+
+
+	public boolean setAppointmentRecordStatus(String AppointmentRecordID, String status){
+		boolean flag = false;
+		AppointmentRecord appointmentRecord = RecordsRepository.APPOINTMENT_RECORDS_RECORDID.get(AppointmentRecordID);
+		if (appointmentRecord!=null)
+		{
+			appointmentRecord.setAppointmentStatus(AppointmentStatus.toEnumAppointmentStatus(status));
+
+		}
+		return flag;
+
+	}
+		public AppointmentOutcomeRecord generateAppointmentOutcomeRecord(MedicalRecord medicalRecord,String diagnosisID , String typeOfService, String consultationNotes){
+
+		AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord(
+				medicalRecord.getPatientID(),
+				medicalRecord.getDoctorID(),
+				diagnosisID,
+				medicalRecord.getRecordID(),
+				LocalDateTime.now(),
+				PrescriptionRepository.PRESCRIPTION_MAP.get(diagnosisID),
+				typeOfService,
+				consultationNotes);
+
+		AppointmentOutcomeRecordRepository.addOutcomeRecord(outcomeRecord);
+		AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
+		return outcomeRecord;
+
+	}
+
+
+
+
+
+	/////////////////////////////CKHAI
+
 	public void selectAndUpdateMedicalRecord() {
 		Scanner scanner = new Scanner(System.in);
 	    System.out.println("\n--- Confirmed Appointment Records ---");
@@ -341,7 +444,6 @@ public class DoctorUI extends MainUI {
 	                            } else {
 	                                System.out.println("--- Prescribed Medications ---");
 	                                for (PrescribedMedication medication : prescribedMedications) {
-	                                    System.out.println("Medicine ID: " + medication.getMedicineID());
 	                                    System.out.println("Quantity: " + medication.getMedicineQuantity());
 	                                    System.out.println("Period (Days): " + medication.getPeriodDays());
 	                                    System.out.println("Dosage: " + medication.getDosage());
@@ -587,7 +689,7 @@ public class DoctorUI extends MainUI {
 	    String diagnosisDescription = scanner.nextLine();
 	    String medicalRecordID = getMedicalRecordID(doctor.getUID(), selectedAppointment.getPatientID());
 	    Diagnosis diagnosis = new Diagnosis(selectedAppointment.getPatientID(), diagnosisID, doctor.getUID(), medicalRecordID,
-	            LocalDateTime.now(), diagnosisDescription, null);
+	            LocalDateTime.now(),null, diagnosisDescription, null);
 	    DiagnosisRepository.addDiagnosis(diagnosisID, diagnosis);
 	    
 
@@ -609,7 +711,7 @@ public class DoctorUI extends MainUI {
 	            int periodDays = Integer.parseInt(scanner.nextLine());
 	            System.out.print("Enter dosage: ");
 	            String dosage = scanner.nextLine();
-	            PrescribedMedication medication = new PrescribedMedication(diagnosisID, medicineID, quantity, periodDays, enums.PrescriptionStatus.PENDING, dosage);
+	            PrescribedMedication medication = new PrescribedMedication(diagnosisID,quantity, periodDays, enums.PrescriptionStatus.PENDING, dosage);
 	            medications.add(medication);
 	            PrescribedMedicationRepository.addMedication(diagnosisID, medication);
 

@@ -18,7 +18,6 @@ public class DiagnosisRepository extends Repository {
     private static final String folder = "data";
     private static final String fileName = "diagnosis_records.csv";
     private static boolean isRepoLoaded = false;
-
     // Static data collection for Diagnosis records (key = patientID)
     public static HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords = new HashMap<>();
 

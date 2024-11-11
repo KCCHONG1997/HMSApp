@@ -67,7 +67,6 @@ public class PrescribedMedicationRepository extends Repository {
     private static String medicationToCSV(String diagnosisID, PrescribedMedication medication) {
         return String.join(",",
                 medication.getDiagnosisID(),
-                medication.getMedicineID(),
                 String.valueOf(medication.getMedicineQuantity()),
                 String.valueOf(medication.getPeriodDays()),
                 medication.getPrescriptionStatus().toString(),
@@ -129,13 +128,12 @@ public class PrescribedMedicationRepository extends Repository {
         String[] fields = csv.split(",");
         try {
             String diagnosisID = fields[0];
-            String medicineID = fields[1];
-            int medicineQuantity = Integer.parseInt(fields[2]);
-            int periodDays = Integer.parseInt(fields[3]);
-            PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[4]);
-            String dosage = fields[5].replace("\"", "");
+            int medicineQuantity = Integer.parseInt(fields[1]);
+            int periodDays = Integer.parseInt(fields[2]);
+            PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[3]);
+            String dosage = fields[4].replace("\"", "");
 
-            return new PrescribedMedication(diagnosisID, medicineID, medicineQuantity, periodDays, prescriptionStatus, dosage);
+            return new PrescribedMedication(diagnosisID, medicineQuantity, periodDays, prescriptionStatus, dosage);
         } catch (Exception e) {
             System.out.println("Error parsing medication data: " + e.getMessage());
         }
