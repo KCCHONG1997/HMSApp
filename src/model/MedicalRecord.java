@@ -15,9 +15,14 @@ public class MedicalRecord extends HMSRecords {
     private ArrayList <Diagnosis> Diagnosis;
     
     public MedicalRecord( // This Constructor is for create new MedicalRecord
-            LocalDateTime createdDate, LocalDateTime updatedDate,
-            RecordStatusType recordStatus,String patientID,String doctorID,
-            String bloodType,ArrayList<model.Diagnosis> diagnosis, String allergies) {
+            LocalDateTime createdDate, 
+            LocalDateTime updatedDate,
+            RecordStatusType recordStatus,
+            String patientID,
+            String doctorID,
+            String bloodType,
+            ArrayList<model.Diagnosis> diagnosis, 
+            String allergies) {
     	
 			super(RecordsController.generateRecordID(RecordFileType.MEDICAL_RECORDS), createdDate, updatedDate, recordStatus);
 			this.patientID = patientID;
