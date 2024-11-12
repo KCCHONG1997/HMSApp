@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 
+import enums.AppointmentOutcomeStatus;
 import enums.AppointmentStatus;
 
 public class AppointmentOutcomeRecord {
@@ -15,6 +16,11 @@ public class AppointmentOutcomeRecord {
 	private String typeOfService;
 	private String consultationNotes;
 
+
+
+	private AppointmentOutcomeStatus appointmentOutcomeStatus;
+
+
 	public AppointmentOutcomeRecord(String patientID,
 									String doctorID,
 									String diagnosisID,
@@ -22,7 +28,8 @@ public class AppointmentOutcomeRecord {
 									LocalDateTime appointmentTime,
 									Prescription prescription,
 									String typeOfService,
-									String consultationNotes) {
+									String consultationNotes,
+									AppointmentOutcomeStatus appointmentOutcomeStatus) {
 		this.patientID = patientID;
 		this.doctorID = doctorID;
 		this.diagnosisID = diagnosisID;
@@ -31,6 +38,7 @@ public class AppointmentOutcomeRecord {
 		this.prescription = prescription;
 		this.typeOfService = typeOfService;
 		this.consultationNotes = consultationNotes;
+		this.appointmentOutcomeStatus = appointmentOutcomeStatus;
 	}
 	public String getPatientID() {
 		return patientID;
@@ -95,6 +103,12 @@ public class AppointmentOutcomeRecord {
 	public void setConsultationNotes(String consultationNotes) {
 		this.consultationNotes = consultationNotes;
 	}
+	public AppointmentOutcomeStatus getAppointmentOutcomeStatus() {
+		return appointmentOutcomeStatus;
+	}
 
+	public void setAppointmentOutcomeStatus(AppointmentOutcomeStatus appointmentOutcomeStatus) {
+		this.appointmentOutcomeStatus = appointmentOutcomeStatus;
+	}
 
 }

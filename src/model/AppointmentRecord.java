@@ -10,7 +10,6 @@ import repository.AppointmentOutcomeRecordRepository;
 import repository.RecordFileType;
 
 public class AppointmentRecord extends HMSRecords {
-
 	private String appointmentOutcomeRecordID;
 	private String patientID;
 	private String doctorID;
@@ -20,27 +19,8 @@ public class AppointmentRecord extends HMSRecords {
 	private AppointmentOutcomeRecord appointmentOutcomeRecord;
 
 
-
 	 //Constructor when retrieving CSV to an object
-	public AppointmentRecord(
-			String recordID, // KC - we need this when retrieving from CSV
-			String patientID,
-			LocalDateTime createdDate,
-			LocalDateTime updatedDate,
-			RecordStatusType recordStatus,
-			LocalDateTime appointmentTime,
-			String location,
-			AppointmentStatus appointmentStatus,
-			AppointmentOutcomeRecord appointmentOutcomeRecord) {
-		super(recordID, createdDate, updatedDate, recordStatus);
-
-		this.patientID = patientID;
-		this.appointmentTime = appointmentTime;
-		this.location = location;
-		this.appointmentStatus = appointmentStatus;
-		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
-	}
-
+	 // delete kc constructor dy
 
 	public AppointmentRecord(String recordID,
 							 LocalDateTime createdDate,
@@ -117,6 +97,7 @@ public class AppointmentRecord extends HMSRecords {
 	public void setAppointmentOutcomeRecord(AppointmentOutcomeRecord appointmentOutcomeRecord) {
 		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
 	}
+
 }
 
 	// Constructor when generating a new AppointmentRecord

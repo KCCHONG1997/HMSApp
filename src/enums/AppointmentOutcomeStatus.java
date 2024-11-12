@@ -7,19 +7,19 @@ public enum AppointmentOutcomeStatus {
     public String toString() {
         switch (this) {
             case INCOMPLETED:
-                return "Incompleted";
+                return "INCOMPLETED";
             case COMPLETED:
-                return "Completed";
+                return "COMPLETED";
             default:
-                return "Unknown";
+                return "UNKNOWN";
         }
     }
 
     public static AppointmentOutcomeStatus toEnumAppointmentOutcomeStatus(String status) {
-        switch (status) {
-            case "Incompleted":
+        switch (status.toUpperCase()) {
+            case "INCOMPLETED":
                 return INCOMPLETED;
-            case "Completed":
+            case "COMPLETED":
                 return COMPLETED;
             default:
                 return null; // or throw an exception if you want to handle invalid inputs differently

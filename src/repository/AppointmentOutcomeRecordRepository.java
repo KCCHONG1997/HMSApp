@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import enums.AppointmentOutcomeStatus;
 import model.AppointmentOutcomeRecord;
 import model.Prescription;
 
@@ -66,7 +67,8 @@ public class AppointmentOutcomeRecordRepository extends Repository {
                 record.getAppointmentOutcomeRecordID(),
                 record.getAppointmentTime().toString(), // Appointment time
                 "\"" + record.getTypeOfService() + "\"",
-                "\"" + record.getConsultationNotes() + "\"" // Consultation Notes
+                "\"" + record.getConsultationNotes() + "\"", // Consultation Notes
+                record.getAppointmentOutcomeStatus().toString()
         );
     }
 
@@ -125,8 +127,9 @@ public class AppointmentOutcomeRecordRepository extends Repository {
             String appointmentOutcomeRecordID = fields[3];
             LocalDateTime appointmentTime = LocalDateTime.parse(fields[4]);
             Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[2]);//diagnosisID
-            String typeOfService = fields[5];
-            String consultationNotes = fields[3].replace("\"", "");
+            String typeOfService = fields[5].replace("\"", "");
+            String consultationNotes = fields[6].replace("\"", "");
+            AppointmentOutcomeStatus appointmentOutcomeStatus = AppointmentOutcomeStatus.toEnumAppointmentOutcomeStatus(fields[7]);
 
             return new AppointmentOutcomeRecord(patientID,
                                                 doctorID,
@@ -135,7 +138,8 @@ public class AppointmentOutcomeRecordRepository extends Repository {
                                                 appointmentTime,
                                                 prescription,
                                                 typeOfService,
-                                                consultationNotes
+                                                consultationNotes,
+                                                appointmentOutcomeStatus
             );
         } catch (Exception e) {
             System.out.println("Error parsing appointment outcome record data: " + e.getMessage());

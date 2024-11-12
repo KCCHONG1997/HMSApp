@@ -3,6 +3,8 @@ package view;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import enums.AppointmentOutcomeStatus;
 import model.*;
 import repository.*;
 import controller.MedicineController;
@@ -144,7 +146,8 @@ public class AppointmentRecordOutcomeUI extends MainUI {
                 LocalDateTime.now(),
                 prescription,
                 typeOfService,
-                consultationNotes);
+                consultationNotes,
+                AppointmentOutcomeStatus.COMPLETED);
 
         AppointmentOutcomeRecordRepository.addAppointmentOutcomeRecord(appointment.getPatientID(), outcomeRecord);
         appointment.setAppointmentOutcomeRecordID(outcomeRecordID);

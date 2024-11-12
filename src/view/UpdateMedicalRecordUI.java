@@ -68,8 +68,6 @@ public class UpdateMedicalRecordUI {
         RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
         RecordsRepository.saveAllRecordFiles();
         currentAppointmentRecord.setAppointmentStatus(AppointmentStatus.CONFIRMED);
-
-
     }
 
     private Diagnosis addNewDiagnosis(String patientId, String diagnosisDescription) {

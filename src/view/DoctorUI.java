@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import HMSApp.HMSMain;
 import controller.*;
+import enums.AppointmentOutcomeStatus;
 import enums.AppointmentStatus;
 import enums.PrescriptionStatus;
 import helper.Helper;
@@ -258,7 +259,8 @@ public class DoctorUI extends MainUI {
 				LocalDateTime.now(),
 				PrescriptionRepository.PRESCRIPTION_MAP.get(diagnosisID),
 				typeOfService,
-				consultationNotes);
+				consultationNotes,
+				AppointmentOutcomeStatus.INCOMPLETED);
 
 		AppointmentOutcomeRecordRepository.addAppointmentOutcomeRecord(medicalRecord.getPatientID(), outcomeRecord);
 		AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();

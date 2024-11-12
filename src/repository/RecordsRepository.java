@@ -209,9 +209,9 @@ public class RecordsRepository extends Repository {
                         LocalDateTime.parse(fields[1]), // createdDate
                         LocalDateTime.parse(fields[2]), // updatedDate
                         RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        fields[4], // patientID
-                        fields[5],
-                        fields[6],
+                        fields[4], //appointmentOutcomeRecordID
+                        fields[5], //patientID
+                        fields[6], //doctorID
                         LocalDateTime.parse(fields[7]), // appointmentTime
                         fields[8],
                         AppointmentStatus.toEnumAppointmentStatus(fields[9]), // appointmentStatus
