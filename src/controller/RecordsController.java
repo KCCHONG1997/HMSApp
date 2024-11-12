@@ -198,20 +198,24 @@ public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
         else 
             return null;
     }
-    
+
+//    public ArrayList<AppointmentOutcomeRecord> getAppointmentOutcomeRecordByPatientId(String patientID) {
+//        ArrayList<AppointmentOutcomeRecord> records = new ArrayList<>();
+//
+//        // Iterate over the patientOutcomeRecords map and collect matching records
+//        for (String id : AppointmentOutcomeRecordRepository.patientOutcomeRecords.keySet()) {
+//            if (id.equals(patientID)) {
+//                records.add(AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(id));
+//            }
+//        }
+//
+//        return records;
+//    }
     public ArrayList<AppointmentOutcomeRecord> getAppointmentOutcomeRecordByPatientId(String patientID) {
-        ArrayList<AppointmentOutcomeRecord> records = new ArrayList<>();
-        
-        // Iterate over the patientOutcomeRecords map and collect matching records
-        for (String id : AppointmentOutcomeRecordRepository.patientOutcomeRecords.keySet()) {
-            if (id.equals(patientID)) {
-                records.add(AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(id));
-            }
-        }
-        
-        return records;
+        // Retrieve the list of records for the given patientID, or an empty list if none exists
+        return AppointmentOutcomeRecordRepository.patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
     }
-    
+
 
 
 
