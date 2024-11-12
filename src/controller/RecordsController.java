@@ -216,7 +216,4 @@ public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
         return AppointmentOutcomeRecordRepository.patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
     }
 
-
-
-
 }

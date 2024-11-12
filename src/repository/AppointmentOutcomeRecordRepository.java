@@ -18,6 +18,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
 
     private static boolean isRepoLoaded = false;
     private static final String AppointmentOutcomeRecordsfileName = "appointment_outcome_records.csv";
+    //key value = patientID
     public static HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords = new HashMap<>();
 
     @Override

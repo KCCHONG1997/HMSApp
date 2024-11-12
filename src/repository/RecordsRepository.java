@@ -26,13 +26,13 @@ public class RecordsRepository extends Repository {
     public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_DOCTORID= new HashMap<>();
     public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_DOCTORID = new HashMap<>();
     public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_DOCTORID = new HashMap<>();
-    
-    
+
+
     //key value = patientID
     public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_PATIENTID = new HashMap<>();
     public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_PATIENTID = new HashMap<>();
     public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_PATIENTID = new HashMap<>();
-    
+
   //key value = recordID
     public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_RECORDID = new HashMap<>();
     public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_RECORDID = new HashMap<>();
@@ -195,6 +195,16 @@ public class RecordsRepository extends Repository {
                         fields[6], // bloodType
                         DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
+                ArrayList<AppointmentOutcomeRecord> outcomeRecords = AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(fields[4]);
+                AppointmentOutcomeRecord matchingRecord = null;
+                if (outcomeRecords != null) {
+                    for (AppointmentOutcomeRecord record : outcomeRecords) {
+                        if (record.getAppointmentOutcomeRecordID().equals(fields[0])) {
+                            matchingRecord = record;
+                            break; // Exit loop once the matching record is found
+                        }
+                    }
+                }
                 return type.cast(new AppointmentRecord(
 //                        fields[0], // recordID
 //                        fields[1], // patientID
@@ -206,18 +216,17 @@ public class RecordsRepository extends Repository {
 //                        AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
 //                        rc.getAppointmentOutcomeRecordByPatientId(fields[1]) // appointmentOutcomeRecord
                         fields[0],                                       // recordID (MRID)
-                       
                         LocalDateTime.parse(fields[1]),                  // createdDate
                         LocalDateTime.parse(fields[2]),                  // updatedDate
                         RecordStatusType.toEnumRecordStatusType(fields[3]),             // recordStatus
-                        fields[4],
+                        fields[4], //patientID
                         fields[5],
                         fields[6],
                         LocalDateTime.parse(fields[7]),                   // appointmentTime
                         fields[8],                                  
                         AppointmentStatus.toEnumAppointmentStatus(fields[9]),            // appointmentStatus
-                        AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(fields[4]))        //appointmentOutcome, look up for appointment outcome ID
-                        );                                    // doctorID
+                        matchingRecord       //appointmentOutcome, look up for appointment outcome ID
+                        ));                                    // doctorID
 
             } else if (type == PaymentRecord.class) {
                 return type.cast(new PaymentRecord(
