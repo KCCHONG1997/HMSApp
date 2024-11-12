@@ -1,6 +1,9 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import controller.HMSPersonnelController;
 import helper.Helper;
 import model.MedicalRecord;
@@ -37,11 +40,17 @@ public class MedicalRecordUI extends MainUI {
 
         System.out.println("| Diagnoses:");
         if (medicalRecord.getDiagnosis() != null && !medicalRecord.getDiagnosis().isEmpty()) {
+            Set<String> printedDiagnosisIDs = new HashSet<>();
             for (Diagnosis diagnosis : medicalRecord.getDiagnosis()) {
-                System.out.println(border);
-                System.out.printf("| %-20s: %-20s |\n", "Diagnosis ID", diagnosis.getDiagnosisID());
-                System.out.printf("| %-20s: %-20s |\n", "Description", diagnosis.getDiagnosisDescription());
+                String diagnosisID = diagnosis.getDiagnosisID();
+                if (!printedDiagnosisIDs.contains(diagnosisID)) {
+                    System.out.println(border);
+                    System.out.printf("| %-20s: %-20s |\n", "Diagnosis ID", diagnosisID);
+                    System.out.printf("| %-20s: %-20s |\n", "Description", diagnosis.getDiagnosisDescription());
 
+                    // Mark this diagnosisID as printed
+                    printedDiagnosisIDs.add(diagnosisID);
+                }
                 Prescription prescription = diagnosis.getPrescription();
                 if (prescription != null) {
                     System.out.printf("| %-20s: %-20s |\n", "Prescription Date", prescription.getPrescriptionDate());

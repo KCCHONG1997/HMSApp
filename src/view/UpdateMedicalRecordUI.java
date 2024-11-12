@@ -59,8 +59,9 @@ public class UpdateMedicalRecordUI {
         Diagnosis diagnosis = new Diagnosis(patientId, diagnosisID, doctor.getUID(),
                 medicalRecord.getRecordID(), LocalDateTime.now(), null,
                 diagnosisDescription, null);
-        medicalRecord.addDiagnosis(diagnosis); // Add the diagnosis to the current medical record
+
         DiagnosisRepository.addDiagnosis(patientId, diagnosis); // Add to the Diagnosis Repository
+        medicalRecord.addDiagnosis(diagnosis); // Add the diagnosis to the current medical record
         DiagnosisRepository.saveAlltoCSV();
         return diagnosis;
     }

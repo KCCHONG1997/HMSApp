@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import model.Diagnosis;
 import model.Prescription;
@@ -55,10 +57,17 @@ public class DiagnosisRepository extends Repository {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            Set<String> writtenDiagnosisIDs = new HashSet<>();
             for (String patientID : patientDiagnosisRecords.keySet()) {
                 for (Diagnosis record : patientDiagnosisRecords.get(patientID)) {
-                    writer.write(diagnosisToCSV(record));
-                    writer.newLine();
+                    String diagnosisID = record.getDiagnosisID();
+                    if (!writtenDiagnosisIDs.contains(diagnosisID)) {
+                        writer.write(diagnosisToCSV(record));
+                        writer.newLine();
+
+                        // Mark this diagnosisID as written
+                        writtenDiagnosisIDs.add(diagnosisID);
+                    }
                 }
             }
             System.out.println("Diagnosis records successfully saved to CSV.");
@@ -118,8 +127,17 @@ public class DiagnosisRepository extends Repository {
 
     public static void addDiagnosis(String patientID, Diagnosis diagnosis) {
         ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(patientID, new ArrayList<>());
+//        System.out.println(diagnoses);
+//        System.out.println(patientDiagnosisRecords.size());
         diagnoses.add(diagnosis);
+//        System.out.println(diagnoses);
+//        System.out.println(patientDiagnosisRecords.size());
         patientDiagnosisRecords.put(patientID, diagnoses);
+//        System.out.println(diagnoses);
+//        System.out.println(patientDiagnosisRecords.size());
+
+        //System.out.println(diagnoses);
+
     }
 
     private static Diagnosis csvToDiagnosisRecord(String csv) {
