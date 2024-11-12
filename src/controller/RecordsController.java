@@ -36,18 +36,18 @@ public class RecordsController {
     public Boolean checkRecordsDuplication(String UID, RecordFileType recType) {
         switch(recType){
             case MEDICAL_RECORDS:
-                return RecordsRepository.MEDICAL_RECORDS_RECORDID.get(UID) != null;
+                return RecordsRepository.MEDICAL_RECORDS.get(UID) != null;
             case APPOINTMENT_RECORDS:
-                return RecordsRepository.APPOINTMENT_RECORDS_RECORDID.get(UID) != null;
+                return RecordsRepository.APPOINTMENT_RECORDS.get(UID) != null;
             case PAYMENT_RECORDS:
-                return RecordsRepository.PAYMENT_RECORDS_RECORDID.get(UID) != null;
+                return RecordsRepository.PAYMENT_RECORDS.get(UID) != null;
             default:
                 return true;
         }
     }
 
     public void addMedicalRecord(MedicalRecord mr) {
-        RecordsRepository.MEDICAL_RECORDS_RECORDID.put(mr.getRecordID(), mr);
+        RecordsRepository.MEDICAL_RECORDS.put(mr.getRecordID(), mr);
     }    
 
     public Boolean updateRecord(String recordID, RecordFileType recType, String status, String doctorID, String patientID, LocalDateTime updatedDate) {
@@ -70,7 +70,7 @@ public class RecordsController {
     }
 
     private Boolean updateMedicalRecord(String recordID, String status, String doctorID, String patientID, LocalDateTime updatedDate) {
-        MedicalRecord record = RecordsRepository.MEDICAL_RECORDS_RECORDID.get(recordID);
+        MedicalRecord record = RecordsRepository.MEDICAL_RECORDS.get(recordID);
         if (record != null) {
             if (status != null) record.setRecordStatus(RecordStatusType.valueOf(status));
             if (doctorID != null) record.setDoctorID(doctorID);
@@ -87,7 +87,7 @@ public class RecordsController {
 
     //FIXME
     private Boolean updateAppointmentRecord(String recordID, LocalDateTime updatedDate) {
-        AppointmentRecord record = RecordsRepository.APPOINTMENT_RECORDS_RECORDID.get(recordID);
+        AppointmentRecord record = RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
         if (record != null) {
             record.setUpdatedDate(updatedDate);
             RecordsRepository.saveAllRecordFiles();
@@ -99,7 +99,7 @@ public class RecordsController {
     }
 
     private Boolean updatePaymentRecord(String recordID, LocalDateTime updatedDate) {
-        PaymentRecord record = RecordsRepository.PAYMENT_RECORDS_RECORDID.get(recordID);
+        PaymentRecord record = RecordsRepository.PAYMENT_RECORDS.get(recordID);
         if (record != null) {
             record.setUpdatedDate(updatedDate);
             RecordsRepository.saveAllRecordFiles();
@@ -124,8 +124,8 @@ public class RecordsController {
     }
 
     private Boolean deleteMedicalRecord(String recordID) {
-        if (RecordsRepository.MEDICAL_RECORDS_RECORDID.containsKey(recordID)) {
-            RecordsRepository.MEDICAL_RECORDS_RECORDID.remove(recordID);
+        if (RecordsRepository.MEDICAL_RECORDS.containsKey(recordID)) {
+            RecordsRepository.MEDICAL_RECORDS.remove(recordID);
             RecordsRepository.saveAllRecordFiles();
             logger.log(System.Logger.Level.INFO, "Deleted Medical Record with ID: {0}", recordID);
             return true;
@@ -134,8 +134,8 @@ public class RecordsController {
     }
 
     private Boolean deleteAppointmentRecord(String recordID) {
-        if (RecordsRepository.APPOINTMENT_RECORDS_RECORDID.containsKey(recordID)) {
-            RecordsRepository.APPOINTMENT_RECORDS_RECORDID.remove(recordID);
+        if (RecordsRepository.APPOINTMENT_RECORDS.containsKey(recordID)) {
+            RecordsRepository.APPOINTMENT_RECORDS.remove(recordID);
             RecordsRepository.saveAllRecordFiles();
             logger.log(System.Logger.Level.INFO, "Deleted Appointment Record with ID: {0}", recordID);
             return true;
@@ -144,8 +144,8 @@ public class RecordsController {
     }
 
     private Boolean deletePaymentRecord(String recordID) {
-        if (RecordsRepository.PAYMENT_RECORDS_RECORDID.containsKey(recordID)) {
-            RecordsRepository.PAYMENT_RECORDS_RECORDID.remove(recordID);
+        if (RecordsRepository.PAYMENT_RECORDS.containsKey(recordID)) {
+            RecordsRepository.PAYMENT_RECORDS.remove(recordID);
             RecordsRepository.saveAllRecordFiles();
             logger.log(System.Logger.Level.INFO, "Deleted Payment Record with ID: {0}", recordID);
             return true;
@@ -155,7 +155,7 @@ public class RecordsController {
 
     public MedicalRecord getMedicalRecordsByPatientID(String patientID) {
         if (RecordsRepository.isRepoLoad()) {
-            for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS_RECORDID.values()) {
+            for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
                 if (record.getPatientID().equals(patientID)) {
                     return record;
                 }
@@ -168,7 +168,7 @@ public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
     ArrayList<MedicalRecord> recordsByDoctor = new ArrayList<>(); // Initialize an empty list
     
     if (RecordsRepository.isRepoLoaded()) {
-        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS_RECORDID.values()) {
+        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
             if (record.getDoctorID().equals(doctorID)) {
                 recordsByDoctor.add(record); // Add matching records to the list
             }
@@ -180,21 +180,21 @@ public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
 
     public MedicalRecord getMedicalRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())
-            return RecordsRepository.MEDICAL_RECORDS_RECORDID.get(recordID);
+            return RecordsRepository.MEDICAL_RECORDS.get(recordID);
         else 
             return null;
     }
 
     public AppointmentRecord getDiagnosisRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())
-            return RecordsRepository.APPOINTMENT_RECORDS_RECORDID.get(recordID);
+            return RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
         else 
             return null;
     }
 
     public PaymentRecord getPaymentRecordbyID(String recordID) {
         if (RecordsRepository.isRepoLoad())
-            return RecordsRepository.PAYMENT_RECORDS_RECORDID.get(recordID);
+            return RecordsRepository.PAYMENT_RECORDS.get(recordID);
         else 
             return null;
     }

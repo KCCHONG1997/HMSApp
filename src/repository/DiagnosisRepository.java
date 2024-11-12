@@ -106,7 +106,7 @@ public class DiagnosisRepository extends Repository {
             while ((line = reader.readLine()) != null) {
                 Diagnosis record = csvToDiagnosisRecord(line);
                 if (record != null) {
-                    addDiagnosis(record.getMedicalRecordID(), record);
+                    addDiagnosis(record.getPatientID(), record);
                 }
             }
             System.out.println(
@@ -116,10 +116,10 @@ public class DiagnosisRepository extends Repository {
         }
     }
 
-    public static void addDiagnosis(String MedicalRecordID, Diagnosis diagnosis) {
-        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(MedicalRecordID, new ArrayList<>());
+    public static void addDiagnosis(String patientID, Diagnosis diagnosis) {
+        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(patientID, new ArrayList<>());
         diagnoses.add(diagnosis);
-        patientDiagnosisRecords.put(MedicalRecordID, diagnoses);
+        patientDiagnosisRecords.put(patientID, diagnoses);
     }
 
     private static Diagnosis csvToDiagnosisRecord(String csv) {
