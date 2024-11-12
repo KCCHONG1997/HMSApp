@@ -353,7 +353,14 @@ public class DoctorUI extends MainUI {
 	    // If no record is found, return null or an appropriate message
 	    return null; // Or throw an exception if preferred
 	}
-
+	public String retrieveMedicalRecordID(String doctorID, String patientID) {
+		for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+			if (record.getDoctorID().equals(doctorID) && record.getPatientID().equals(patientID)) {
+				return record.getRecordID(); // Return the matching record's ID
+			}
+		}
+		return null; // No matching record found
+	}
 	public void recordAppointmentOutcome() {
 		Scanner scanner = new Scanner(System.in);
 
