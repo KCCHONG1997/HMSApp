@@ -19,6 +19,7 @@ import model.RecordStatusType;
 import repository.AppointmentOutcomeRecordRepository;
 import repository.RecordFileType;
 import repository.RecordsRepository;
+import java.util.Comparator;
 
 public class AppointmentController {
 
@@ -38,4 +39,49 @@ public class AppointmentController {
                 return "R-" + uuidAsString;
         }
     }
+
+    public static ArrayList<AppointmentRecord> getAppointmentsByDoctorAndPatient(String doctorID, String patientID, AppointmentStatus status) {
+        ArrayList<AppointmentRecord> filteredAppointments = new ArrayList<>();
+
+        // Loop through all appointment records
+        for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
+            // Check if appointment matches both the doctorID and patientID, and has a CONFIRMED status
+            if (doctorID.equals(appointment.getDoctorID()) &&
+                    patientID.equals(appointment.getPatientID()) &&
+                    appointment.getAppointmentStatus() == status) {
+
+                // Add to filtered list
+                filteredAppointments.add(appointment);
+            }
+        }
+
+        return filteredAppointments;
+
+        // If no appointments match the criteria
+    }
+
+
+
+    public static AppointmentRecord getEarliestAppointment(ArrayList<AppointmentRecord> appointments) {
+        if (appointments.isEmpty()) {
+            return null; // Return null if there are no pending appointments
+        }
+
+        // Sort appointments by AppointmentTime in ascending order
+        appointments.sort(Comparator.comparing(AppointmentRecord::getAppointmentTime));
+
+        // Return the first (earliest) appointment
+        return appointments.get(0);
+    }
+
+    public static AppointmentRecord retrieveEarliestPendingAppointmentRecord(String doctorID, String patientID){
+        ArrayList<AppointmentRecord> pendingAppointments ;
+        pendingAppointments = AppointmentController.getAppointmentsByDoctorAndPatient(doctorID,
+                                                                                    patientID,
+                                                                                    AppointmentStatus.PENDING);
+
+        AppointmentRecord currentAppointmentRecord = AppointmentController.getEarliestAppointment(pendingAppointments);
+        return currentAppointmentRecord;
+    }
+
 }

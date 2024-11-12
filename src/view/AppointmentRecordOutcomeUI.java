@@ -158,4 +158,6 @@ public class AppointmentRecordOutcomeUI extends MainUI {
 
         System.out.println("Appointment outcome recorded and saved successfully.");
     }
+
+
 }

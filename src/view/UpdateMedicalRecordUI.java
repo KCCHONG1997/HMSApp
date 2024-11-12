@@ -3,6 +3,8 @@ package view;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import enums.AppointmentStatus;
 import model.*;
 import repository.*;
 import controller.AppointmentController;
@@ -12,17 +14,30 @@ public class UpdateMedicalRecordUI {
 
     private Doctor doctor;
     private MedicalRecord medicalRecord;
+    private AppointmentRecord currentAppointmentRecord;
     private Scanner sc;
 
     // Constructor to initialize with the doctor and medical record to be updated
-    public UpdateMedicalRecordUI(Doctor doctor, MedicalRecord medicalRecord) {
+    public UpdateMedicalRecordUI(Doctor doctor, MedicalRecord medicalRecord,AppointmentRecord currentAppointmentRecord) {
         this.doctor = doctor;
         this.medicalRecord = medicalRecord;
+        this.currentAppointmentRecord = currentAppointmentRecord;
         this.sc = new Scanner(System.in);
     }
 
     public void start() {
-        // Add a new diagnosis
+        // displaying currentAppointmentRecord that the doctor is working on
+
+        currentAppointmentRecord = AppointmentController.retrieveEarliestPendingAppointmentRecord(doctor.getUID(),
+                medicalRecord.getPatientID());
+        System.out.println("\n-- Current Appointment Details --");
+        System.out.println("Patient ID: " + medicalRecord.getPatientID());
+        System.out.println("Appointment DateTime: " + currentAppointmentRecord.getAppointmentTime());
+        System.out.println("Doctor: " + doctor.getFullName());
+        System.out.println("Status: " + currentAppointmentRecord.getAppointmentStatus().toString());
+        System.out.println("=========================================");
+
+
         System.out.println("Adding New Diagnosis");
         System.out.println("Enter Diagnosis Description:");
         String diagnosisDescription = sc.nextLine();
@@ -52,6 +67,9 @@ public class UpdateMedicalRecordUI {
         // Save updated medical record back to repository
         RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
         RecordsRepository.saveAllRecordFiles();
+        currentAppointmentRecord.setAppointmentStatus(AppointmentStatus.CONFIRMED);
+
+
     }
 
     private Diagnosis addNewDiagnosis(String patientId, String diagnosisDescription) {

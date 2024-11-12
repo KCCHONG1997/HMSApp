@@ -114,8 +114,18 @@ public class DoctorUI extends MainUI {
 			return;
 		}
 
+		AppointmentRecord currentAppointmentRecord = AppointmentController.retrieveEarliestAppointmentRecord(doctor.getUID(),
+				medicalRecord.getPatientID());
+
+
+		if (currentAppointmentRecord == null) {
+			System.out.println("Error: There are no pending appointments for the current patient.");
+			System.out.println("You cannot update the medical record");
+			return;
+		}
+
 		// Use UpdateMedicalRecordUI to handle the updating process
-		UpdateMedicalRecordUI updateUI = new UpdateMedicalRecordUI(doctor, medicalRecord);
+		UpdateMedicalRecordUI updateUI = new UpdateMedicalRecordUI(doctor, medicalRecord,currentAppointmentRecord);
 		updateUI.start();
 
 		// After updating, save the medical record explicitly back to the repository
