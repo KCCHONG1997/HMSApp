@@ -22,17 +22,6 @@ public class RecordsRepository extends Repository {
     private static final String paymentFileName = "payment_records.csv";
     private static Boolean isRepoLoaded = false;
     // Static data collections for different record types
-    //key value = doctorID
-    public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_DOCTORID= new HashMap<>();
-    public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_DOCTORID = new HashMap<>();
-    public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_DOCTORID = new HashMap<>();
-
-
-    //key value = patientID
-    public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_PATIENTID = new HashMap<>();
-    public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_PATIENTID = new HashMap<>();
-    public static HashMap<String, PaymentRecord> PAYMENT_RECORDS_PATIENTID = new HashMap<>();
-
   //key value = recordID
     public static HashMap<String, MedicalRecord> MEDICAL_RECORDS_RECORDID = new HashMap<>();
     public static HashMap<String, AppointmentRecord> APPOINTMENT_RECORDS_RECORDID = new HashMap<>();
@@ -45,9 +34,9 @@ public class RecordsRepository extends Repository {
     @Override
     public boolean loadFromCSV() {
         try {
-            loadRecordsFromCSV(medicalFileName, MEDICAL_RECORDS_DOCTORID,MEDICAL_RECORDS_PATIENTID ,MEDICAL_RECORDS_RECORDID, MedicalRecord.class);
-            loadRecordsFromCSV(appointmentFileName,APPOINTMENT_RECORDS_DOCTORID,APPOINTMENT_RECORDS_PATIENTID, APPOINTMENT_RECORDS_RECORDID, AppointmentRecord.class);
-            loadRecordsFromCSV(paymentFileName, PAYMENT_RECORDS_DOCTORID,PAYMENT_RECORDS_PATIENTID,PAYMENT_RECORDS_RECORDID, PaymentRecord.class);
+            loadRecordsFromCSV(medicalFileName ,MEDICAL_RECORDS_RECORDID, MedicalRecord.class);
+            loadRecordsFromCSV(appointmentFileName, APPOINTMENT_RECORDS_RECORDID, AppointmentRecord.class);
+            loadRecordsFromCSV(paymentFileName,PAYMENT_RECORDS_RECORDID, PaymentRecord.class);
             setRepoLoaded(true);
             return true;
         } catch (Exception e) {
@@ -137,8 +126,6 @@ public class RecordsRepository extends Repository {
      * Load records from a CSV file or create an empty file if it doesn't exist
      */
     private static <T extends HMSRecords> void loadRecordsFromCSV(String fileName, 
-    															HashMap<String, T> recordsMapPatientID,
-    															HashMap<String,T>recordsMapDoctorID,
     															HashMap<String, T> recordsMapRecordID,
                                                                   Class<T> type) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
@@ -183,24 +170,24 @@ public class RecordsRepository extends Repository {
     // Convert a CSV line to a record object
     private static <T extends HMSRecords> T csvToRecord(String csv, Class<T> type) {
         String[] fields = csv.split(",");
-        RecordsController rc = new RecordsController();
+//        RecordsController rc = new RecordsController();
         try {
             if (type == MedicalRecord.class) {
                 return type.cast(new MedicalRecord(
                         fields[0], // recordID
                         LocalDateTime.parse(fields[1]), // createdDate
                         LocalDateTime.parse(fields[2]), // updatedDate
-                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
+                        RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus //ACTIVE
                         fields[4], // patientID
                         fields[5], // doctorID
                         fields[6], // bloodType
-                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[0], new ArrayList<>())));
+                        DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[4], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
                 ArrayList<AppointmentOutcomeRecord> outcomeRecords = AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(fields[4]);
                 AppointmentOutcomeRecord matchingRecord = null;
                 if (outcomeRecords != null) {
                     for (AppointmentOutcomeRecord record : outcomeRecords) {
-                        if (record.getAppointmentOutcomeRecordID().equals(fields[0])) {
+                        if (record.getAppointmentOutcomeRecordID().equals(fields[4])) {
                             matchingRecord = record;
                             break; // Exit loop once the matching record is found
                         }

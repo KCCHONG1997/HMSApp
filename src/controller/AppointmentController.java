@@ -38,6 +38,4 @@ public class AppointmentController {
                 return "R-" + uuidAsString;
         }
     }
-
-   
 }

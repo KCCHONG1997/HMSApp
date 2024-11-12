@@ -15,7 +15,7 @@ public class DateTimePicker {
     }
 
     public static LocalDateTime pickDateTime(String title) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = Helper.sc;
         System.out.println(title);
 
         int year = 0, month = 0, day = 0, hour = 0, minute = 0;
@@ -81,7 +81,6 @@ public class DateTimePicker {
         }
 
         LocalDateTime dateTime = LocalDateTime.of(year, month, day, hour, minute);
-        scanner.close();
         return dateTime;
     }
 }

@@ -7,7 +7,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-//import java.time.temporal.ChronoUnit;
 
 public class Helper {
     public static final Scanner sc = new Scanner(System.in);
@@ -19,7 +18,8 @@ public class Helper {
     public static int readInt(String prompt) {
         while (true) {
             try {
-                if (prompt != "") System.out.print(prompt);
+                if (prompt != "")
+                    System.out.print(prompt);
                 int userInput = sc.nextInt();
                 sc.nextLine(); // Consume newline left-over
                 return userInput;
@@ -47,19 +47,20 @@ public class Helper {
         return date;
     }
 
-
     /**
-     * Reads an integer from the user within a specified range, with a prompt message.
+     * Reads an integer from the user within a specified range, with a prompt
+     * message.
      * Continues to prompt until a valid integer within the range is entered.
      *
      * @param prompt The prompt message to display to the user.
-     * @param min The minimum allowed value (inclusive).
-     * @param max The maximum allowed value (inclusive).
+     * @param min    The minimum allowed value (inclusive).
+     * @param max    The maximum allowed value (inclusive).
      * @return The integer entered by the user within the specified range.
      */
     public static int readInt(String prompt, int min, int max) {
         while (true) {
-            if (prompt != "") System.out.print(prompt);
+            if (prompt != "")
+                System.out.print(prompt);
             try {
                 int userInput = sc.nextInt();
                 sc.nextLine(); // Consume newline left-over
@@ -101,7 +102,7 @@ public class Helper {
     public static String readEmail(String prompt) {
         System.out.println(prompt);
         String email = sc.nextLine();
-        while(!Helper.isValidEmail(email)) {
+        while (!Helper.isValidEmail(email)) {
             System.out.println("The email '" + email + "' is invalid. Please enter a new email:");
             email = Helper.readString("Enter a new email: ");
         }
@@ -111,7 +112,7 @@ public class Helper {
     public static String readGender(String prompt) {
         System.out.println(prompt);
         String gender = sc.nextLine();
-        while(!Helper.isValidGender(gender)) {
+        while (!Helper.isValidGender(gender)) {
             System.out.println(gender + " is invalid genderType. Please enter again");
             gender = Helper.readString("Enter your gender again: ");
         }
@@ -150,9 +151,10 @@ public class Helper {
     }
 
     /**
-     * Reads a date input from the user in the specified format and returns a LocalDateTime object.
+     * Reads a date input from the user in the specified format and returns a
+     * LocalDateTime object.
      * Continues to prompt until a valid date is entered.
-     *
+     * 
      * @param prompt The prompt message to display to the user.
      * @return LocalDateTime object representing the entered date and time.
      */
@@ -163,14 +165,16 @@ public class Helper {
             System.out.println(prompt);
             String userInput = sc.nextLine();
             try {
-                return LocalDateTime.parse(userInput + "T00:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME); // Time set to midnight by default
+                return LocalDateTime.parse(userInput + "T00:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME); // Time set
+                                                                                                            // to
+                                                                                                            // midnight
+                                                                                                            // by
+                                                                                                            // default
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
             }
         }
     }
-
-
 
     public static String getFieldOrNull(String[] fields, int index) {
         return index < fields.length && !fields[index].isEmpty() ? fields[index] : null;

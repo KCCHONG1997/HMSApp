@@ -11,13 +11,13 @@ public enum RecordStatusType {
     public String toString() {
         switch (this) {
             case ACTIVE:
-                return "Active";
+                return "ACTIVE";
             case INACTIVE:
-                return "Inactive";
+                return "INACTIVE";
             case ARCHIVED:
-                return "Archived";
+                return "ARCHIVED";
             case DELETED:
-                return "Deleted";
+                return "DELETED";
             default:
                 return "Unknown";
         }
@@ -25,14 +25,14 @@ public enum RecordStatusType {
 
 
     public static RecordStatusType toEnumRecordStatusType(String status) {
-        switch (status) {
-            case "Active":
+        switch (status.toUpperCase()) {
+            case "ACTIVE":
                 return ACTIVE;
-            case "Inactive":
+            case "INACTIVE":
                 return INACTIVE;
-            case "Archived":
+            case "ARCHIVED":
                 return ARCHIVED;
-            case "Deleted":
+            case "DELETED":
                 return DELETED;
             default:
                 return null;  // or throw an exception if you want to handle invalid inputs differently

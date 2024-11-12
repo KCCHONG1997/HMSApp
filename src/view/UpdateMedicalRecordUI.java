@@ -7,7 +7,6 @@ import model.*;
 import repository.*;
 import controller.AppointmentController;
 import controller.MedicineController;
-import enums.PrescriptionStatus;
 
 public class UpdateMedicalRecordUI {
 
@@ -49,80 +48,81 @@ public class UpdateMedicalRecordUI {
             }
             default -> System.out.println("Invalid choice.");
         }
+
+        // Save updated medical record back to repository
+        RecordsRepository.MEDICAL_RECORDS_RECORDID.put(medicalRecord.getRecordID(), medicalRecord);
+        RecordsRepository.saveAllRecordFiles();
     }
 
     private Diagnosis addNewDiagnosis(String patientId, String diagnosisDescription) {
         String diagnosisID = AppointmentController.generateRecordID(RecordFileType.DIAGNOSIS_RECORDS);
         Diagnosis diagnosis = new Diagnosis(patientId, diagnosisID, doctor.getUID(),
-                                            medicalRecord.getRecordID(), LocalDateTime.now(), null,
-                                            diagnosisDescription, null);
-        DiagnosisRepository.addDiagnosis(patientId, diagnosis);
-        //medicalRecord.addDiagnosis(diagnosis);
+                medicalRecord.getRecordID(), LocalDateTime.now(), null,
+                diagnosisDescription, null);
+        medicalRecord.addDiagnosis(diagnosis);  // Add the diagnosis to the current medical record
+        DiagnosisRepository.addDiagnosis(patientId, diagnosis); // Add to the Diagnosis Repository
         DiagnosisRepository.saveAlltoCSV();
         return diagnosis;
     }
 
-    private TreatmentPlans addTreatmentPlan(Diagnosis diagnosis) {
+    private void addTreatmentPlan(Diagnosis diagnosis) {
         System.out.println("Enter Treatment Description:");
         String treatmentDescription = sc.nextLine();
-        TreatmentPlans treatmentPlan = new TreatmentPlans(diagnosis.getDiagnosisID(), LocalDateTime.now(), treatmentDescription);
+        TreatmentPlans treatmentPlan = new TreatmentPlans(diagnosis.getDiagnosisID(), LocalDateTime.now(),
+                treatmentDescription);
         diagnosis.setTreatmentPlans(treatmentPlan);
         TreatmentPlansRepository.saveAlltoCSV();
+        RecordsRepository.saveAllRecordFiles();  // Save changes
         System.out.println("Treatment plan added successfully for Diagnosis ID: " + diagnosis.getDiagnosisID());
-        return treatmentPlan;
     }
 
-
-
-
-
-
-    private void addPrescriptions(Diagnosis newDiagnosis) {
+    private void addPrescriptions(Diagnosis diagnosis) {
         boolean addMore = true;
-        String medicineID;
-		Medicine medicine;
-		ArrayList<PrescribedMedication> newPrescribedMedicationsList;
-        newPrescribedMedicationsList = new ArrayList<>();
         while (addMore) {
             System.out.println("\n--- Add Prescribed Medication ---");
-            System.out.println("Enter Medication Name:");
+            System.out.print("Enter Medication Name: ");
             String medicationName = sc.nextLine();
-            medicine = MedicineController.getMedicineByName(medicationName);
+            Medicine medicine = MedicineController.getMedicineByName(medicationName);
 
             if (medicine == null) {
                 System.out.println("\n--- Invalid Prescribed Medication ---");
                 continue;
             }
 
-            System.out.println("Enter Quantity:");
+            System.out.print("Enter Quantity: ");
             int quantity = sc.nextInt();
-            System.out.println("Enter Period (Days):");
+            System.out.print("Enter Period (Days): ");
             int periodDays = sc.nextInt();
             sc.nextLine(); // Consume newline left-over
-            System.out.println("Enter Dosage:");
+            System.out.print("Enter Dosage: ");
             String dosage = sc.nextLine();
 
-            PrescribedMedication newPrescribedMedication = new PrescribedMedication(newDiagnosis.getDiagnosisID(), medicine.getMedicineID(), quantity, periodDays, PrescriptionStatus.PENDING, dosage);
-            newPrescribedMedicationsList.add(newPrescribedMedication);
+            // Add the prescribed medication
+            String medicineID = medicine.getMedicineID();
+            PrescribedMedication prescribedMedication = new PrescribedMedication(diagnosis.getDiagnosisID(), medicineID,
+                    quantity, periodDays, null, dosage);
+            Prescription prescription = addPrescription(diagnosis, prescribedMedication);
+            PrescriptionRepository.PRESCRIPTION_MAP.put(diagnosis.getDiagnosisID(), prescription);
 
-            // Map diagnosis to medications
-            //hashmap(diagnosis id to arraylist of prescribed medication)
-            PrescribedMedicationRepository.diagnosisToMedicationsMap.put(newDiagnosis.getDiagnosisID(), newPrescribedMedicationsList);
+            System.out.println("Medication prescribed successfully for Diagnosis ID: " + diagnosis.getDiagnosisID());
 
-            Prescription newPrescription = new Prescription(newDiagnosis.getDiagnosisID(), LocalDateTime.now(), newPrescribedMedicationsList);
-            PrescriptionRepository.PRESCRIPTION_MAP.put(newDiagnosis.getDiagnosisID(), newPrescription);
-
-            System.out.println("Medication prescribed successfully for Diagnosis ID: " + newDiagnosis.getDiagnosisID());
-
+            // Prompt to add more medication or finish
             System.out.print("Would you like to add another prescribed medication? (yes/no): ");
-            String response = sc.nextLine().trim().toLowerCase();
-            addMore = response.equals("yes");
+            addMore = sc.nextLine().trim().equalsIgnoreCase("yes");
         }
-        System.out.println("Finished adding prescribed medications for Diagnosis ID: " + newDiagnosis.getDiagnosisID());
-        PrescriptionRepository.saveAlltoCSV();
-        PrescribedMedicationRepository.saveAlltoCSV();
 
+        System.out.println("Finished adding prescribed medications for Diagnosis ID: " + diagnosis.getDiagnosisID());
     }
 
-
+    private Prescription addPrescription(Diagnosis diagnosis, PrescribedMedication prescribedMedication) {
+        Prescription prescription = diagnosis.getPrescription();
+        if (prescription == null) {
+            prescription = new Prescription(diagnosis.getDiagnosisID(), LocalDateTime.now(), new ArrayList<>());
+            diagnosis.setPrescription(prescription);
+        }
+        prescription.addPrescribedMedication(prescribedMedication);
+        PrescribedMedicationRepository.saveAlltoCSV();
+        RecordsRepository.saveAllRecordFiles();
+        return prescription;
+    }
 }
