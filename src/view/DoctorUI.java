@@ -163,28 +163,9 @@ public class DoctorUI extends MainUI {
 	}
 
 	public PrescribedMedication addPrescribedMedication(Diagnosis newDiagnosis, String toBePrescribedMedication, int quantity,int periodDays,String dosage){
-		//	    System.out.println("Do you want to prescribe medication? (yes/no)");
-//	    String response/toBePrescribedMedication = scanner.nextLine();
-//	    if (response.equalsIgnoreCase("yes")) {
-//	        while (true) {
-//	            System.out.println("Enter Quantity:");
-//	            int quantity = Integer.parseInt(scanner.nextLine());
-//	            System.out.println("Enter Period (Days):");
-//	            int periodDays = Integer.parseInt( scanner.nextLine());
-//	            System.out.println("Enter Dosage:");
-//	            String dosage =  scanner.nextLine();
-//
 		PrescribedMedication newPrescribedMedication = new PrescribedMedication(newDiagnosis.getDiagnosisID(),  quantity, periodDays,null , dosage);
 		PrescriptionRepository.PRESCRIPTION_MAP.get(newDiagnosis.getDiagnosisID());
 		PrescribedMedicationRepository.saveAlltoCSV(); // Add to repository
-//
-//	            System.out.println("Do you want to add another medication? (yes/no)");
-//	            response =scanner.nextLine();
-//	            if (!response.equalsIgnoreCase("yes")) {
-//	                break;
-//	            }
-//	        }
-//	    }
 		RecordsRepository.saveAllRecordFiles();
 		return newPrescribedMedication;
 
@@ -192,7 +173,6 @@ public class DoctorUI extends MainUI {
 	public String retrieveMedicalRecordID(String doctorID, String patientID){
 		String medicalRecordID = getMedicalRecordID(doctorID, patientID);
 		MedicalRecord medicalRecord = RecordsRepository.MEDICAL_RECORDS_RECORDID.get(medicalRecordID);
-
 		return medicalRecord.getRecordID();
 	}
 
@@ -210,21 +190,23 @@ public class DoctorUI extends MainUI {
 	}
 		public AppointmentOutcomeRecord generateAppointmentOutcomeRecord(MedicalRecord medicalRecord,String diagnosisID , String typeOfService, String consultationNotes){
 
-		AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord(
-				medicalRecord.getPatientID(),
-				medicalRecord.getDoctorID(),
-				diagnosisID,
-				medicalRecord.getRecordID(),
-				LocalDateTime.now(),
-				PrescriptionRepository.PRESCRIPTION_MAP.get(diagnosisID),
-				typeOfService,
-				consultationNotes);
+			AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord(
+					medicalRecord.getPatientID(),
+					medicalRecord.getDoctorID(),
+					diagnosisID,
+					medicalRecord.getRecordID(),
+					LocalDateTime.now(),
+					PrescriptionRepository.PRESCRIPTION_MAP.get(diagnosisID),
+					typeOfService,
+					consultationNotes);
 
-		AppointmentOutcomeRecordRepository.addOutcomeRecord(outcomeRecord);
-		AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
-		return outcomeRecord;
+			AppointmentOutcomeRecordRepository.addAppointmentOutcomeRecord(medicalRecord.getPatientID(), outcomeRecord);
+			AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
+			return outcomeRecord;
 
 	}
+
+
 
 
 
@@ -632,79 +614,219 @@ public class DoctorUI extends MainUI {
 	}
 	
 
-	
+//
+//	public void recordAppointmentOutcome() {
+//	    Scanner scanner = new Scanner(System.in);
+//
+//	    System.out.println(
+//	            "\n--- Confirmed Appointments for: " + doctor.getFullName() + " (UID: " + doctor.getUID() + ") ---");
+//
+//	    ArrayList<AppointmentRecord> confirmedAppointments = new ArrayList<>();
+//	    int index = 1;
+//
+//	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+//	        if (doctor.getUID().equals(appointment.getDoctorID())
+//	                && appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
+//	            confirmedAppointments.add(appointment);
+//	            System.out.println(index + ". Day: " + appointment.getAppointmentTime().getDayOfWeek()
+//	                    + ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+//	                    + ", Location: " + appointment.getLocation()
+//	                    + ", Patient ID: " + appointment.getPatientID()
+//	                    + ", Patient Name: " + PatientController.getPatientNameById(appointment.getPatientID()));
+//	            index++;
+//	        }
+//	    }
+//
+//	    if (confirmedAppointments.isEmpty()) {
+//	        System.out.println("No confirmed appointments found for this doctor.");
+//	        return;
+//	    }
+//
+//	    System.out.print("\nEnter the number of the appointment you want to record the outcome for: ");
+//	    int selectedIndex = scanner.nextInt();
+//	    scanner.nextLine();
+//
+//	    if (selectedIndex < 1 || selectedIndex > confirmedAppointments.size()) {
+//	        System.out.println("Invalid selection. No outcome recorded.");
+//	        return;
+//	    }
+//
+//	    AppointmentRecord selectedAppointment = confirmedAppointments.get(selectedIndex - 1);
+//
+//	    System.out.print("The appointment is confirmed. Do you want to record the outcome? (yes/no): ");
+//	    String response = scanner.nextLine().trim().toLowerCase();
+//
+//	    if (!"yes".equals(response)) {
+//	        System.out.println("No changes made.");
+//	        return;
+//	    }
+//
+//	    selectedAppointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+//
+//	    // Generate IDs
+//	    String outcomeRecordID = AppointmentController.generateRecordID(RecordFileType.APPOINTMENT_OUTCOME_RECORDS);
+//	    String diagnosisID = AppointmentController.generateRecordID(RecordFileType.DIAGNOSIS_RECORDS);
+//
+//	    System.out.print("Enter diagnosis description: ");
+//	    String diagnosisDescription = scanner.nextLine();
+//	    String medicalRecordID = getMedicalRecordID(doctor.getUID(), selectedAppointment.getPatientID());
+//	    Diagnosis diagnosis = new Diagnosis(selectedAppointment.getPatientID(), diagnosisID, doctor.getUID(), medicalRecordID,
+//	            LocalDateTime.now(),null, diagnosisDescription, null);
+//	    DiagnosisRepository.addDiagnosis(diagnosisID, diagnosis);
+//
+//
+//	    System.out.print("Enter treatment description: ");
+//	    String treatmentDescription = scanner.nextLine();
+//	    TreatmentPlans treatmentPlan = new TreatmentPlans(diagnosisID, LocalDateTime.now(), treatmentDescription);
+//	    TreatmentPlansRepository.addTreatmentPlansRecord(treatmentPlan);
+//
+//	    ArrayList<PrescribedMedication> medications = new ArrayList<>();
+//	    Prescription prescription = new Prescription(diagnosisID, LocalDateTime.now(),medications);
+//	    PrescriptionRepository.addPrescriptionRecord(prescription);
+//	    System.out.print("Do you want to prescribe medication? (yes/no): ");
+//	    if (scanner.nextLine().trim().equalsIgnoreCase("yes")) {
+//	        while (true) {
+//	            String medicineID = AppointmentController.generateRecordID(RecordFileType.MEDICINE_RECORDS);
+//	            System.out.print("Enter quantity: ");
+//	            int quantity = Integer.parseInt(scanner.nextLine());
+//	            System.out.print("Enter period (days): ");
+//	            int periodDays = Integer.parseInt(scanner.nextLine());
+//	            System.out.print("Enter dosage: ");
+//	            String dosage = scanner.nextLine();
+//	            PrescribedMedication medication = new PrescribedMedication(diagnosisID,quantity, periodDays, enums.PrescriptionStatus.PENDING, dosage);
+//	            medications.add(medication);
+//	            PrescribedMedicationRepository.addMedication(diagnosisID, medication);
+//
+//	            System.out.print("Add another medication? (yes/no): ");
+//	            if (!scanner.nextLine().trim().equalsIgnoreCase("yes")) {
+//	                break;
+//	            }
+//	        }
+//
+//	    }
+//
+//	    System.out.print("Enter the type of service: ");
+//	    String typeOfService = scanner.nextLine();
+//	    System.out.print("Enter your consultation notes: ");
+//	    String consultationNotes = scanner.nextLine();
+//
+//	    AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord(
+//	            selectedAppointment.getPatientID(),
+//	            doctor.getUID(),
+//	            diagnosisID,
+//	            outcomeRecordID,
+//	            LocalDateTime.now(),
+//	            prescription,
+//	            typeOfService,
+//	            consultationNotes);
+//
+//	    AppointmentOutcomeRecordRepository.addOutcomeRecord(outcomeRecord);
+//	    //RecordsRepository.MEDICAL_RECORDS.set
+//
+//	    selectedAppointment.setAppointmentOutcomeRecordID(outcomeRecordID);
+//
+//
+//
+//
+////
+////
+////	    }
+////
+//
+//
+//	    RecordsRepository.saveAllRecordFiles();
+//	    AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
+//	    DiagnosisRepository.saveAlltoCSV();
+//	    TreatmentPlansRepository.saveAlltoCSV();
+//	    PrescribedMedicationRepository.saveAlltoCSV();
+//
+//	    System.out.println("Appointment outcome recorded and saved successfully.");
+//	}
+
 	public void recordAppointmentOutcome() {
-	    Scanner scanner = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 
-	    System.out.println(
-	            "\n--- Confirmed Appointments for: " + doctor.getFullName() + " (UID: " + doctor.getUID() + ") ---");
+		System.out.println(
+				"\n--- Confirmed Appointments for: " + doctor.getFullName() + " (UID: " + doctor.getUID() + ") ---");
 
-	    ArrayList<AppointmentRecord> confirmedAppointments = new ArrayList<>();
-	    int index = 1;
+		ArrayList<AppointmentRecord> confirmedAppointments = new ArrayList<>();
+		int index = 1;
 
-	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
-	        if (doctor.getUID().equals(appointment.getDoctorID())
-	                && appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
-	            confirmedAppointments.add(appointment);
-	            System.out.println(index + ". Day: " + appointment.getAppointmentTime().getDayOfWeek()
-	                    + ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-	                    + ", Location: " + appointment.getLocation()
-	                    + ", Patient ID: " + appointment.getPatientID()
-	                    + ", Patient Name: " + PatientController.getPatientNameById(appointment.getPatientID()));
-	            index++;
-	        }
-	    }
+		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+			if (doctor.getUID().equals(appointment.getDoctorID())
+					&& appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
+				confirmedAppointments.add(appointment);
+				System.out.println(index + ". Day: " + appointment.getAppointmentTime().getDayOfWeek()
+						+ ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+						+ ", Location: " + appointment.getLocation()
+						+ ", Patient ID: " + appointment.getPatientID()
+						+ ", Patient Name: " + PatientController.getPatientNameById(appointment.getPatientID()));
+				index++;
+			}
+		}
 
-	    if (confirmedAppointments.isEmpty()) {
-	        System.out.println("No confirmed appointments found for this doctor.");
-	        return;
-	    }
+		if (confirmedAppointments.isEmpty()) {
+			System.out.println("No confirmed appointments found for this doctor.");
+			return;
+		}
 
-	    System.out.print("\nEnter the number of the appointment you want to record the outcome for: ");
-	    int selectedIndex = scanner.nextInt();
-	    scanner.nextLine(); 
+		System.out.print("\nEnter the number of the appointment you want to record the outcome for: ");
+		int selectedIndex = scanner.nextInt();
+		scanner.nextLine();
 
-	    if (selectedIndex < 1 || selectedIndex > confirmedAppointments.size()) {
-	        System.out.println("Invalid selection. No outcome recorded.");
-	        return;
-	    }
+		if (selectedIndex < 1 || selectedIndex > confirmedAppointments.size()) {
+			System.out.println("Invalid selection. No outcome recorded.");
+			return;
+		}
 
-	    AppointmentRecord selectedAppointment = confirmedAppointments.get(selectedIndex - 1);
+		AppointmentRecord selectedAppointment = confirmedAppointments.get(selectedIndex - 1);
+		System.out.println("\n--- Select Diagnosis for Patient (ID: " + selectedAppointment.getPatientID() + ") ---");
 
-	    System.out.print("The appointment is confirmed. Do you want to record the outcome? (yes/no): ");
-	    String response = scanner.nextLine().trim().toLowerCase();
+		// Fetch diagnoses for the selected patient
+		ArrayList<Diagnosis> diagnoses = DiagnosisRepository.getDiagnosesByPatientID(selectedAppointment.getPatientID());
+		if (diagnoses.isEmpty()) {
+			System.out.println("No diagnoses found for this patient.");
+			return;
+		}
 
-	    if (!"yes".equals(response)) {
-	        System.out.println("No changes made.");
-	        return;
-	    }
+		for (int i = 0; i < diagnoses.size(); i++) {
+			Diagnosis diagnosis = diagnoses.get(i);
+			System.out.println((i + 1) + ". Diagnosis ID: " + diagnosis.getDiagnosisID()
+					+ ", Condition: " + diagnosis.getDiagnosisDescription());
+		}
 
-	    selectedAppointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+		System.out.print("\nEnter the number of the diagnosis to use: ");
+		int diagnosisIndex = scanner.nextInt();
+		scanner.nextLine();
 
-	    // Generate IDs
-	    String outcomeRecordID = AppointmentController.generateRecordID(RecordFileType.APPOINTMENT_OUTCOME_RECORDS);
-	    String diagnosisID = AppointmentController.generateRecordID(RecordFileType.DIAGNOSIS_RECORDS);
+		if (diagnosisIndex < 1 || diagnosisIndex > diagnoses.size()) {
+			System.out.println("Invalid selection. No outcome recorded.");
+			return;
+		}
 
-	    System.out.print("Enter diagnosis description: ");
-	    String diagnosisDescription = scanner.nextLine();
-	    String medicalRecordID = getMedicalRecordID(doctor.getUID(), selectedAppointment.getPatientID());
-	    Diagnosis diagnosis = new Diagnosis(selectedAppointment.getPatientID(), diagnosisID, doctor.getUID(), medicalRecordID,
-	            LocalDateTime.now(),null, diagnosisDescription, null);
-	    DiagnosisRepository.addDiagnosis(diagnosisID, diagnosis);
-	    
+		Diagnosis selectedDiagnosis = diagnoses.get(diagnosisIndex - 1);
+		String diagnosisID = selectedDiagnosis.getDiagnosisID();
 
-	    System.out.print("Enter treatment description: ");
-	    String treatmentDescription = scanner.nextLine();
-	    TreatmentPlans treatmentPlan = new TreatmentPlans(diagnosisID, LocalDateTime.now(), treatmentDescription);
-	    TreatmentPlansRepository.addTreatmentPlansRecord(treatmentPlan);
+		System.out.print("The appointment is confirmed. Do you want to record the outcome? (yes/no): ");
+		String response = scanner.nextLine().trim().toLowerCase();
 
-	    ArrayList<PrescribedMedication> medications = new ArrayList<>();
+		if (!"yes".equals(response)) {
+			System.out.println("No changes made.");
+			return;
+		}
+
+		selectedAppointment.setAppointmentStatus(AppointmentStatus.COMPLETED);
+
+		// same ID as the appointmentRecord
+		String outcomeRecordID = selectedAppointment.getRecordID();
+
+		// update prescribedMedication to medical record and appointment outcome record
+		ArrayList<PrescribedMedication> medications = new ArrayList<>();
 	    Prescription prescription = new Prescription(diagnosisID, LocalDateTime.now(),medications);
 	    PrescriptionRepository.addPrescriptionRecord(prescription);
 	    System.out.print("Do you want to prescribe medication? (yes/no): ");
 	    if (scanner.nextLine().trim().equalsIgnoreCase("yes")) {
 	        while (true) {
-	            String medicineID = AppointmentController.generateRecordID(RecordFileType.MEDICINE_RECORDS);
 	            System.out.print("Enter quantity: ");
 	            int quantity = Integer.parseInt(scanner.nextLine());
 	            System.out.print("Enter period (days): ");
@@ -720,59 +842,37 @@ public class DoctorUI extends MainUI {
 	                break;
 	            }
 	        }
-	        
+
 	    }
 
-	    System.out.print("Enter the type of service: ");
-	    String typeOfService = scanner.nextLine();
-	    System.out.print("Enter your consultation notes: ");
-	    String consultationNotes = scanner.nextLine();
 
-	    AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord(
-	            selectedAppointment.getPatientID(),
-	            doctor.getUID(),
-	            diagnosisID,
-	            outcomeRecordID,
-	            LocalDateTime.now(),
-	            prescription,
-	            typeOfService,
-	            consultationNotes);
 
-	    AppointmentOutcomeRecordRepository.addOutcomeRecord(outcomeRecord);
-	    //RecordsRepository.MEDICAL_RECORDS.set
 
-	    selectedAppointment.setAppointmentOutcomeRecordID(outcomeRecordID);
-	    
-	    
-//	    if (RecordsRepository.MEDICAL_RECORDS_PATIENTID.get(selectedAppointment.getPatientID()) != null){
-//	    	medicalRecordID = RecordsController.generateRecordID(RecordFileType.MEDICAL_RECORDS); 
-//
-//		    MedicalRecord medicalRecord = new MedicalRecord(
-//		    								medicalRecordID, 
-//		    								LocalDateTime.now(), 
-//		    								LocalDateTime.now(),
-//		    								RecordStatusType.ACTIVE,
-//		    								selectedAppointment.getPatientID(),
-//		    					            doctor.getUID(),
-//		    					            "O",
-//		    					            DiagnosisRepository.getDiagnosesByPatientID(selectedAppointment.getPatientID())
-//		    								);
-//		    RecordsRepository.MEDICAL_RECORDS_RECORDID.put(medicalRecordID, medicalRecord);
-////		    RecordsRepository.MEDICAL_RECORDS_PATIENTID.put(medicalRecordID, medicalRecord);
-////		    RecordsRepository.MEDICAL_RECORDS_DOCTORID.put(medicalRecordID, medicalRecord);
-//	    	
-//	    	
-//	    }
-//	    
-		
-	    
-	    RecordsRepository.saveAllRecordFiles();
-	    AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
-	    DiagnosisRepository.saveAlltoCSV();
-	    TreatmentPlansRepository.saveAlltoCSV();
-	    PrescribedMedicationRepository.saveAlltoCSV();
+		System.out.print("Enter the type of service: ");
+		String typeOfService = scanner.nextLine();
+		System.out.print("Enter your consultation notes: ");
+		String consultationNotes = scanner.nextLine();
 
-	    System.out.println("Appointment outcome recorded and saved successfully.");
+		AppointmentOutcomeRecord outcomeRecord = new AppointmentOutcomeRecord(
+				selectedAppointment.getPatientID(),
+				doctor.getUID(),
+				diagnosisID,
+				outcomeRecordID,
+				LocalDateTime.now(),
+				prescription,
+				typeOfService,
+				consultationNotes);
+
+		AppointmentOutcomeRecordRepository.addAppointmentOutcomeRecord(selectedAppointment.getPatientID(),outcomeRecord);
+		selectedAppointment.setAppointmentOutcomeRecordID(outcomeRecordID);
+
+		RecordsRepository.saveAllRecordFiles();
+		AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
+		DiagnosisRepository.saveAlltoCSV();
+		TreatmentPlansRepository.saveAlltoCSV();
+		PrescribedMedicationRepository.saveAlltoCSV();
+
+		System.out.println("Appointment outcome recorded and saved successfully.");
 	}
 
 }

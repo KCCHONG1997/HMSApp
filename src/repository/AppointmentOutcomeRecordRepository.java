@@ -18,7 +18,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
 
     private static boolean isRepoLoaded = false;
     private static final String AppointmentOutcomeRecordsfileName = "appointment_outcome_records.csv";
-    public static HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords = new HashMap<>();
+    public static HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords = new HashMap<>();
 
     @Override
     public boolean loadFromCSV() {
@@ -31,7 +31,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
     }
 
     public static void saveAppoinmentOutcomeRecordsToCSV(String fileName,
-                                                         HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+                                                         HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
@@ -41,11 +41,12 @@ public class AppointmentOutcomeRecordRepository extends Repository {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String appointmentOutcomeRecordID : patientOutcomeRecords.keySet()) {
-                AppointmentOutcomeRecord record = patientOutcomeRecords.get(appointmentOutcomeRecordID);
-                if (record != null) {
-                    writer.write(appointmentOutcomeToCSV(record));
-                    writer.newLine();
+            for (String patientID: patientOutcomeRecords.keySet()) {
+                for (AppointmentOutcomeRecord record : patientOutcomeRecords.get(patientID)) {
+                    if (record != null) {
+                        writer.write(appointmentOutcomeToCSV(record));
+                        writer.newLine();
+                    }
                 }
 
             }
@@ -73,7 +74,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
      * file if it doesn't exist
      */
     public static void loadAppoinmentOutcomeRecordsFromCSV(String fileName,
-                                                           HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+                                                           HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
@@ -97,9 +98,8 @@ public class AppointmentOutcomeRecordRepository extends Repository {
                 AppointmentOutcomeRecord record = csvToOutcomeRecord(line);
                 String patientID = getPatientIDFromCSV(line);
                 if (record != null && patientID != null) {
-                    patientOutcomeRecords.put(patientID, record);
+                    addAppointmentOutcomeRecord( patientID,  record);
                 }
-
             }
             System.out.println("Successfully loaded " + patientOutcomeRecords.size()
                     + " appointment outcome records from " + fileName);
@@ -158,11 +158,24 @@ public class AppointmentOutcomeRecordRepository extends Repository {
     public static void setRepoLoaded(boolean isRepoLoaded) {
         AppointmentOutcomeRecordRepository.isRepoLoaded = isRepoLoaded;
     }
-    public static void addOutcomeRecord(AppointmentOutcomeRecord outcomeRecord) {
-        // Add the record to the repository
-    	patientOutcomeRecords.put(outcomeRecord.getAppointmentOutcomeRecordID(), outcomeRecord);
+    public static void addAppointmentOutcomeRecord(String patientID, AppointmentOutcomeRecord record) {
+        // Retrieve the list of records for the patient ID, or create a new list if none exists
+        ArrayList<AppointmentOutcomeRecord> records = patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
 
-    	saveAppointmentOutcomeRecordRepository();
+        // Add the new record to the list
+        records.add(record);
+
+        // Update the HashMap with the modified list
+        patientOutcomeRecords.put(patientID, records);
+        saveAppointmentOutcomeRecordRepository();
     }
+
+//    public static void addOutcomeRecord(String patientID, AppointmentOutcomeRecord outcomeRecord) {
+//        // Add the record to the repository
+//    	patientOutcomeRecords.put(outcomeRecord.getAppointmentOutcomeRecordID(), outcomeRecord);
+//
+//    	saveAppointmentOutcomeRecordRepository();
+//    }
+
 
 }
