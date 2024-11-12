@@ -57,7 +57,7 @@ public class MedicalRecord extends HMSRecords {
         this.Diagnosis= diagnosis;
                          }
 
-	public void addDiagnosis(model.Diagnosis newDiagnosis) {
+	public void addDiagnosis(Diagnosis newDiagnosis) {
 		this.Diagnosis.add(newDiagnosis);
 	}
 
