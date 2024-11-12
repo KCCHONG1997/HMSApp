@@ -132,7 +132,7 @@ public class PrescribedMedicationRepository extends Repository {
             String medicineID = fields[1];
             String medicineQuantity = fields[2];
             int periodDays = Integer.parseInt(fields[3]);
-            PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[4]);
+            PrescriptionStatus prescriptionStatus = PrescriptionStatus.toEnumPrescriptionStatus(fields[4]);
             String dosage = fields[5].replace("\"", "");
 
             return new PrescribedMedication(diagnosisID, medicineID, medicineQuantity, periodDays, prescriptionStatus, dosage);
