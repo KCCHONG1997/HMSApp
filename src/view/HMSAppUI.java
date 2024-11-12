@@ -2,14 +2,7 @@ package view;
 
 import java.util.Scanner;
 
-import repository.AppointmentOutcomeRecordRepository;
-import repository.DiagnosisRepository;
-import repository.PersonnelRepository;
-import repository.PrescribedMedicationRepository;
-import repository.PrescriptionRepository;
-import repository.RecordsRepository;
-import repository.Repository;
-import repository.TreatmentPlansRepository;
+import repository.*;
 
 public class HMSAppUI extends MainUI{
 	
@@ -68,6 +61,8 @@ public class HMSAppUI extends MainUI{
         Repository.loadRepository(new DiagnosisRepository());
         Repository.loadRepository(new AppointmentOutcomeRecordRepository());
         Repository.loadRepository(new RecordsRepository());
+		Repository.loadRepository(new MedicineRepository());
+
 	}
 	public Boolean isAllRepoLoaded() {
 	    System.out.println("Repository Load Status:");

@@ -99,7 +99,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
                 AppointmentOutcomeRecord record = csvToOutcomeRecord(line);
                 String patientID = getPatientIDFromCSV(line);
                 if (record != null && patientID != null) {
-                    addAppointmentOutcomeRecord( patientID,  record);
+                    addAppointmentOutcomeRecordIntoHashMapValue( patientID,  record);
                 }
             }
             System.out.println("Successfully loaded " + patientOutcomeRecords.size()
@@ -159,7 +159,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
     public static void setRepoLoaded(boolean isRepoLoaded) {
         AppointmentOutcomeRecordRepository.isRepoLoaded = isRepoLoaded;
     }
-    public static void addAppointmentOutcomeRecord(String patientID, AppointmentOutcomeRecord record) {
+    public static void addAppointmentOutcomeRecordIntoHashMapValue(String patientID, AppointmentOutcomeRecord record) {
         // Retrieve the list of records for the patient ID, or create a new list if none exists
         ArrayList<AppointmentOutcomeRecord> records = patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
 
@@ -168,8 +168,18 @@ public class AppointmentOutcomeRecordRepository extends Repository {
 
         // Update the HashMap with the modified list
         patientOutcomeRecords.put(patientID, records);
+
+    }
+    public static void addAppointmentOutcomeRecord(String patientID, AppointmentOutcomeRecord record) {
+        // Retrieve the list of records for the patient ID, or create a new list if none exists
+        ArrayList<AppointmentOutcomeRecord> records = patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
+        // Add the new record to the list
+        records.add(record);
+        // Update the HashMap with the modified list
+        patientOutcomeRecords.put(patientID, records);
         saveAppointmentOutcomeRecordRepository();
     }
+
 
 //    public static void addOutcomeRecord(String patientID, AppointmentOutcomeRecord outcomeRecord) {
 //        // Add the record to the repository

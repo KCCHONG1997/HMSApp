@@ -1,6 +1,7 @@
 package repository;
 
 import enums.PrescriptionStatus;
+import model.Diagnosis;
 import model.PrescribedMedication;
 
 import java.io.*;
@@ -132,7 +133,7 @@ public class PrescribedMedicationRepository extends Repository {
             String medicineID = fields[1];
             int medicineQuantity = Integer.parseInt(fields[2]);
             int periodDays = Integer.parseInt(fields[3]);
-            PrescriptionStatus prescriptionStatus = PrescriptionStatus.valueOf(fields[4]);
+            PrescriptionStatus prescriptionStatus = PrescriptionStatus.toEnumPrescriptionStatus(fields[4]);
             String dosage = fields[5].replace("\"", "");
 
             return new PrescribedMedication(diagnosisID,medicineID, medicineQuantity, periodDays, prescriptionStatus, dosage);
@@ -145,6 +146,7 @@ public class PrescribedMedicationRepository extends Repository {
     /**
      * Clear all prescribed medication data and save an empty file
      */
+
     public static boolean clearPrescribedMedicationDatabase() {
         diagnosisToMedicationsMap.clear();
         saveMedicationsToCSV(fileName, diagnosisToMedicationsMap);

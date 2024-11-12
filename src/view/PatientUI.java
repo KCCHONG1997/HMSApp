@@ -63,12 +63,10 @@ public class PatientUI extends MainUI {
 			case 1:
 				// Code for viewing medical record
                 viewPatientMedicalRecord(patient.getUID());
-
 				break;
 			case 2:
 				// Code for updating personal information
 				updatePatientContactInfo(patient.getUID());
-
 				break;
 			case 3:
 				// Code for viewing available appointment slots

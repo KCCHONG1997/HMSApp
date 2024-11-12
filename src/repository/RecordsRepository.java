@@ -103,7 +103,8 @@ public class RecordsRepository extends Repository {
             );
         } else if (record instanceof AppointmentRecord) {
             AppointmentRecord appRecord = (AppointmentRecord) record;
-            AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();return String.join(",",
+            AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();
+            return String.join(",",
                     appRecord.getRecordID(),
                     appRecord.getCreatedDate().toString(),
                     appRecord.getUpdatedDate().toString(),

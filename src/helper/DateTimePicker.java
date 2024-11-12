@@ -6,9 +6,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DateTimePicker {
-	
-	
-	//main only here for testing purpose
+
+
+    //main only here for testing purpose
     public static void main(String[] args) {
         LocalDateTime selectedDateTime = pickDateTime("Please select a date and time");
         System.out.println("You selected: " + selectedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
@@ -40,7 +40,7 @@ public class DateTimePicker {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid month (1-12).");
-                scanner.nextLine(); 
+                scanner.nextLine();
             }
         }
 
@@ -52,7 +52,7 @@ public class DateTimePicker {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid day (1-31).");
-                scanner.nextLine(); 
+                scanner.nextLine();
             }
         }
 
@@ -64,7 +64,7 @@ public class DateTimePicker {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid hour (0-23).");
-                scanner.nextLine(); 
+                scanner.nextLine();
             }
         }
 
@@ -76,7 +76,7 @@ public class DateTimePicker {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid minute (0-59).");
-                scanner.nextLine(); 
+                scanner.nextLine();
             }
         }
 

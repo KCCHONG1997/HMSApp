@@ -190,7 +190,7 @@ public class TreatmentPlansRepository extends Repository {
         // Add the record to the repository
     	diagnosisToTreatmentPlansMap.put(treatmentplans.getDiagnosisID(), treatmentplans);
 
-    	saveAlltoCSV();
+    	//saveAlltoCSV();
     }
 
 

@@ -1,8 +1,10 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import controller.HMSPersonnelController;
+import helper.Helper;
 import model.MedicalRecord;
+import model.Patient;
 import model.Diagnosis;
 import model.Prescription;
 import model.PrescribedMedication;
@@ -10,10 +12,12 @@ import model.PrescribedMedication;
 public class MedicalRecordUI extends MainUI {
 
     private MedicalRecord medicalRecord;
+    private Patient patient;
 
     // Constructor to initialize MedicalRecordUI with the specified medical record
     public MedicalRecordUI(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
+        this.patient = HMSPersonnelController.getPatientById(medicalRecord.getPatientID());
     }
 
     // Method to display a formatted medical record in a box
@@ -25,30 +29,44 @@ public class MedicalRecordUI extends MainUI {
         System.out.println(border);
         System.out.printf("| %-20s: %-20s |\n", "Doctor ID", medicalRecord.getDoctorID());
         System.out.printf("| %-20s: %-20s |\n", "Patient ID", medicalRecord.getPatientID());
+        System.out.printf("| %-20s: %-20s |\n", "Patient Name", (patient != null ? patient.getFullName() : "Unknown"));
+        System.out.printf("| %-20s: %-20s |\n", "Patient DOB", (patient != null ? patient.getDoB() : "Unknown"));
+        System.out.printf("| %-20s: %-20s |\n", "Patient Gender", (patient != null ? patient.getGender() : "Unknown"));
         System.out.printf("| %-20s: %-20s |\n", "Blood Type", medicalRecord.getBloodType());
         System.out.println(border);
 
         System.out.println("| Diagnoses:");
-        for (Diagnosis diagnosis : medicalRecord.getDiagnosis()) {
-            System.out.println(border);
-            System.out.printf("| %-20s: %-20s |\n", "Diagnosis ID", diagnosis.getDiagnosisID());
-            System.out.printf("| %-20s: %-20s |\n", "Description", diagnosis.getDiagnosisDescription());
+        if (medicalRecord.getDiagnosis() != null && !medicalRecord.getDiagnosis().isEmpty()) {
+            for (Diagnosis diagnosis : medicalRecord.getDiagnosis()) {
+                System.out.println(border);
+                System.out.printf("| %-20s: %-20s |\n", "Diagnosis ID", diagnosis.getDiagnosisID());
+                System.out.printf("| %-20s: %-20s |\n", "Description", diagnosis.getDiagnosisDescription());
 
-            Prescription prescription = diagnosis.getPrescription();
-            System.out.printf("| %-20s: %-20s |\n", "Prescription Date", prescription.getPrescriptionDate());
+                Prescription prescription = diagnosis.getPrescription();
+                if (prescription != null) {
+                    System.out.printf("| %-20s: %-20s |\n", "Prescription Date", prescription.getPrescriptionDate());
 
-            System.out.println("| Medications:");
-            for (PrescribedMedication medication : prescription.getMedications()) {
-                System.out.printf("| %-20s: %-20s |\n", "Medicine ID", medication.getMedicineID());
-                System.out.printf("| %-20s: %-20s |\n", "Quantity", medication.getMedicineQuantity());
-                System.out.printf("| %-20s: %-20s |\n", "Dosage", medication.getDosage());
-                System.out.printf("| %-20s: %-20s |\n", "Period (days)", medication.getPeriodDays());
-                System.out.printf("| %-20s: %-20s |\n", "Status", medication.getPrescriptionStatus());
+                    System.out.println("| Medications:");
+                    if (prescription.getMedications() != null && !prescription.getMedications().isEmpty()) {
+                        for (PrescribedMedication medication : prescription.getMedications()) {
+                            System.out.printf("| %-20s: %-20s |\n", "Medicine ID", medication.getMedicineID());
+                            System.out.printf("| %-20s: %-20s |\n", "Quantity", medication.getMedicineQuantity());
+                            System.out.printf("| %-20s: %-20s |\n", "Dosage", medication.getDosage());
+                            System.out.printf("| %-20s: %-20s |\n", "Period (days)", medication.getPeriodDays());
+                            System.out.printf("| %-20s: %-20s |\n", "Status", medication.getPrescriptionStatus());
+                            System.out.println(border);
+                        }
+                    } else {
+                        System.out.println("| No prescribed medications found |");
+                    }
+                } else {
+                    System.out.println("| No prescription found |");
+                }
                 System.out.println(border);
             }
-            System.out.println(border);
+        } else {
+            System.out.println("| No diagnosis records found |");
         }
-
         System.out.println();
     }
 
@@ -63,14 +81,12 @@ public class MedicalRecordUI extends MainUI {
     // Start method to display the medical record and provide a back option
     @Override
     public void start() {
-        Scanner scanner = new Scanner(System.in);
-        
         displayMedicalRecordInBox();  // Display the medical record
-        
+
         int choice = 0;
         do {
             printChoice();
-            choice = scanner.nextInt();
+            choice = Helper.readInt("");
             switch (choice) {
                 case 1:
                     System.out.println("Returning to previous menu...");
