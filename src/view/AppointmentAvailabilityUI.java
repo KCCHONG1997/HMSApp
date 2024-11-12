@@ -76,7 +76,7 @@ public class AppointmentAvailabilityUI extends MainUI {
 
             // Add and save the appointment
             availableAppointments.add(appointment);
-            RecordsRepository.APPOINTMENT_RECORDS_RECORDID.put(appointment.getRecordID(), appointment);
+            RecordsRepository.APPOINTMENT_RECORDS.put(appointment.getRecordID(), appointment);
 
             System.out.printf("Created and saved appointment for %s at %s\n",
                     appointmentDateTime.toLocalDate(), appointmentDateTime.toLocalTime());

@@ -50,7 +50,7 @@ public class UpdateMedicalRecordUI {
         }
 
         // Save updated medical record back to repository
-        RecordsRepository.MEDICAL_RECORDS_RECORDID.put(medicalRecord.getRecordID(), medicalRecord);
+        RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
         RecordsRepository.saveAllRecordFiles();
     }
 
@@ -100,19 +100,19 @@ public class UpdateMedicalRecordUI {
 
             // Add the prescribed medication
             String medicineID = medicine.getMedicineID();
-            PrescribedMedication prescribedMedication = new PrescribedMedication(diagnosis.getDiagnosisID(), medicineID,
+            PrescribedMedication prescribedMedication = new PrescribedMedication(newDiagnosis.getDiagnosisID(), medicineID,
                     quantity, periodDays, null, dosage);
-            Prescription prescription = addPrescription(diagnosis, prescribedMedication);
-            PrescriptionRepository.PRESCRIPTION_MAP.put(diagnosis.getDiagnosisID(), prescription);
+            Prescription prescription = addPrescription(newDiagnosis, prescribedMedication);
+            PrescriptionRepository.PRESCRIPTION_MAP.put(newDiagnosis.getDiagnosisID(), prescription);
 
-            System.out.println("Medication prescribed successfully for Diagnosis ID: " + diagnosis.getDiagnosisID());
+            System.out.println("Medication prescribed successfully for Diagnosis ID: " + newDiagnosis.getDiagnosisID());
 
             // Prompt to add more medication or finish
             System.out.print("Would you like to add another prescribed medication? (yes/no): ");
             addMore = sc.nextLine().trim().equalsIgnoreCase("yes");
         }
 
-        System.out.println("Finished adding prescribed medications for Diagnosis ID: " + diagnosis.getDiagnosisID());
+        System.out.println("Finished adding prescribed medications for Diagnosis ID: " + newDiagnosis.getDiagnosisID());
     }
 
     private Prescription addPrescription(Diagnosis diagnosis, PrescribedMedication prescribedMedication) {

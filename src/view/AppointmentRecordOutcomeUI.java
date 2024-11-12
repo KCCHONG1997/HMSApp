@@ -44,7 +44,7 @@ public class AppointmentRecordOutcomeUI extends MainUI {
         ArrayList<AppointmentRecord> confirmedAppointments = new ArrayList<>();
         int index = 1;
 
-        for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+        for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
             if (doctor.getUID().equals(appointment.getDoctorID())
                     && appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
                 confirmedAppointments.add(appointment);

@@ -119,7 +119,7 @@ public class DoctorUI extends MainUI {
 		updateUI.start();
 
 		// After updating, save the medical record explicitly back to the repository
-		RecordsRepository.MEDICAL_RECORDS_RECORDID.put(medicalRecord.getRecordID(), medicalRecord);
+		RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
 		RecordsRepository.saveAllRecordFiles(); // Save to persist changes
 	}
 
