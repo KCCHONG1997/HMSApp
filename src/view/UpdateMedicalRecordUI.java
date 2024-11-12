@@ -59,7 +59,7 @@ public class UpdateMedicalRecordUI {
         Diagnosis diagnosis = new Diagnosis(patientId, diagnosisID, doctor.getUID(),
                 medicalRecord.getRecordID(), LocalDateTime.now(), null,
                 diagnosisDescription, null);
-        medicalRecord.addDiagnosis(diagnosis);  // Add the diagnosis to the current medical record
+        medicalRecord.addDiagnosis(diagnosis); // Add the diagnosis to the current medical record
         DiagnosisRepository.addDiagnosis(patientId, diagnosis); // Add to the Diagnosis Repository
         DiagnosisRepository.saveAlltoCSV();
         return diagnosis;
@@ -71,12 +71,13 @@ public class UpdateMedicalRecordUI {
         TreatmentPlans treatmentPlan = new TreatmentPlans(diagnosis.getDiagnosisID(), LocalDateTime.now(),
                 treatmentDescription);
         diagnosis.setTreatmentPlans(treatmentPlan);
+        TreatmentPlansRepository.diagnosisToTreatmentPlansMap.put(diagnosis.getDiagnosisID(), treatmentPlan);
         TreatmentPlansRepository.saveAlltoCSV();
-        RecordsRepository.saveAllRecordFiles();  // Save changes
+        RecordsRepository.saveAllRecordFiles(); // Save changes
         System.out.println("Treatment plan added successfully for Diagnosis ID: " + diagnosis.getDiagnosisID());
     }
 
-    private void addPrescriptions(Diagnosis diagnosis) {
+    private void addPrescriptions(Diagnosis newDiagnosis) {
         boolean addMore = true;
         while (addMore) {
             System.out.println("\n--- Add Prescribed Medication ---");

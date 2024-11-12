@@ -153,7 +153,7 @@ public class PatientUI extends MainUI {
 	        System.out.println("---------------------------------------");
 
 	        boolean recordFound = false;
-	        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS_RECORDID.values()) {
+	        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
 	            if (record.getPatientID().equals(patientId)) {
 	                recordFound = true;
 	                System.out.println("Blood Type: " + record.getBloodType());
@@ -222,7 +222,7 @@ public class PatientUI extends MainUI {
 		System.out.println("\n--- Available Appointment Slots :  ---");
 
 		boolean found = false;
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 			if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
 				found = true;
 				String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
@@ -302,7 +302,7 @@ public class PatientUI extends MainUI {
 		}
 
 		AppointmentRecord existingAppointment = null;
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 			if (appointment.getDoctorID().equals(doctorId) && appointment.getAppointmentTime().equals(appointmentTime)
 					&& appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
 				existingAppointment = appointment;
@@ -328,7 +328,7 @@ public class PatientUI extends MainUI {
 	    boolean found = false;
 	    Scanner scanner = new Scanner(System.in);
 
-	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 	        if (appointment.getAppointmentStatus() == AppointmentStatus.CANCELED
 	                && patient.getUID().equals(appointment.getPatientID())) {  // Check if the appointment belongs to the current user
 	            found = true;
@@ -367,7 +367,7 @@ public class PatientUI extends MainUI {
 
 	    boolean found = false;
 
-	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 	        if (patient.getUID().equals(appointment.getPatientID()) &&
 	            appointment.getAppointmentStatus() != AppointmentStatus.AVAILABLE ) {
 	            
@@ -394,7 +394,7 @@ public class PatientUI extends MainUI {
 	    List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
 	    int index = 1;
 
- 	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+ 	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 	        if (patient.getUID().equals(appointment.getPatientID()) &&
 	            appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
 	            
@@ -448,7 +448,7 @@ public class PatientUI extends MainUI {
 	    List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
 	    int index = 1;
 
-	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+	    for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 	        if (patient.getUID().equals(appointment.getPatientID()) &&
 	            appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
 	            
@@ -484,7 +484,7 @@ public class PatientUI extends MainUI {
 	            List<AppointmentRecord> availableSlots = new ArrayList<>();
 	            index = 1;
 
-	            for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS_RECORDID.values()) {
+	            for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 	                if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE &&
 	                    appointment.getDoctorID().equals(selectedAppointment.getDoctorID())) {
 	                    
