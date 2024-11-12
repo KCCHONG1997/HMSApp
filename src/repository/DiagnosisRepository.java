@@ -1,9 +1,16 @@
 package repository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import model.Diagnosis;
 import model.Prescription;
@@ -13,7 +20,6 @@ public class DiagnosisRepository extends Repository {
     private static final String folder = "data";
     private static final String fileName = "diagnosis_records.csv";
     private static boolean isRepoLoaded = false;
-
     // Static data collection for Diagnosis records (key = patientID)
     public static HashMap<String, ArrayList<Diagnosis>> patientDiagnosisRecords = new HashMap<>();
 
@@ -51,10 +57,17 @@ public class DiagnosisRepository extends Repository {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            Set<String> writtenDiagnosisIDs = new HashSet<>();
             for (String patientID : patientDiagnosisRecords.keySet()) {
                 for (Diagnosis record : patientDiagnosisRecords.get(patientID)) {
-                    writer.write(diagnosisToCSV(record));
-                    writer.newLine();
+                    String diagnosisID = record.getDiagnosisID();
+                    if (!writtenDiagnosisIDs.contains(diagnosisID)) {
+                        writer.write(diagnosisToCSV(record));
+                        writer.newLine();
+
+                        // Mark this diagnosisID as written
+                        writtenDiagnosisIDs.add(diagnosisID);
+                    }
                 }
             }
             System.out.println("Diagnosis records successfully saved to CSV.");
@@ -102,7 +115,7 @@ public class DiagnosisRepository extends Repository {
             while ((line = reader.readLine()) != null) {
                 Diagnosis record = csvToDiagnosisRecord(line);
                 if (record != null) {
-                    addDiagnosis(record.getMedicalRecordID(), record);
+                    addDiagnosis(record.getPatientID(), record);
                 }
             }
             System.out.println(
@@ -112,10 +125,19 @@ public class DiagnosisRepository extends Repository {
         }
     }
 
-    public static void addDiagnosis(String MedicalRecordID, Diagnosis diagnosis) {
-        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(MedicalRecordID, new ArrayList<>());
+    public static void addDiagnosis(String patientID, Diagnosis diagnosis) {
+        ArrayList<Diagnosis> diagnoses = patientDiagnosisRecords.getOrDefault(patientID, new ArrayList<>());
+//        System.out.println(diagnoses);
+//        System.out.println(patientDiagnosisRecords.size());
         diagnoses.add(diagnosis);
-        patientDiagnosisRecords.put(MedicalRecordID, diagnoses);
+//        System.out.println(diagnoses);
+//        System.out.println(patientDiagnosisRecords.size());
+        patientDiagnosisRecords.put(patientID, diagnoses);
+//        System.out.println(diagnoses);
+//        System.out.println(patientDiagnosisRecords.size());
+
+        //System.out.println(diagnoses);
+
     }
 
     private static Diagnosis csvToDiagnosisRecord(String csv) {
@@ -126,12 +148,11 @@ public class DiagnosisRepository extends Repository {
             String doctorID = fields[2];
             String medicalRecordID = fields[3];
             LocalDateTime diagnosisDate = LocalDateTime.parse(fields[4]);
-            // TreatmentPlans treatmentPlan =
-            // TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
+            TreatmentPlans treatmentPlan = TreatmentPlansRepository.diagnosisToTreatmentPlansMap.get(fields[1]);
             String diagnosisDescription = fields[5].replace("\"", "");
             Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[1]);
 
-            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate, diagnosisDescription,
+            return new Diagnosis(patientID, diagnosisID, doctorID, medicalRecordID, diagnosisDate,treatmentPlan, diagnosisDescription,
                     prescription);
         } catch (Exception e) {
             System.out.println("Error parsing diagnosis record data: " + e.getMessage());
@@ -146,4 +167,20 @@ public class DiagnosisRepository extends Repository {
     public static void setRepoLoaded(boolean isRepoLoaded) {
         DiagnosisRepository.isRepoLoaded = isRepoLoaded;
     }
+    
+    public static ArrayList<Diagnosis> getDiagnosesByPatientID(String patientID) {
+        ArrayList<Diagnosis> diagnosesForPatient = new ArrayList<>();
+        
+        for (ArrayList<Diagnosis> diagnoses : patientDiagnosisRecords.values()) {
+            for (Diagnosis diagnosis : diagnoses) {
+                if (diagnosis.getPatientID().equals(patientID)) {
+                    diagnosesForPatient.add(diagnosis);
+                }
+            }
+        }
+
+        return diagnosesForPatient;
+    }
+
+
 }

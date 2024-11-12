@@ -10,42 +10,47 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import enums.AppointmentOutcomeStatus;
 import model.AppointmentOutcomeRecord;
 import model.Prescription;
 
-public class AppointmentOutcomeRecordRepository extends Repository{
+public class AppointmentOutcomeRecordRepository extends Repository {
     private static final String folder = "data";
-    
+
     private static boolean isRepoLoaded = false;
     private static final String AppointmentOutcomeRecordsfileName = "appointment_outcome_records.csv";
-    public static HashMap<String,AppointmentOutcomeRecord> patientOutcomeRecords = new HashMap<>();
+    //key value = patientID
+    public static HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords = new HashMap<>();
 
-    
-	@Override
-	public boolean loadFromCSV() {
-		loadAppoinmentOutcomeRecordsFromCSV(AppointmentOutcomeRecordsfileName,patientOutcomeRecords);
-		setRepoLoaded(true);
-		return false;
-	}
+    @Override
+    public boolean loadFromCSV() {
+        loadAppoinmentOutcomeRecordsFromCSV(AppointmentOutcomeRecordsfileName, patientOutcomeRecords);
+        setRepoLoaded(true);
+        return true;
+    }
+    public static void saveAppointmentOutcomeRecordRepository() {
+        saveAppoinmentOutcomeRecordsToCSV(AppointmentOutcomeRecordsfileName, patientOutcomeRecords);
+    }
 
-    public static void saveAppoinmentOutcomeRecordsToCSV(String fileName, HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+    public static void saveAppoinmentOutcomeRecordsToCSV(String fileName,
+                                                         HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
 
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (String patientID : patientOutcomeRecords.keySet()) {
-                AppointmentOutcomeRecord record = patientOutcomeRecords.get(patientID);
-                if(record != null)
-                {
-                	writer.write(appointmentOutcomeToCSV(patientID,record));
-                    writer.newLine();
+            for (String patientID: patientOutcomeRecords.keySet()) {
+                for (AppointmentOutcomeRecord record : patientOutcomeRecords.get(patientID)) {
+                    if (record != null) {
+                        writer.write(appointmentOutcomeToCSV(record));
+                        writer.newLine();
+                    }
                 }
-                
+
             }
             System.out.println("Appointment outcome records successfully saved to CSV.");
         } catch (IOException e) {
@@ -54,57 +59,61 @@ public class AppointmentOutcomeRecordRepository extends Repository{
     }
 
     // Convert an AppointmentOutcomeRecord object to a CSV line
-    private static String appointmentOutcomeToCSV(String patientID, AppointmentOutcomeRecord record) {
+    private static String appointmentOutcomeToCSV( AppointmentOutcomeRecord record) {
         return String.join(",",
-                record.getAppointmentTime().toString(),   // Appointment time
-                record.getTypeOfService(),                // Type of Service
-                record.getPrescription().toString(),      // prescription 
+                record.getPatientID(), // Patient ID
+                record.getDoctorID(), // Doctor ID
+                record.getDiagnosisID(),
+                record.getAppointmentOutcomeRecordID(),
+                record.getAppointmentTime().toString(), // Appointment time
+                "\"" + record.getTypeOfService() + "\"",
                 "\"" + record.getConsultationNotes() + "\"", // Consultation Notes
-                record.getPatientID() +                   // Patient ID
-                record.getDoctorID()                    //Doctor ID
+                record.getAppointmentOutcomeStatus().toString()
         );
     }
-   
+
     /**
-     * Load AppointmentOutcomeRecord records from a CSV file, or create an empty file if it doesn't exist
+     * Load AppointmentOutcomeRecord records from a CSV file, or create an empty
+     * file if it doesn't exist
      */
-    public static void loadAppoinmentOutcomeRecordsFromCSV(String fileName, HashMap<String, AppointmentOutcomeRecord> patientOutcomeRecords) {
+    public static void loadAppoinmentOutcomeRecordsFromCSV(String fileName,
+                                                           HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
         // Ensure the directory exists
         File directory = new File("./src/repository/" + folder);
         if (!directory.exists()) {
-            directory.mkdirs();  // Create the directory if it doesn't exist
+            directory.mkdirs(); // Create the directory if it doesn't exist
         }
         File file = new File(filePath);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();  // Create an empty file if it doesn't exist
+                file.createNewFile(); // Create an empty file if it doesn't exist
                 System.out.println("Created empty file: " + filePath);
             } catch (IOException e) {
                 System.out.println("Error creating file: " + e.getMessage());
             }
-            return;  // No data to load, as the file was just created
+            return; // No data to load, as the file was just created
         }
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 AppointmentOutcomeRecord record = csvToOutcomeRecord(line);
                 String patientID = getPatientIDFromCSV(line);
                 if (record != null && patientID != null) {
-                	patientOutcomeRecords.put(patientID, record);
+                    addAppointmentOutcomeRecordIntoHashMapValue( patientID,  record);
                 }
-                
             }
-            System.out.println("Successfully loaded " + patientOutcomeRecords.size() + " appointment outcome records from " + fileName);
+            System.out.println("Successfully loaded " + patientOutcomeRecords.size()
+                    + " appointment outcome records from " + fileName);
         } catch (IOException e) {
             System.out.println("Error reading appointment outcome records: " + e.getMessage());
         }
     }
+
     private static String getPatientIDFromCSV(String csv) {
         String[] fields = csv.split(",");
-        return fields[4];
+        return fields[0];
     }
 
     // Convert a CSV line to an AppointmentOutcomeRecord object
@@ -112,14 +121,26 @@ public class AppointmentOutcomeRecordRepository extends Repository{
         // Split by comma, ignoring commas within quotes
         String[] fields = csv.split(",");
         try {
-            LocalDateTime appointmentTime = LocalDateTime.parse(fields[0]);
-            String typeOfService = fields[1];
-            Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[2]);
-            String consultationNotes = fields[3].replace("\"", "");
-            String patientID = fields[4];
-            String doctorID = fields[5];
-            
-            return new AppointmentOutcomeRecord(appointmentTime,typeOfService,  prescription, consultationNotes,patientID, doctorID);
+            String patientID = fields[0];
+            String doctorID = fields[1];
+            String diagnosisID = fields[2];
+            String appointmentOutcomeRecordID = fields[3];
+            LocalDateTime appointmentTime = LocalDateTime.parse(fields[4]);
+            Prescription prescription = PrescriptionRepository.PRESCRIPTION_MAP.get(fields[2]);//diagnosisID
+            String typeOfService = fields[5].replace("\"", "");
+            String consultationNotes = fields[6].replace("\"", "");
+            AppointmentOutcomeStatus appointmentOutcomeStatus = AppointmentOutcomeStatus.toEnumAppointmentOutcomeStatus(fields[7]);
+
+            return new AppointmentOutcomeRecord(patientID,
+                                                doctorID,
+                                                diagnosisID,
+                                                appointmentOutcomeRecordID,
+                                                appointmentTime,
+                                                prescription,
+                                                typeOfService,
+                                                consultationNotes,
+                                                appointmentOutcomeStatus
+            );
         } catch (Exception e) {
             System.out.println("Error parsing appointment outcome record data: " + e.getMessage());
         }
@@ -135,13 +156,41 @@ public class AppointmentOutcomeRecordRepository extends Repository{
         return true;
     }
 
-	public static boolean isRepoLoaded() {
-		return isRepoLoaded;
-	}
+    public static boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
 
-	public static void setRepoLoaded(boolean isRepoLoaded) {
-		AppointmentOutcomeRecordRepository.isRepoLoaded = isRepoLoaded;
-	}
+    public static void setRepoLoaded(boolean isRepoLoaded) {
+        AppointmentOutcomeRecordRepository.isRepoLoaded = isRepoLoaded;
+    }
+    public static void addAppointmentOutcomeRecordIntoHashMapValue(String patientID, AppointmentOutcomeRecord record) {
+        // Retrieve the list of records for the patient ID, or create a new list if none exists
+        ArrayList<AppointmentOutcomeRecord> records = patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
+
+        // Add the new record to the list
+        records.add(record);
+
+        // Update the HashMap with the modified list
+        patientOutcomeRecords.put(patientID, records);
+
+    }
+    public static void addAppointmentOutcomeRecord(String patientID, AppointmentOutcomeRecord record) {
+        // Retrieve the list of records for the patient ID, or create a new list if none exists
+        ArrayList<AppointmentOutcomeRecord> records = patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
+        // Add the new record to the list
+        records.add(record);
+        // Update the HashMap with the modified list
+        patientOutcomeRecords.put(patientID, records);
+        saveAppointmentOutcomeRecordRepository();
+    }
+
+
+//    public static void addOutcomeRecord(String patientID, AppointmentOutcomeRecord outcomeRecord) {
+//        // Add the record to the repository
+//    	patientOutcomeRecords.put(outcomeRecord.getAppointmentOutcomeRecordID(), outcomeRecord);
+//
+//    	saveAppointmentOutcomeRecordRepository();
+//    }
 
 
 }
