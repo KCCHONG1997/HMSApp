@@ -185,7 +185,6 @@ public class RecordsRepository extends Repository {
             } else if (type == AppointmentRecord.class) {
                 ArrayList<AppointmentOutcomeRecord> outcomeRecords = AppointmentOutcomeRecordRepository.patientOutcomeRecords
                         .get(fields[5]);
-                System.out.println(outcomeRecords);
                 AppointmentOutcomeRecord matchingRecord = null;
                 if (outcomeRecords != null) {
                     for (AppointmentOutcomeRecord record : outcomeRecords) {
