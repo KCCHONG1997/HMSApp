@@ -215,6 +215,10 @@ public class PharmacistController{
                         System.out.println("No replenishment requests found.");
                     }
                     break;
+                    
+                case 3:
+                    System.out.println("Returning to Main Menu...");
+                    break;
 
                 default:
                     System.out.println("Invalid choice. Please select a valid option.");
