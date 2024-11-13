@@ -7,7 +7,6 @@ import controller.RecordsController;
 import repository.RecordFileType;
 
 public class MedicalRecord extends HMSRecords {
-
     private String patientID;
     private String doctorID;
     private String bloodType;
@@ -20,6 +19,7 @@ public class MedicalRecord extends HMSRecords {
     public void setPatientID(String patientID) {
         this.patientID = patientID;
     }
+
     public String getDoctorID() {
         return doctorID;
     }
@@ -28,11 +28,9 @@ public class MedicalRecord extends HMSRecords {
         this.doctorID = doctorID;
     }
 
-
     public String getBloodType() {
         return bloodType;
     }
-
     public void setBloodType(String bloodType) {
         this.bloodType = bloodType;
     }
@@ -45,7 +43,6 @@ public class MedicalRecord extends HMSRecords {
         Diagnosis = diagnosis;
     }
 
-
     public MedicalRecord(String recordID,
                          LocalDateTime createdDate, LocalDateTime updatedDate,
                          RecordStatusType recordStatus,String patientID,String doctorID,
@@ -55,12 +52,9 @@ public class MedicalRecord extends HMSRecords {
         this.doctorID = doctorID;
         this.bloodType = bloodType;
         this.Diagnosis= diagnosis;
-                         }
+    }
 
 	public void addDiagnosis(model.Diagnosis newDiagnosis) {
 		this.Diagnosis.add(newDiagnosis);
 	}
-
-
-
 }

@@ -12,7 +12,6 @@ public class MedicalHistory {
         this.medicalHistoryList = medicalHistoryList;
         this.patient = patient;
     }
-    
 
     public List<MedicalRecord> getMedicalHistoryList() {
         return medicalHistoryList;
@@ -29,8 +28,6 @@ public class MedicalHistory {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
-
-
 
 
 }

@@ -16,7 +16,6 @@ import model.Prescription;
 
 public class AppointmentOutcomeRecordRepository extends Repository {
     private static final String folder = "data";
-
     private static boolean isRepoLoaded = false;
     private static final String AppointmentOutcomeRecordsfileName = "appointment_outcome_records.csv";
     //key value = patientID
@@ -31,7 +30,6 @@ public class AppointmentOutcomeRecordRepository extends Repository {
     public static void saveAppointmentOutcomeRecordRepository() {
         saveAppoinmentOutcomeRecordsToCSV(AppointmentOutcomeRecordsfileName, patientOutcomeRecords);
     }
-
     public static void saveAppoinmentOutcomeRecordsToCSV(String fileName,
                                                          HashMap<String, ArrayList<AppointmentOutcomeRecord>>patientOutcomeRecords) {
         String filePath = "./src/repository/" + folder + "/" + fileName;
@@ -71,7 +69,6 @@ public class AppointmentOutcomeRecordRepository extends Repository {
                 record.getAppointmentOutcomeStatus().toString()
         );
     }
-
     /**
      * Load AppointmentOutcomeRecord records from a CSV file, or create an empty
      * file if it doesn't exist
@@ -172,6 +169,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
 
         // Update the HashMap with the modified list
         patientOutcomeRecords.put(patientID, records);
+        System.out.println(records);
 
     }
     public static void addAppointmentOutcomeRecord(String patientID, AppointmentOutcomeRecord record) {
@@ -183,14 +181,10 @@ public class AppointmentOutcomeRecordRepository extends Repository {
         patientOutcomeRecords.put(patientID, records);
         saveAppointmentOutcomeRecordRepository();
     }
-
-
 //    public static void addOutcomeRecord(String patientID, AppointmentOutcomeRecord outcomeRecord) {
 //        // Add the record to the repository
 //    	patientOutcomeRecords.put(outcomeRecord.getAppointmentOutcomeRecordID(), outcomeRecord);
 //
 //    	saveAppointmentOutcomeRecordRepository();
 //    }
-
-
 }

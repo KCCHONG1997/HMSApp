@@ -53,7 +53,6 @@ public class UpdateMedicalRecordUI {
 
         int updateChoice = sc.nextInt();
         sc.nextLine(); // Consume newline left-over
-
         switch (updateChoice) {
             case 1 -> addTreatmentPlan(newDiagnosis);
             case 2 -> addPrescriptions(newDiagnosis);
@@ -128,6 +127,8 @@ public class UpdateMedicalRecordUI {
             System.out.print("Would you like to add another prescribed medication? (yes/no): ");
             addMore = sc.nextLine().trim().equalsIgnoreCase("yes");
         }
+        PrescriptionRepository.saveAlltoCSV();
+        RecordsRepository.saveAllRecordFiles();
 
         System.out.println("Finished adding prescribed medications for Diagnosis ID: " + newDiagnosis.getDiagnosisID());
     }

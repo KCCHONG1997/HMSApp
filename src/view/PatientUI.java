@@ -533,11 +533,6 @@ public class PatientUI extends MainUI {
 
 	    System.out.println("----------------------------------");
 	    RecordsRepository.saveAllRecordFiles();
-
 	}
-
-
-
-
 }
 

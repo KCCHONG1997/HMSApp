@@ -26,7 +26,6 @@ public class Diagnosis {
         this.prescription = prescription;
     }
 
-
 	public String getPatientID() {
         return patientID;
     }
