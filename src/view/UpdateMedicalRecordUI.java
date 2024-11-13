@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import enums.AppointmentStatus;
+import enums.PrescriptionStatus;
 import model.*;
 import repository.*;
 import controller.AppointmentController;
 import controller.MedicineController;
 
 public class UpdateMedicalRecordUI {
-
     private Doctor doctor;
     private MedicalRecord medicalRecord;
     private AppointmentRecord currentAppointmentRecord;
@@ -28,8 +28,8 @@ public class UpdateMedicalRecordUI {
     public void start() {
         // displaying currentAppointmentRecord that the doctor is working on
 
-        currentAppointmentRecord = AppointmentController.retrieveEarliestPendingAppointmentRecord(doctor.getUID(),
-                medicalRecord.getPatientID());
+        //currentAppointmentRecord = AppointmentController.retrieveEarliestConfirmedAppointmentRecord(doctor.getUID(),
+               // medicalRecord.getPatientID());
         System.out.println("\n-- Current Appointment Details --");
         System.out.println("Patient ID: " + medicalRecord.getPatientID());
         System.out.println("Appointment DateTime: " + currentAppointmentRecord.getAppointmentTime());
@@ -66,7 +66,12 @@ public class UpdateMedicalRecordUI {
         // Save updated medical record back to repository
         RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
         RecordsRepository.saveAllRecordFiles();
-        currentAppointmentRecord.setAppointmentStatus(AppointmentStatus.CONFIRMED);
+        currentAppointmentRecord.setAppointmentStatus(AppointmentStatus.COMPLETED);
+
+        // autogenerate the appointmentoutcomerecord with prescription , typpe of service == null, consultation = null, status incomplete
+        // put in the hash map
+        // save to repo
+
     }
 
     private Diagnosis addNewDiagnosis(String patientId, String diagnosisDescription) {
@@ -89,7 +94,7 @@ public class UpdateMedicalRecordUI {
         diagnosis.setTreatmentPlans(treatmentPlan);
         TreatmentPlansRepository.diagnosisToTreatmentPlansMap.put(diagnosis.getDiagnosisID(), treatmentPlan);
         TreatmentPlansRepository.saveAlltoCSV();
-        RecordsRepository.saveAllRecordFiles(); // Save changes
+        //RecordsRepository.saveAllRecordFiles(); // Save changes
         System.out.println("Treatment plan added successfully for Diagnosis ID: " + diagnosis.getDiagnosisID());
     }
 
@@ -117,7 +122,7 @@ public class UpdateMedicalRecordUI {
             // Add the prescribed medication
             String medicineID = medicine.getMedicineID();
             PrescribedMedication prescribedMedication = new PrescribedMedication(newDiagnosis.getDiagnosisID(), medicineID,
-                    quantity, periodDays, null, dosage);
+                    quantity, periodDays, PrescriptionStatus.PENDING, dosage);
             Prescription prescription = addPrescription(newDiagnosis, prescribedMedication);
             PrescriptionRepository.PRESCRIPTION_MAP.put(newDiagnosis.getDiagnosisID(), prescription);
 
@@ -128,7 +133,7 @@ public class UpdateMedicalRecordUI {
             addMore = sc.nextLine().trim().equalsIgnoreCase("yes");
         }
         PrescriptionRepository.saveAlltoCSV();
-        RecordsRepository.saveAllRecordFiles();
+        //RecordsRepository.saveAllRecordFiles();
 
         System.out.println("Finished adding prescribed medications for Diagnosis ID: " + newDiagnosis.getDiagnosisID());
     }
@@ -139,9 +144,11 @@ public class UpdateMedicalRecordUI {
             prescription = new Prescription(diagnosis.getDiagnosisID(), LocalDateTime.now(), new ArrayList<>());
             diagnosis.setPrescription(prescription);
         }
+
         prescription.addPrescribedMedication(prescribedMedication);
+        PrescribedMedicationRepository.addMedication(diagnosis.getDiagnosisID(), prescribedMedication);
         PrescribedMedicationRepository.saveAlltoCSV();
-        RecordsRepository.saveAllRecordFiles();
+        //RecordsRepository.saveAllRecordFiles();
         return prescription;
     }
 }

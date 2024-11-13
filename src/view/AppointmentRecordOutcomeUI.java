@@ -41,6 +41,8 @@ public class AppointmentRecordOutcomeUI extends MainUI {
     }
 
     public void recordAppointmentOutcome() {
+        // prompt doctor to select appointment outcome record that is not completed,
+        // then only update service etc, then set to completed
         System.out.println("\n--- Confirmed Appointments for Dr. " + doctor.getFullName() + " ---");
 
         ArrayList<AppointmentRecord> confirmedAppointments = new ArrayList<>();

@@ -74,11 +74,11 @@ public class AppointmentController {
         return appointments.get(0);
     }
 
-    public static AppointmentRecord retrieveEarliestPendingAppointmentRecord(String doctorID, String patientID){
+    public static AppointmentRecord retrieveEarliestConfirmedAppointmentRecord(String doctorID, String patientID){
         ArrayList<AppointmentRecord> pendingAppointments ;
         pendingAppointments = AppointmentController.getAppointmentsByDoctorAndPatient(doctorID,
                                                                                     patientID,
-                                                                                    AppointmentStatus.PENDING);
+                                                                                    AppointmentStatus.CONFIRMED);
 
         AppointmentRecord currentAppointmentRecord = AppointmentController.getEarliestAppointment(pendingAppointments);
         return currentAppointmentRecord;

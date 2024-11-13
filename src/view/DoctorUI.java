@@ -115,7 +115,7 @@ public class DoctorUI extends MainUI {
 			return;
 		}
 
-		AppointmentRecord currentAppointmentRecord = AppointmentController.retrieveEarliestPendingAppointmentRecord(doctor.getUID(),
+		AppointmentRecord currentAppointmentRecord = AppointmentController.retrieveEarliestConfirmedAppointmentRecord(doctor.getUID(),
 				medicalRecord.getPatientID());
 
 
