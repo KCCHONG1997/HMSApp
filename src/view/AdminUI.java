@@ -17,12 +17,26 @@ import controller.*;
 import enums.ReplenishStatus;
 import helper.Helper;
 
+/**
+ * This class represents the User Interface (UI) for the Admin in the Healthcare Management System (HMS).
+ * It allows the Admin to manage hospital staff, view appointments, and manage the medication inventory.
+ * It also supports the addition, update, removal of hospital staff and medicines.
+ */
+
 public class AdminUI extends MainUI {
 	private Admin admin;
+	/**
+     * Constructs an AdminUI instance for the given Admin.
+     * 
+     * @param admin The admin for whom the UI is created.
+     */
     public AdminUI(Admin admin) {
         this.admin = admin;
     }
     
+    /**
+     * Prints the available menu options for the Admin user.
+     */
 	@Override
     protected void printChoice() {
 		System.out.printf("Welcome! Admin --- %s ---\n", admin.getFullName());
@@ -35,11 +49,17 @@ public class AdminUI extends MainUI {
         System.out.println("5. Logout");
     }
     
+	/**
+     * Starts the Admin UI by showing the Admin Dashboard.
+     */
 	public void start() {
 		showAdminDashboard();
 	}
+	
+	/**
+     * Displays the Admin Dashboard and handles the Admin's menu choices.
+     */
     public void showAdminDashboard() {
-        Scanner sc = new Scanner(System.in);
         int choice = 0;
         do {
         	printChoice();
@@ -51,6 +71,7 @@ public class AdminUI extends MainUI {
                     break;
                 case 2: 
                 	printBreadCrumbs("HMS App UI > Admin Dashboard > View Appointments");
+                	AdminController.listAllAppointments();
                     break;
                 case 3: 
                 	printBreadCrumbs("HMS App UI > Admin Dashboard > View And Manage Medication Inventory");
@@ -69,9 +90,11 @@ public class AdminUI extends MainUI {
             }
         } while(choice != 8);
         
-        sc.close(); // Close the Scanner
     }
     
+    /**
+     * Displays the options for managing hospital staff (Doctors and Pharmacists).
+     */
     public static void viewAndManageStaff() {
     	System.out.println("Enter your choice");
 	    System.out.println("1. View Staff By Role");
@@ -123,6 +146,11 @@ public class AdminUI extends MainUI {
 	    }
 	}
     
+    /**
+     * Prompts the user to enter details for adding a new staff (Doctor or Pharmacist).
+     * 
+     * @param role The role of the personnel to be added (Doctor or Pharmacist).
+     */
     public static void addPersonnel(String role) {
         System.out.println("Enter Full Name: " );
         String fullName = Helper.readString();
@@ -143,7 +171,7 @@ public class AdminUI extends MainUI {
              String specialty = Helper.readString();
              System.out.println("Enter Medical License Number: " );
              String medicalLicenseNumber = Helper.readString();
-             System.out.println("Enter Date Join: (YYYY-MM-DD HH:MM): : " );
+             System.out.println("Enter Date Join (YYYY-MM-DD HH:MM): " );
              LocalDateTime dateJoin = readDate();
              System.out.println("Enter Years of Experiences: " );
              int yearsOfExperiences = Helper.readInt();
@@ -156,13 +184,19 @@ public class AdminUI extends MainUI {
         else {
         	System.out.println("Enter Pharmacist License Number: " );
         	String pharmacistLicenseNumber = Helper.readString();
-        	System.out.println("Enter Date Of Employment: " );
+        	System.out.println("Enter Date Of Employment (YYYY-MM-DD HH:MM) : " );
         	LocalDateTime dateOfEmployment = readDate();
         	Pharmacist pharmacist = new Pharmacist(fullName,idCard, username, email, phoneNo, "defaultPassword", DoB, gender,pharmacistLicenseNumber , dateOfEmployment);
         	HMSPersonnel personnel = (HMSPersonnel) pharmacist;
         	AdminController.addPersonnel(personnel);
         }
     }
+    
+    /**
+     * Prompts the user to enter details for updating an existing staff (Doctor or Pharmacist).
+     * 
+     * @param role The role of the personnel to be updated (Doctor or Pharmacist).
+     */
     public static void updatePersonnel(String role) {
     	System.out.println("Enter UID: " );
     	String UID = Helper.readString();
@@ -210,8 +244,14 @@ public class AdminUI extends MainUI {
             AdminController.updatePersonnel(pharmacist.getUID(), pharmacist);
         }
     }
+    
+    /**
+     * Prompts the user to enter the UID of a staff member to remove (Doctor or Pharmacist).
+     * 
+     * @param role The role of the personnel to be removed (Doctor or Pharmacist).
+     */
     public static void removePersonnel(String role) {
-    	System.out.println("Enter Staff UID");
+    	System.out.println("Enter Staff UID: ");
     	if(role == "Doctor") {
     		String uidDoctor = Helper.readString();
             AdminController.removePersonnel(uidDoctor, PersonnelFileType.DOCTORS);
@@ -222,6 +262,9 @@ public class AdminUI extends MainUI {
     	}
     }  
     
+    /**
+     * Displays options for managing the medication inventory.
+     */
     public static void viewAndManageMedicationInventory() {
     	System.out.println("Enter your choice");
 		System.out.println("1. View All Medicine");
@@ -242,6 +285,10 @@ public class AdminUI extends MainUI {
 	    	break;
 	    }
 	}
+    
+    /**
+     * Prompts the user to enter details for adding a new medicine to the inventory.
+     */
     public static void addMedicine() {
     	 System.out.print("Enter Medicine ID: ");
 		 String medicineID = Helper.readString();	    
@@ -264,6 +311,10 @@ public class AdminUI extends MainUI {
 		                                      inventoryStock, lowStockLevel, status, date, date);
 		 AdminController.addMedicine(medicine);
     }
+    
+    /**
+     * Prompts the user to update the details of an existing medicine in the inventory.
+     */
     public static void updateMedicine() {
 		 System.out.print("Enter Medicine ID: ");
 		 String medicineID = Helper.readString();
@@ -282,16 +333,27 @@ public class AdminUI extends MainUI {
 		 medicine.setLowStockLevel(lowStockLevel);
 		 AdminController.updateMedicine(medicineID, medicine);		
 	}
+    
+    /**
+     * Prompts the user to remove a medicine from the inventory.
+     */
     public static void removeMedicine() {
 		 System.out.print("Enter Medicine ID: ");
 		 String medicineID = Helper.readString();	
 		 AdminController.removeMedicine(medicineID);
 	}
 	
+    /**
+     * Approves a replenish request for a particular medicine.
+     */
     public static void approveReplenishRequest() {
     	 System.out.print("Enter Medicine ID: ");
 		 String medicineID = Helper.readString();
-		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);	    
+		 Medicine medicine = MedicineController.getMedicineByUID(medicineID);
+		 if(medicine.getReplenishStatus()!= ReplenishStatus.APPROVED){
+			 System.out.println("No Replenish Request Submitted for This Medicine!");
+			 return;
+		 }
 		 System.out.print("Enter New Manufacturer: ");
 		 String manufacturer = Helper.readString();
 		 medicine.setManufacturer(manufacturer);
@@ -312,6 +374,12 @@ public class AdminUI extends MainUI {
 		 medicine.setApprovedDate(approvedDate);
 		 AdminController.approveReplenishRequest(medicineID, medicine);
     }
+    
+    /**
+     * Reads a valid date from the user input.
+     * 
+     * @return The parsed date as a LocalDateTime object.
+     */
     public static LocalDateTime readDate() {
     	LocalDateTime date = null;
         boolean valid = false;

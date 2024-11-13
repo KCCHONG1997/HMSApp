@@ -184,7 +184,8 @@ public class RecordsRepository extends Repository {
                         DiagnosisRepository.patientDiagnosisRecords.getOrDefault(fields[4], new ArrayList<>())));
             } else if (type == AppointmentRecord.class) {
                 ArrayList<AppointmentOutcomeRecord> outcomeRecords = AppointmentOutcomeRecordRepository.patientOutcomeRecords
-                        .get(fields[4]);
+                        .get(fields[5]);
+                System.out.println(outcomeRecords);
                 AppointmentOutcomeRecord matchingRecord = null;
                 if (outcomeRecords != null) {
                     for (AppointmentOutcomeRecord record : outcomeRecords) {

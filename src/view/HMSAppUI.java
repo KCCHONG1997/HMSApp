@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import repository.AppointmentOutcomeRecordRepository;
 import repository.DiagnosisRepository;
+import repository.MedicineRepository;
 import repository.PersonnelRepository;
 import repository.PrescribedMedicationRepository;
 import repository.PrescriptionRepository;
@@ -61,12 +62,13 @@ public class HMSAppUI extends MainUI {
 	public void loadHMSRepository() {
 		// MUST BE LOADED IN THIS SEQUENCES RECORDS REPOSITORY LOADED LAST!
 		Repository.loadRepository(new PersonnelRepository());
-		Repository.loadRepository(new PrescribedMedicationRepository());
-		Repository.loadRepository(new TreatmentPlansRepository());
-		Repository.loadRepository(new PrescriptionRepository());
-		Repository.loadRepository(new DiagnosisRepository());
-		Repository.loadRepository(new AppointmentOutcomeRecordRepository());
-		Repository.loadRepository(new RecordsRepository());
+	       Repository.loadRepository(new PrescribedMedicationRepository());
+	       Repository.loadRepository(new TreatmentPlansRepository());
+	       Repository.loadRepository(new PrescriptionRepository());
+	       Repository.loadRepository(new DiagnosisRepository());
+	       Repository.loadRepository(new AppointmentOutcomeRecordRepository());
+	       Repository.loadRepository(new RecordsRepository());
+	       Repository.loadRepository(new MedicineRepository());
 	}
 
 	public Boolean isAllRepoLoaded() {

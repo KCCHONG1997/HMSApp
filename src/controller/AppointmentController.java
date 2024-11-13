@@ -19,6 +19,8 @@ import model.RecordStatusType;
 import repository.AppointmentOutcomeRecordRepository;
 import repository.RecordFileType;
 import repository.RecordsRepository;
+import repository.Repository;
+
 import java.util.Comparator;
 
 public class AppointmentController {
@@ -49,7 +51,7 @@ public class AppointmentController {
             if (doctorID.equals(appointment.getDoctorID()) &&
                     patientID.equals(appointment.getPatientID()) &&
                     appointment.getAppointmentStatus() == status) {
-
+            		
                 // Add to filtered list
                 filteredAppointments.add(appointment);
             }
@@ -59,6 +61,28 @@ public class AppointmentController {
 
         // If no appointments match the criteria
     }
+    public static AppointmentOutcomeRecord getAppointmentOutcomeByDoctorAndPatient(String doctorID, String patientID, LocalDateTime AppointmentTime) {
+        // Iterate through the values of the patientOutcomeRecords map
+        for (ArrayList<AppointmentOutcomeRecord> outcomeList : AppointmentOutcomeRecordRepository.patientOutcomeRecords.values()) {
+            // Iterate through each AppointmentOutcomeRecord in the outcomeList
+            for (AppointmentOutcomeRecord outcome : outcomeList) {
+                // Check if appointment matches both the doctorID, patientID, and has the same appointment time
+                if (doctorID.equals(outcome.getDoctorID()) &&
+                        patientID.equals(outcome.getPatientID()) &&
+                        AppointmentTime.isEqual(outcome.getAppointmentTime())) {
+                    // If a match is found, return the AppointmentOutcomeRecord
+                    return outcome;
+                }
+            }
+        }
+
+        // If no appointments match the criteria, return null
+        return null;
+    }
+
+
+
+    
 
 
 
