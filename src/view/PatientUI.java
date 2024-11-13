@@ -144,6 +144,13 @@ public class PatientUI extends MainUI {
 		ScheduleAppointmentUI scheduleAppointmentUI = new ScheduleAppointmentUI(patient);
 		scheduleAppointmentUI.start();
 	}
+	
+	// 5. rescheduleAppointment
+	public void rescheduleAppointment() {
+		System.out.println("\n--- Reschedule an Appointment ---");
+		RescheduleAppointmentUI rescheduleAppointmentUI= new RescheduleAppointmentUI(patient);
+		rescheduleAppointmentUI.start();
+	}
 		
 	
 	
@@ -266,97 +273,5 @@ public class PatientUI extends MainUI {
 		RecordsRepository.saveAllRecordFiles();
 	}
 
-	public void rescheduleAppointment() {
-		System.out.println("\n--- Reschedule an Appointment ---");
-
-		List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
-		int index = 1;
-
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patient.getUID().equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
-
-				confirmedAppointments.add(appointment);
-				String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
-
-				System.out.println(index++ + ". Doctor: " + (doctorName != null ? doctorName : "Unknown") + ", Date: "
-						+ appointment.getAppointmentTime().toLocalDate() + ", Time: "
-						+ appointment.getAppointmentTime().toLocalTime() + ", Status: "
-						+ appointment.getAppointmentStatus());
-			}
-		}
-
-		if (confirmedAppointments.isEmpty()) {
-			System.out.println("No appointments available for rescheduling.");
-			System.out.println("----------------------------------");
-			return;
-		}
-
-		System.out.println("----------------------------------");
-
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Enter the number of the appointment you wish to reschedule: ");
-		int choice;
-
-		try {
-			choice = Integer.parseInt(scanner.nextLine().trim());
-
-			if (choice >= 1 && choice <= confirmedAppointments.size()) {
-				AppointmentRecord selectedAppointment = confirmedAppointments.get(choice - 1);
-
-				System.out.println("\n--- Available Slots for Rescheduling ---");
-				List<AppointmentRecord> availableSlots = new ArrayList<>();
-				index = 1;
-
-				for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-					if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE
-							&& appointment.getDoctorID().equals(selectedAppointment.getDoctorID())) {
-
-						availableSlots.add(appointment);
-						System.out.println(index++ + ". Date: " + appointment.getAppointmentTime().toLocalDate()
-								+ ", Time: " + appointment.getAppointmentTime().toLocalTime() + ", Location: "
-								+ appointment.getLocation());
-					}
-				}
-
-				if (availableSlots.isEmpty()) {
-					System.out.println("No available slots for rescheduling with the selected doctor.");
-					System.out.println("----------------------------------");
-					return;
-				}
-
-				System.out.println("----------------------------------");
-
-				System.out.print("Enter the number of the new slot: ");
-				int newSlotChoice;
-
-				try {
-					newSlotChoice = Integer.parseInt(scanner.nextLine().trim());
-
-					if (newSlotChoice >= 1 && newSlotChoice <= availableSlots.size()) {
-						AppointmentRecord newSlot = availableSlots.get(newSlotChoice - 1);
-
-						selectedAppointment.setAppointmentStatus(AppointmentStatus.AVAILABLE); // Free up the previous
-																								// slot
-						selectedAppointment.setPatientID(null);
-						newSlot.setAppointmentStatus(AppointmentStatus.PENDING);
-						newSlot.setPatientID(patient.getUID());
-						System.out.println("Appointment has been successfully rescheduled.");
-
-					} else {
-						System.out.println("Invalid selection. Please enter a valid number.");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid input. Please enter a valid number.");
-				}
-			} else {
-				System.out.println("Invalid selection. Please enter a valid number.");
-			}
-		} catch (NumberFormatException e) {
-			System.out.println("Invalid input. Please enter a valid number.");
-		}
-
-		System.out.println("----------------------------------");
-		RecordsRepository.saveAllRecordFiles();
-	}
+	
 }
