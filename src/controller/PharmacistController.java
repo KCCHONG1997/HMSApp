@@ -1,66 +1,106 @@
 package controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import enums.PrescriptionStatus;
 import enums.ReplenishStatus;
 import helper.Helper;
 import model.AppointmentOutcomeRecord;
+import model.Prescription;
+import model.PrescribedMedication;
 import model.Medicine;
-//import model.PrescriptionItem;
 import repository.AppointmentOutcomeRecordRepository;
 import repository.MedicineRepository;
 
 public class PharmacistController{
 
-//    /**
-//     * View Appointment Outcome Records to fulfill prescription orders from doctors.
-//     */
-//    public static void viewAppointmentOutcomeRecords() {
-//        System.out.print("Enter Appointment ID: ");
-//        String appointmentID = Helper.readString();
-//
-//        AppointmentOutcomeRecord outcomeRecord = AppointmentRepository.getAppointmentOutcomeRecord(appointmentID);
-//        if (outcomeRecord != null) {
-//            System.out.println("Appointment Outcome for ID: " + appointmentID);
-//            for (PrescriptionItem prescription : outcomeRecord.getPrescriptions()) {
-//                System.out.println("Medicine: " + prescription.getMedicine().getName());
-//                System.out.println("Quantity: " + prescription.getMedicineQuantity());
-//                System.out.println("Status: " + prescription.getStatus());
-//                System.out.println();
-//            }
-//        } else {
-//            System.out.println("Error: Appointment Outcome Record not found.");
-//        }
-//    }
+    /**
+     * View Appointment Outcome Records to fulfill prescription orders from doctors.
+     * This method retrieves and displays appointment outcome details for a given record ID.
+     */
+    public static void viewAppointmentOutcomeRecords() {
+        System.out.print("Enter Patient ID to view appointment outcome records: ");
+        String patientID = Helper.readString();
 
-//    /**
-//     * Update the status of a specific prescription in an appointment outcome record.
-//     */
-//    public static void updatePrescriptionStatus() {
-//        System.out.print("Enter Appointment ID: ");
-//        String appointmentID = Helper.readString();
-//        System.out.print("Enter Medicine ID to update: ");
-//        String medicineID = Helper.readString();
-//        System.out.print("Enter New Status (e.g., DISPENSED): ");
-//        String newStatus = Helper.readString().toUpperCase();
-//
-//        AppointmentOutcomeRecord outcomeRecord = AppointmentRepository.getAppointmentOutcomeRecord(appointmentID);
-//        if (outcomeRecord != null) {
-//            boolean found = false;
-//            for (PrescriptionItem prescription : outcomeRecord.getPrescriptions()) {
-//                if (prescription.getMedicine().getMedicineID().equals(medicineID)) {
-//                    prescription.setStatus(newStatus);  // Update status
-//                    System.out.println("Updated status for medicine " + medicineID + " to " + newStatus);
-//                    found = true;
-//                    break;
-//                }
-//            }
-//            if (!found) {
-//                System.out.println("Error: Prescription for medicine ID " + medicineID + " not found in appointment record.");
-//            }
-//        } else {
-//            System.out.println("Error: Appointment Outcome Record not found.");
-//        }
-//    }
+        if (AppointmentOutcomeRecordRepository.patientOutcomeRecords.containsKey(patientID)) {
+            for (AppointmentOutcomeRecord record : AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(patientID)) {
+                System.out.println("Appointment Outcome for Record ID: " + record.getAppointmentOutcomeRecordID());
+                System.out.println("Patient ID: " + record.getPatientID());
+                System.out.println("Doctor ID: " + record.getDoctorID());
+                System.out.println("Diagnosis ID: " + record.getDiagnosisID());
+                System.out.println("Appointment Time: " + record.getAppointmentTime());
+                System.out.println("Type of Service: " + record.getTypeOfService());
+                System.out.println("Consultation Notes: " + record.getConsultationNotes());
+                System.out.println("Appointment Outcome Status: " + record.getAppointmentOutcomeStatus());
+
+                Prescription prescription = record.getPrescription();
+                if (prescription != null && prescription.getMedications() != null) {
+                    System.out.println("Prescription Details:");
+                    for (PrescribedMedication medication : prescription.getMedications()) {
+                        System.out.println("Medicine ID: " + medication.getMedicineID());
+                        System.out.println("Quantity: " + medication.getMedicineQuantity());
+                        System.out.println("Dosage: " + medication.getDosage());
+                        System.out.println("Period (days): " + medication.getPeriodDays());
+                        System.out.println("Prescription Status: " + medication.getPrescriptionStatus());
+                        System.out.println();
+                    }
+                } else {
+                    System.out.println("No prescription details available for this appointment outcome record.");
+                }
+                System.out.println("------------------------------------------------------");
+            }
+        } else {
+            System.out.println("No appointment outcome records found for patient ID: " + patientID);
+        }
+    }
+
+    /**
+     * Update the status of a specific prescription in an appointment outcome record.
+     * This method allows pharmacists to update the status of a prescribed medicine in the record.
+     */
+    public static void updatePrescriptionStatus() {
+        System.out.print("Enter Patient ID for appointment outcome record: ");
+        String patientID = Helper.readString();
+        System.out.print("Enter Appointment Outcome Record ID to update: ");
+        String appointmentOutcomeRecordID = Helper.readString();
+        System.out.print("Enter Medicine ID to update: ");
+        String medicineID = Helper.readString();
+        System.out.print("Enter New Status (e.g., DISPENSED): ");
+        PrescriptionStatus newStatus = PrescriptionStatus.valueOf(Helper.readString().toUpperCase());
+
+        ArrayList<AppointmentOutcomeRecord> records = AppointmentOutcomeRecordRepository.patientOutcomeRecords.get(patientID);
+        if (records != null) {
+            boolean recordFound = false;
+            for (AppointmentOutcomeRecord record : records) {
+                if (record.getAppointmentOutcomeRecordID().equals(appointmentOutcomeRecordID)) {
+                    recordFound = true;
+                    boolean medicationFound = false;
+
+                    for (PrescribedMedication medication : record.getPrescription().getMedications()) {
+                        if (medication.getMedicineID().equals(medicineID)) {
+                            medication.setPrescriptionStatus(newStatus);  // Update status
+                            System.out.println("Updated status for medicine " + medicineID + " to " + newStatus);
+                            medicationFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!medicationFound) {
+                        System.out.println("Error: Prescription for medicine ID " + medicineID + " not found in appointment record.");
+                    }
+                    // Save changes to repository after updating
+                    AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
+                    break;
+                }
+            }
+            if (!recordFound) {
+                System.out.println("Error: Appointment Outcome Record ID " + appointmentOutcomeRecordID + " not found for patient ID " + patientID);
+            }
+        } else {
+            System.out.println("Error: No appointment outcome records found for patient ID " + patientID);
+        }
+    }
 
 	/**
 	 * Monitor inventory levels of all medicines, check for expired medicines, and allow removal.
@@ -249,11 +289,11 @@ public class PharmacistController{
             
             switch (choice) {
                 case 1:
-                    //viewAppointmentOutcomeRecords();
-                    //break;
+                    viewAppointmentOutcomeRecords();
+                    break;
                 case 2:
-                    //updatePrescriptionStatus();
-                    //break;
+                    updatePrescriptionStatus();
+                    break;
                 case 3:
                     monitorInventory();
                     break;

@@ -12,6 +12,7 @@ public class Prescription {
         this.prescriptionDate = prescriptionDate;
         this.medications = medications;
     }
+
     public String getDiagnosisID() {
         return diagnosisID;
     }
@@ -37,6 +38,11 @@ public class Prescription {
     }
 
 
+    public void addPrescribedMedication(model.PrescribedMedication newPrescribedMedication) {
+        this.medications.add(newPrescribedMedication);
+    }
 
 
 }
+
+
