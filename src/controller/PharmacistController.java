@@ -12,6 +12,7 @@ import model.PrescribedMedication;
 import model.Medicine;
 import repository.AppointmentOutcomeRecordRepository;
 import repository.MedicineRepository;
+import repository.PrescribedMedicationRepository;
 
 public class PharmacistController{
 
@@ -90,6 +91,7 @@ public class PharmacistController{
                         System.out.println("Error: Prescription for medicine ID " + medicineID + " not found in appointment record.");
                     }
                     // Save changes to repository after updating
+                    PrescribedMedicationRepository.saveAlltoCSV();
                     AppointmentOutcomeRecordRepository.saveAppointmentOutcomeRecordRepository();
                     break;
                 }
