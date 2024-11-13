@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.AppointmentController;
 import controller.DoctorController;
 import enums.AppointmentStatus;
 import helper.Helper;
@@ -51,7 +52,7 @@ public class RescheduleAppointmentUI extends MainUI {
 				break;
 			}
 
-			List<AppointmentRecord> confirmedAppointments = getConfirmedAppointments();
+			List<AppointmentRecord> confirmedAppointments = AppointmentController.getConfirmedAppointments(patient.getUID());
 			if (confirmedAppointments.isEmpty()) {
 				System.out.println("No confirmed appointments to reschedule.");
 				return;
@@ -63,9 +64,9 @@ public class RescheduleAppointmentUI extends MainUI {
 			if (choice >= 1 && choice <= confirmedAppointments.size()) {
 				AppointmentRecord selectedAppointment = confirmedAppointments.get(choice - 1);
 
-				List<AppointmentRecord> availableSlots = getAvailableSlotsForDoctor(selectedAppointment.getDoctorID());
+				List<AppointmentRecord> availableSlots = AppointmentController.getAvailableAppointmentSlotsFromAllDoctor();
 				if (availableSlots.isEmpty()) {
-					System.out.println("No available slots for rescheduling with the selected doctor.");
+					System.out.println("No available slots for rescheduling for all the doctors.");
 					return;
 				}
 
@@ -92,17 +93,6 @@ public class RescheduleAppointmentUI extends MainUI {
 		}
 	}
 
-	private List<AppointmentRecord> getConfirmedAppointments() {
-		List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patient.getUID().equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
-				confirmedAppointments.add(appointment);
-			}
-		}
-		return confirmedAppointments;
-	}
-
 	private void displayConfirmedAppointments(List<AppointmentRecord> confirmedAppointments) {
 		System.out.println("\n--- Confirmed Appointments ---");
 		int index = 1;
@@ -120,16 +110,6 @@ public class RescheduleAppointmentUI extends MainUI {
 			System.out.println("---------------------------------------");
 		}
 
-	}
-
-	private List<AppointmentRecord> getAvailableSlotsForDoctor(String doctorId) {
-		List<AppointmentRecord> availableSlots = new ArrayList<>();
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
-				availableSlots.add(appointment);
-			}
-		}
-		return availableSlots;
 	}
 
 	private void displayAvailableSlots(List<AppointmentRecord> availableSlots) {

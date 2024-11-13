@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Scanner;
 
 import HMSApp.HMSMain;
+import controller.AppointmentController;
 import controller.AuthenticationController;
 import controller.DoctorController;
 import controller.HMSPersonnelController;
 import controller.PatientController;
 import controller.RecordsController;
 import enums.AppointmentStatus;
+import helper.Helper;
 import model.AppointmentRecord;
 import model.Diagnosis;
 import model.Doctor;
@@ -45,7 +47,7 @@ public class PatientUI extends MainUI {
 		System.out.println("6. Cancel an Appointment");
 		System.out.println("7. View Scheduled Appointments");
 		System.out.println("8. View Past Appointment Outcome Records");
-		System.out.println("9. Acknowledge Rejected Appointment Slots");
+		System.out.println("9. Acknowledge Rejected Appointment Slots"); // my added
 		System.out.println("10. Logout");
 	}
 
@@ -60,23 +62,23 @@ public class PatientUI extends MainUI {
 			printChoice();
 			choice = sc.nextInt();
 			switch (choice) {
-			case 1 -> viewPatientMedicalRecord(patient.getUID()); 
+			case 1 -> viewPatientMedicalRecord(patient.getUID());
 			case 2 -> updatePatientPrivateInfo(patient.getUID());
 			case 3 -> viewAvailableAppointmentSlots();
-			case 4 -> scheduleAppointment(); 
+			case 4 -> scheduleAppointment();
 			case 5 -> rescheduleAppointment();
 			case 6 -> cancelAppointment();
 			case 7 -> viewScheduledAppointments();
-			case 8 -> cancelAppointment(); // Code for viewing past appointment outcomes
+			case 8 -> viewPastAppointmentOutcomes();
 			case 9 -> acknowledgeRejectedAppointments();
 			case 10 -> System.out.println("Logging out...");
 			default -> System.out.println("Invalid choice!");
 			}
 		} while (choice != 10);
 
-		sc.close(); // Close the Scanner
+		sc.close();
 	}
-	
+
 	// 1. viewPatientMedicalRecordUI
 	public void viewPatientMedicalRecord(String patientID) {
 		System.out.println("\n--- Patient Medical Records for Patient ID: " + patientID + " ---");
@@ -110,32 +112,30 @@ public class PatientUI extends MainUI {
 		}
 		System.out.println("---------------------------------------");
 	}
-	
-	
+
 	// 3. viewAvailableAppointmentSlots
 	public static void viewAvailableAppointmentSlots() {
-		System.out.println("\n--- Available Appointment Slots :  ---");
-		boolean found = false;
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
-				found = true;
-				String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
-				System.out.println("Doctor ID        : " + appointment.getDoctorID());
-		        System.out.println("Doctor           : " + doctorName);
-				System.out.println("Day              : " + appointment.getAppointmentTime().getDayOfWeek());
-		        System.out.println("Date             : " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		        System.out.println("Time             : " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-		        System.out.println("Location         : " + appointment.getLocation());
-		        System.out.println("---------------------------------------");
-			}
-		}
+		System.out.println("\n--- Available Appointment Slots ---");
+		List<AppointmentRecord> availableSlots = AppointmentController.getAvailableAppointmentSlotsFromAllDoctor();
 
-		if (!found) {
+		if (availableSlots.isEmpty()) {
 			System.out.println("No appointments found");
+			System.out.println("---------------------------------------");
+			return;
 		}
 
-		System.out.println("---------------------------------------");
-
+		for (AppointmentRecord appointment : availableSlots) {
+			String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
+			System.out.println("Doctor ID        : " + appointment.getDoctorID());
+			System.out.println("Doctor           : " + doctorName);
+			System.out.println("Day              : " + appointment.getAppointmentTime().getDayOfWeek());
+			System.out.println("Date             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			System.out.println("Time             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+			System.out.println("Location         : " + appointment.getLocation());
+			System.out.println("---------------------------------------");
+		}
 	}
 
 	// 4. scheduleAppointment
@@ -144,124 +144,46 @@ public class PatientUI extends MainUI {
 		ScheduleAppointmentUI scheduleAppointmentUI = new ScheduleAppointmentUI(patient);
 		scheduleAppointmentUI.start();
 	}
-	
+
 	// 5. rescheduleAppointment
 	public void rescheduleAppointment() {
 		System.out.println("\n--- Reschedule an Appointment ---");
-		RescheduleAppointmentUI rescheduleAppointmentUI= new RescheduleAppointmentUI(patient);
+		RescheduleAppointmentUI rescheduleAppointmentUI = new RescheduleAppointmentUI(patient);
 		rescheduleAppointmentUI.start();
 	}
-		
-	
-	
-	public void acknowledgeRejectedAppointments() {
-		System.out.println("\n--- Acknowledge Rejected Appointments ---");
 
-		boolean found = false;
-		Scanner scanner = new Scanner(System.in);
-
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (appointment.getAppointmentStatus() == AppointmentStatus.CANCELED
-					&& patient.getUID().equals(appointment.getPatientID())) { // Check if the appointment belongs to the
-																				// current user
-				found = true;
-				String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
-
-				System.out.println("Day: " + appointment.getAppointmentTime().getDayOfWeek() + ", Time: "
-						+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-						+ ", Location: " + appointment.getLocation() + ", Doctor ID: " + appointment.getDoctorID()
-						+ ", Doctor: " + doctorName);
-				System.out.println("This appointment has been cancelled by the doctor.");
-
-				System.out.print("Do you acknowledge this cancellation? (yes/no): ");
-				String userResponse = scanner.nextLine().trim().toLowerCase();
-
-				if (userResponse.equals("yes")) {
-					appointment.setAppointmentStatus(AppointmentStatus.AVAILABLE);
-					appointment.setPatientID(null);
-					System.out.println("The appointment status has been changed to AVAILABLE.");
-				} else {
-					System.out.println("The appointment remains CANCELLED.");
-				}
-			}
-		}
-
-		if (!found) {
-			System.out.println("No cancelled appointments found for your user ID.");
-		}
-
-		System.out.println("-----------------------------------------");
-		RecordsRepository.saveAllRecordFiles();
-	}
-
-	public static void viewScheduledAppointments() {
-		System.out.println("\n--- Scheduled Appointments ---");
-
-		boolean found = false;
-
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patient.getUID().equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() != AppointmentStatus.AVAILABLE) {
-
-				found = true;
-				String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
-
-				System.out.println("Doctor: " + (doctorName != null ? doctorName : "Unknown") + ", Date: "
-						+ appointment.getAppointmentTime().toLocalDate() + ", Time: "
-						+ appointment.getAppointmentTime().toLocalTime() + ", Status: "
-						+ appointment.getAppointmentStatus());
-			}
-		}
-
-		if (!found) {
-			System.out.println("No scheduled appointments found.");
-		}
-
-		System.out.println("----------------------------------");
-	}
-
+	// 6. cancelAppointment
 	public void cancelAppointment() {
 		System.out.println("\n--- Scheduled Appointments ---");
 
-		List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
-		int index = 1;
-
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patient.getUID().equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
-
-				confirmedAppointments.add(appointment);
-				String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
-
-				System.out.println(index++ + ". Doctor: " + (doctorName != null ? doctorName : "Unknown") + ", Date: "
-						+ appointment.getAppointmentTime().toLocalDate() + ", Time: "
-						+ appointment.getAppointmentTime().toLocalTime() + ", Status: "
-						+ appointment.getAppointmentStatus());
-			}
-		}
-
+		List<AppointmentRecord> confirmedAppointments = AppointmentController
+				.getConfirmedAppointments(patient.getUID());
 		if (confirmedAppointments.isEmpty()) {
-			System.out.println("No confirmed appointments found.");
-			System.out.println("----------------------------------");
+			System.out.println("No confirmed appointments to cancel.");
+			System.out.println("---------------------------------------");
 			return;
 		}
-
-		System.out.println("----------------------------------");
-
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Enter the number of the appointment you wish to cancel: ");
-		int choice;
+		int index = 1;
+		for (AppointmentRecord appointment : confirmedAppointments) {
+			String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
+			System.out.println(index++ + ")");
+			System.out.println("Doctor ID        : " + appointment.getDoctorID());
+			System.out.println("Doctor           : " + doctorName);
+			System.out.println("Day              : " + appointment.getAppointmentTime().getDayOfWeek());
+			System.out.println("Date             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			System.out.println("Time             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+			System.out.println("Location         : " + appointment.getLocation());
+			System.out.println("---------------------------------------");
+		}
 
 		try {
-			choice = Integer.parseInt(scanner.nextLine().trim());
+			int choice = Helper.readInt("Enter the number of the appointment you wish to cancel: ");
 
-			if (choice >= 1 && choice <= confirmedAppointments.size()) {
-				AppointmentRecord selectedAppointment = confirmedAppointments.get(choice - 1);
-
-				selectedAppointment.setAppointmentStatus(AppointmentStatus.AVAILABLE);
-				selectedAppointment.setPatientID(null);
+			boolean success = AppointmentController.cancelAppointment(choice, confirmedAppointments);
+			if (success) {
 				System.out.println("The appointment has been successfully cancelled.");
-
 			} else {
 				System.out.println("Invalid selection. Please enter a valid number.");
 			}
@@ -270,8 +192,79 @@ public class PatientUI extends MainUI {
 		}
 
 		System.out.println("----------------------------------");
-		RecordsRepository.saveAllRecordFiles();
+
 	}
 
-	
+	// 7. viewScheduledAppointments
+	public static void viewScheduledAppointments() {
+		System.out.println("\n--- Scheduled Appointments ---");
+
+		List<AppointmentRecord> scheduledSlots = AppointmentController.getAllAppointments(patient.getUID());
+
+		if (scheduledSlots.isEmpty()) {
+			System.out.println("No appointments found");
+			System.out.println("---------------------------------------");
+			return;
+		}
+
+		for (AppointmentRecord appointment : scheduledSlots) {
+			String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
+			System.out.println("Doctor ID        : " + appointment.getDoctorID());
+			System.out.println("Doctor           : " + doctorName);
+			System.out.println("Day              : " + appointment.getAppointmentTime().getDayOfWeek());
+			System.out.println("Date             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			System.out.println("Time             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+			System.out.println("Location         : " + appointment.getLocation());
+			System.out.println("Status           : " + appointment.getAppointmentStatus());
+			System.out.println("---------------------------------------");
+		}
+	}
+
+	// 8. viewPastAppointmentOutcomes
+	public void viewPastAppointmentOutcomes() {
+
+	}
+
+	// 9. acknowledgeRejectedAppointments
+	public void acknowledgeRejectedAppointments() {
+		System.out.println("\n--- Acknowledge Rejected Appointments ---");
+
+		List<AppointmentRecord> canceledAppointments = AppointmentController
+				.getCancelledAppointmentSlots(patient.getUID());
+		if (canceledAppointments.isEmpty()) {
+			System.out.println("No canceled appointments found.");
+			System.out.println("---------------------------------------");
+			return;
+		}
+
+		for (AppointmentRecord appointment : canceledAppointments) {
+			String doctorName = DoctorController.getDoctorNameById(appointment.getDoctorID());
+			System.out.println("Doctor ID        : " + appointment.getDoctorID());
+			System.out.println("Doctor           : " + doctorName);
+			System.out.println("Day              : " + appointment.getAppointmentTime().getDayOfWeek());
+			System.out.println("Date             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			System.out.println("Time             : "
+					+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+			System.out.println("Location         : " + appointment.getLocation());
+			System.out.println("---------------------------------------");
+
+			String userResponse = Helper.readString("Do you acknowledge this cancellation? (yes/no): ");
+
+			if ("yes".equalsIgnoreCase(userResponse)) {
+				appointment.setAppointmentStatus(AppointmentStatus.AVAILABLE);
+				appointment.setPatientID(null);
+				System.out.println("Thank you for acknowledging the cancelled slots.");
+				RecordsRepository.saveAllRecordFiles();
+
+			} else {
+				System.out.println("The appointment is not acknowledged");
+			}
+		}
+
+		System.out.println("-----------------------------------------");
+	}
+
 }

@@ -98,7 +98,7 @@ public class RecordsController {
         return false;
     }
 
-    private Boolean updatePaymentRecord(String recordID, LocalDateTime updatedDate) {
+	private Boolean updatePaymentRecord(String recordID, LocalDateTime updatedDate) {
         PaymentRecord record = RecordsRepository.PAYMENT_RECORDS.get(recordID);
         if (record != null) {
             record.setUpdatedDate(updatedDate);
@@ -164,18 +164,18 @@ public class RecordsController {
         return null;
     }
 
-public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
-    ArrayList<MedicalRecord> recordsByDoctor = new ArrayList<>(); // Initialize an empty list
-    
-    if (RecordsRepository.isRepoLoaded()) {
-        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
-            if (record.getDoctorID().equals(doctorID)) {
-                recordsByDoctor.add(record); // Add matching records to the list
-            }
-        }
-    }
-    return recordsByDoctor; // Return the list, even if it might be empty
-}
+	public ArrayList<MedicalRecord> getMedicalRecordsByDoctorID(String doctorID) {
+	    ArrayList<MedicalRecord> recordsByDoctor = new ArrayList<>(); // Initialize an empty list
+	    
+	    if (RecordsRepository.isRepoLoaded()) {
+	        for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+	            if (record.getDoctorID().equals(doctorID)) {
+	                recordsByDoctor.add(record); // Add matching records to the list
+	            }
+	        }
+	    }
+	    return recordsByDoctor; // Return the list, even if it might be empty
+	}
 
 
     public MedicalRecord getMedicalRecordbyID(String recordID) {

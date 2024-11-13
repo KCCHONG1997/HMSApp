@@ -66,6 +66,7 @@ public class ScheduleAppointmentUI extends MainUI {
 			try {
 				appointmentTime = LocalDateTime.parse(dateInput + " " + timeInput,
 						DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
 			} catch (Exception e) {
 				System.out.println("Invalid date and time format. Please try again.");
 				continue;
