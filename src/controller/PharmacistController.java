@@ -3,10 +3,10 @@ package controller;
 import java.time.LocalDateTime;
 import enums.ReplenishStatus;
 import helper.Helper;
-//import model.AppointmentOutcomeRecord;
+import model.AppointmentOutcomeRecord;
 import model.Medicine;
 //import model.PrescriptionItem;
-//import repository.AppointmentRepository;
+import repository.AppointmentOutcomeRecordRepository;
 import repository.MedicineRepository;
 
 public class PharmacistController{
