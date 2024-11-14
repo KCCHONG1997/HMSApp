@@ -63,15 +63,15 @@ public class DoctorUI extends MainUI {
 			printChoice();
 			choice = sc.nextInt();
 			switch (choice) {
-				case 1 -> viewPatientMedicalRecord(doctor.getUID());
-				case 2 -> selectAndUpdateMedicalRecord();
-				case 3 -> viewPersonalSchedule();
-				case 4 -> availabilityForAppointments(); // Open new UI for setting availability
-				case 5 -> acceptOrDeclineAppointmentRequests();
-				case 6 -> viewUpcomingAppointments();
-				case 7 -> recordAppointmentOutcome();
-				case 8 -> System.out.println("Logging out...");
-				default -> System.out.println("Invalid choice!");
+				case 1 : viewPatientMedicalRecord(doctor.getUID());break;
+				case 2 : selectAndUpdateMedicalRecord();break;
+				case 3 : viewPersonalSchedule();break;
+				case 4 : availabilityForAppointments();break; // Open new UI for setting availability
+				case 5 : acceptOrDeclineAppointmentRequests();break;
+				case 6 : viewUpcomingAppointments();break;
+				case 7 : recordAppointmentOutcome();break;
+				case 8 : System.out.println("Logging out..."); HMSMain.main(null); break;
+				default : System.out.println("Invalid choice!");
 			}
 		} while (choice != 8);
 

@@ -107,7 +107,7 @@ public class RecordsRepository extends Repository {
                     appRecord.getDoctorID(),
                     appRecord.getAppointmentTime().toString(),
                     appRecord.getLocation(),
-                    appRecord.getAppointmentStatus().toString());
+                    (outcome != null)?appRecord.getAppointmentStatus().toString() : "");
             // AppointmentOutcomeRecord appointmentOutcomeRecord,
         } else if (record instanceof PaymentRecord) {
             PaymentRecord payRecord = (PaymentRecord) record;
