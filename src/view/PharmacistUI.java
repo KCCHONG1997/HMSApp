@@ -50,14 +50,14 @@ public class PharmacistUI extends MainUI{
         	printChoice();
             choice = Helper.readInt("");
             switch(choice) {
-//          case 1:
-//          // Call the method to view appointment outcome records
-//          PharmacistController.viewAppointmentOutcomeRecords();
-//          break;
-//      case 2:
-//          // Call the method to update prescription status
-//          PharmacistController.updatePrescriptionStatus();
-//          break;
+            case 1:
+        	  // Call the method to view appointment outcome records
+        	  PharmacistController.viewAppointmentOutcomeRecords();
+          		break;
+          	case 2:
+          		// Call the method to update prescription status
+          		PharmacistController.updatePrescriptionStatus();
+          	break;
             case 3:
                 // Call the method to view medication inventory
                 PharmacistController.monitorInventory();
