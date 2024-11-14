@@ -2,63 +2,44 @@ package model;
 
 import java.time.LocalDateTime;
 
+import enums.AppointmentOutcomeStatus;
 import enums.AppointmentStatus;
 
 public class AppointmentOutcomeRecord {
-	private LocalDateTime appointmentTime;
-	private String typeOfService;
-	private Prescription prescription;
-	private String consultationNotes;
+
 	private String patientID;
 	private String doctorID;
+	private String diagnosisID;
+	private String appointmentOutcomeRecordID;
+	private LocalDateTime appointmentTime;
+	private Prescription prescription;
+	private String typeOfService;
+	private String consultationNotes;
 
-	public AppointmentOutcomeRecord(
-			LocalDateTime appointmentTime,
-			String typeOfService,
-			Prescription prescription,
-			String consultationNotes,
-			String patientID,
-			String doctorID) {
-		this.appointmentTime = appointmentTime;
-		this.typeOfService = typeOfService;
-		this.prescription = prescription;
-		this.consultationNotes = consultationNotes;
+
+
+	private AppointmentOutcomeStatus appointmentOutcomeStatus;
+
+
+	public AppointmentOutcomeRecord(String patientID,
+									String doctorID,
+									String diagnosisID,
+									String appointmentOutcomeRecordID,
+									LocalDateTime appointmentTime,
+									Prescription prescription,
+									String typeOfService,
+									String consultationNotes,
+									AppointmentOutcomeStatus appointmentOutcomeStatus) {
 		this.patientID = patientID;
 		this.doctorID = doctorID;
-	}
-
-	public LocalDateTime getAppointmentTime() {
-		return appointmentTime;
-	}
-
-	public void setAppointmentTime(LocalDateTime appointmentTime) {
+		this.diagnosisID = diagnosisID;
+		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
 		this.appointmentTime = appointmentTime;
-	}
-
-	public String getTypeOfService() {
-		return typeOfService;
-	}
-
-	public void setTypeOfService(String typeOfService) {
-		this.typeOfService = typeOfService;
-	}
-
-	public Prescription getPrescription() {
-		return prescription;
-	}
-
-	public void setPrescription(Prescription prescription) {
 		this.prescription = prescription;
-	}
-
-	public String getConsultationNotes() {
-		return consultationNotes;
-	}
-
-	public void setConsultationNotes(String consultationNotes) {
+		this.typeOfService = typeOfService;
 		this.consultationNotes = consultationNotes;
+		this.appointmentOutcomeStatus = appointmentOutcomeStatus;
 	}
-
 	public String getPatientID() {
 		return patientID;
 	}
@@ -75,4 +56,60 @@ public class AppointmentOutcomeRecord {
 		this.doctorID = doctorID;
 	}
 
+	public String getDiagnosisID() {
+		return diagnosisID;
+	}
+
+	public void setDiagnosisID(String diagnosisID) {
+		this.diagnosisID = diagnosisID;
+	}
+
+	public String getAppointmentOutcomeRecordID() {
+		return appointmentOutcomeRecordID;
+	}
+
+	public void setAppointmentOutcomeRecordID(String appointmentOutcomeRecordID) {
+		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
+	}
+
+	public LocalDateTime getAppointmentTime() {
+		return appointmentTime;
+	}
+
+	public void setAppointmentTime(LocalDateTime appointmentTime) {
+		this.appointmentTime = appointmentTime;
+	}
+
+	public Prescription getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(Prescription prescription) {
+		this.prescription = prescription;
+	}
+
+	public String getTypeOfService() {
+		return typeOfService;
+	}
+
+	public void setTypeOfService(String typeOfService) {
+		this.typeOfService = typeOfService;
+	}
+
+	public String getConsultationNotes() {
+		return consultationNotes;
+	}
+
+	public void setConsultationNotes(String consultationNotes) {
+		this.consultationNotes = consultationNotes;
+	}
+	public AppointmentOutcomeStatus getAppointmentOutcomeStatus() {
+		return appointmentOutcomeStatus;
+	}
+
+	public void setAppointmentOutcomeStatus(AppointmentOutcomeStatus appointmentOutcomeStatus) {
+		this.appointmentOutcomeStatus = appointmentOutcomeStatus;
+	}
+
 }
+

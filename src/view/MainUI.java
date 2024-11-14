@@ -3,13 +3,16 @@ package view;
 public abstract class MainUI {
 
     protected abstract void printChoice();
+
     public abstract void start();
+
     public MainUI() {
     }
 
     /**
      * Method to print breadcrumbs for navigation purposes.
      * Breadcrumbs help users track their current location in the app.
+     * 
      * @param breadcrumb Breadcrumbs description showing the current view context.
      */
     protected void printBreadCrumbs(String breadcrumb) {
@@ -20,7 +23,7 @@ public abstract class MainUI {
         System.out.println(
                 "╚══════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
     }
-    
+
     public void printWarning(String breadcrumb) {
         String spaces = String.format("%" + (105 - breadcrumb.length()) + "s", "");
         System.out.println("[ERROR !!! " + breadcrumb + spaces + "!!!]");
@@ -39,7 +42,8 @@ public abstract class MainUI {
      * Adds structure to the console output for readability.
      */
     protected void printSeparator() {
-        System.out.println("===========================================================================================");
+        System.out
+                .println("===========================================================================================");
     }
 
     /**

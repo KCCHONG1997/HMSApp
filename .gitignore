@@ -6,4 +6,5 @@ bin/*
 
 .DS_Store
 Thumbs.db
+/bin/
 .classpath

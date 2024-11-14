@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import repository.AppointmentOutcomeRecordRepository;
 import repository.DiagnosisRepository;
+import repository.MedicineRepository;
 import repository.PersonnelRepository;
 import repository.PrescribedMedicationRepository;
 import repository.PrescriptionRepository;
@@ -30,7 +31,6 @@ public class HMSAppUI extends MainUI {
 	@Override
 	public void start() {
 		loadHMSRepository();
-
 		Scanner sc = new Scanner(System.in);
 
 		while (true) {
@@ -72,6 +72,7 @@ public class HMSAppUI extends MainUI {
 		Repository.loadRepository(new DiagnosisRepository());
 		Repository.loadRepository(new AppointmentOutcomeRecordRepository());
 		Repository.loadRepository(new RecordsRepository());
+		Repository.loadRepository(new MedicineRepository());
 	}
 
 	public Boolean isAllRepoLoaded() {
