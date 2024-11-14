@@ -1,3 +1,8 @@
+/**
+ * Centralized user interface for the Hospital Management System (HMS) application.
+ * Provides options for users to log in, register an account, or exit the application.
+ * Handles loading of all necessary repositories for data access.
+ */
 package view;
 
 import java.util.Scanner;
@@ -14,11 +19,16 @@ import repository.TreatmentPlansRepository;
 
 public class HMSAppUI extends MainUI {
 
-	// The centralized UI
+    /**
+     * Constructs the HMSAppUI.
+     */
 	public HMSAppUI() {
 
 	}
 
+    /**
+     * Prints the main menu options for the HMS application.
+     */
 	@Override
 	protected void printChoice() {
 		printBreadCrumbs("HMS App UI");
@@ -28,6 +38,11 @@ public class HMSAppUI extends MainUI {
 		System.out.println("3. Close App");
 	}
 
+    /**
+     * Starts the HMS application interface, allowing the user to select options
+     * for logging in, registering, or closing the application.
+     * Also initializes and loads all required repositories.
+     */
 	@Override
 	public void start() {
 		loadHMSRepository();
@@ -59,11 +74,18 @@ public class HMSAppUI extends MainUI {
 		}
 	}
 
+    /**
+     * Starts the testing environment by loading all HMS repositories.
+     */
 	public void startTestingEnv() {
 		loadHMSRepository();
 
 	}
 
+    /**
+     * Loads all repositories necessary for the HMS application in a specified order.
+     * Ensures that data is loaded correctly before use in the application.
+     */
 	public void loadHMSRepository() {
 		// MUST BE LOADED IN THIS SEQUENCES RECORDS REPOSITORY LOADED LAST!
 		Repository.loadRepository(new PersonnelRepository());
@@ -76,6 +98,12 @@ public class HMSAppUI extends MainUI {
 		Repository.loadRepository(new MedicineRepository());
 	}
 
+    /**
+     * Checks if all repositories have been successfully loaded and displays the status.
+     * Each repository's load status is printed along with a checkmark or X symbol.
+     *
+     * @return true if all repositories are loaded; false otherwise
+     */
 	public Boolean isAllRepoLoaded() {
 		System.out.println("Repository Load Status:");
 

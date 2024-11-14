@@ -1,3 +1,8 @@
+/**
+ * User interface for managing the outcome of appointments.
+ * Allows a doctor to view incomplete appointments, select one, and record the
+ * outcome, including consultation notes and type of service.
+ */
 package view;
 
 import java.time.LocalDateTime;
@@ -13,12 +18,24 @@ import enums.PrescriptionStatus;
 import helper.Helper;
 
 public class AppointmentRecordOutcomeUI extends MainUI {
-    private Doctor doctor;
+    /**
+     * The doctor recording appointment outcomes.
+     */
+	private Doctor doctor;
 
+
+    /**
+     * Constructs an AppointmentRecordOutcomeUI for the specified doctor.
+     *
+     * @param doctor the doctor managing appointment outcomes
+     */
     public AppointmentRecordOutcomeUI(Doctor doctor) {
         this.doctor = doctor;
     }
-
+    
+    /**
+     * Prints the menu options for the Appointment Outcome UI.
+     */
     @Override
     protected void printChoice() {
         System.out.println("Appointment Outcome Menu:");
@@ -26,6 +43,10 @@ public class AppointmentRecordOutcomeUI extends MainUI {
         System.out.println("2. Back to Doctor Dashboard");
     }
 
+    /**
+     * Starts the appointment outcome UI, allowing the doctor to record
+     * the outcome of an appointment or return to the Doctor Dashboard.
+     */
     @Override
     public void start() {
         int choice = 0;
@@ -40,6 +61,10 @@ public class AppointmentRecordOutcomeUI extends MainUI {
         } while (choice != 2);
     }
 
+    /**
+     * Displays incomplete appointments for the doctor and allows them
+     * to select one for recording the outcome.
+     */
     public void recordAppointmentOutcome() {
         // prompt doctor to select appointment outcome record that is incompleted,
         // then only update service etc, then set to completed
@@ -81,6 +106,13 @@ public class AppointmentRecordOutcomeUI extends MainUI {
         processOutcome(selectedAppointment);
     }
 
+    /**
+     * Processes the selected appointment by allowing the doctor to enter
+     * details such as type of service and consultation notes, then marks
+     * the appointment as completed.
+     *
+     * @param appointment the AppointmentOutcomeRecord to process
+     */
     private void processOutcome(AppointmentOutcomeRecord appointment) {
         System.out.println("\n--- Select Diagnosis for Patient (ID: " + appointment.getPatientID() + ") ---");
 
