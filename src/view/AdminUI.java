@@ -176,7 +176,7 @@ public class AdminUI extends MainUI {
              System.out.println("Enter Date Join (YYYY-MM-DD HH:MM): " );
              LocalDateTime dateJoin = readDate();
              System.out.println("Enter Years of Experiences: " );
-             int yearsOfExperiences = Helper.readInt();
+             int yearsOfExperiences = Helper.readInt("");
              Doctor doctor = new Doctor(fullName,idCard, username, email, phoneNo, "defaultPassword", 
             		 DoB, gender, specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
              HMSPersonnel personnel = (HMSPersonnel) doctor;
@@ -270,7 +270,7 @@ public class AdminUI extends MainUI {
 	    System.out.println("2. Add Medicine");
 	    System.out.println("3. Update Medicine");
 	    System.out.println("4. Remove Medicine");
-	    int choice = Helper.readInt();
+	    int choice = Helper.readInt("");
 	    switch(choice) {
 	    	case 1: AdminController.listAllMedicine();
 	    	break;

@@ -118,7 +118,7 @@ public class PatientUI extends MainUI {
 
                 System.out.println("Day: " + appointment.getAppointmentTime().getDayOfWeek() +
                         ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) +
-                        ", Location: " + appointment.getlocation() +
+                        ", Location: " + appointment.getLocation() +
                         ", Doctor: " + doctorName);
             }
         }
