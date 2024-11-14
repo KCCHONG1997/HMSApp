@@ -110,28 +110,14 @@ public class DoctorUI extends MainUI {
 
 		MedicalRecord medicalRecord = RecordsRepository.MEDICAL_RECORDS.get(medicalRecordID);
 
-		boolean found = false;
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (appointment.getDoctorID().equals(doctor.getUID())) {
-				found = true;
-				System.out.println("Appointment Record:");
-				System.out.println("  - Appointment ID: " + appointment.getRecordID());
-				System.out.println("  - Day: " + appointment.getAppointmentTime().getDayOfWeek());
-				System.out.println("  - Time: "
-						+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-				System.out.println("  - Location: " + appointment.getLocation());
-				System.out.println("  - Status: " + appointment.getAppointmentStatus());
-				System.out.println("  - Patient ID: " + appointment.getPatientID());
-				System.out.println("  - Outcome Record: " + (appointment.getAppointmentOutcomeRecord() != null
-						? appointment.getAppointmentOutcomeRecord().toString()
-						: "N/A"));
-				System.out.println("---------------------------------------");
-			}
+		if (medicalRecord == null) {
+			System.out.println("Error: Medical record not found in repository.");
+			return;
 		}
 
-		AppointmentRecord currentAppointmentRecord = AppointmentController.retrieveEarliestConfirmedAppointmentRecord(
-				doctor.getUID(),
+		AppointmentRecord currentAppointmentRecord = AppointmentController.retrieveEarliestConfirmedAppointmentRecord(doctor.getUID(),
 				medicalRecord.getPatientID());
+
 
 		if (currentAppointmentRecord == null) {
 			System.out.println("Error: There are no pending appointments for the current patient.");
@@ -139,18 +125,9 @@ public class DoctorUI extends MainUI {
 			return;
 		}
 
-		boolean found = false;
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (appointment.getDoctorID().equals(doctor.getUID())
-					&& appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
-				found = true;
-				System.out.println("Day: " + appointment.getAppointmentTime().getDayOfWeek() +
-						", Time: "
-						+ appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) +
-						", Location: " + appointment.getLocation() +
-						", Patient ID: " + appointment.getPatientID());
-			}
-		}
+		// Use UpdateMedicalRecordUI to handle the updating process
+		UpdateMedicalRecordUI updateUI = new UpdateMedicalRecordUI(doctor, medicalRecord,currentAppointmentRecord);
+		updateUI.start();
 
 		// After updating, save the medical record explicitly back to the repository
 		RecordsRepository.MEDICAL_RECORDS.put(medicalRecord.getRecordID(), medicalRecord);
@@ -302,7 +279,6 @@ public class DoctorUI extends MainUI {
 		// If no record is found, return null or an appropriate message
 		return null; // Or throw an exception if preferred
 	}
-
 	public String retrieveMedicalRecordID(String doctorID, String patientID) {
 		for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
 			if (record.getDoctorID().equals(doctorID) && record.getPatientID().equals(patientID)) {
@@ -311,7 +287,6 @@ public class DoctorUI extends MainUI {
 		}
 		return null; // No matching record found
 	}
-
 	public void recordAppointmentOutcome() {
 		AppointmentRecordOutcomeUI outcomeUI = new AppointmentRecordOutcomeUI(doctor);
 		outcomeUI.start();

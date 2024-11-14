@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.time.format.DateTimeFormatter;
 
 import HMSApp.HMSMain;
 import controller.AppointmentController;
@@ -63,17 +62,17 @@ public class PatientUI extends MainUI {
 			printChoice();
 			choice = sc.nextInt();
 			switch (choice) {
-				case 1 -> viewPatientMedicalRecord(patient.getUID());
-				case 2 -> updatePatientPrivateInfo(patient.getUID());
-				case 3 -> viewAvailableAppointmentSlots();
-				case 4 -> scheduleAppointment();
-				case 5 -> rescheduleAppointment();
-				case 6 -> cancelAppointment();
-				case 7 -> viewScheduledAppointments();
-				case 8 -> viewPastAppointmentOutcomes();
-				case 9 -> acknowledgeRejectedAppointments();
-				case 10 -> System.out.println("Logging out...");
-				default -> System.out.println("Invalid choice!");
+			case 1 -> viewPatientMedicalRecord(patient.getUID());
+			case 2 -> updatePatientPrivateInfo(patient.getUID());
+			case 3 -> viewAvailableAppointmentSlots();
+			case 4 -> scheduleAppointment();
+			case 5 -> rescheduleAppointment();
+			case 6 -> cancelAppointment();
+			case 7 -> viewScheduledAppointments();
+			case 8 -> viewPastAppointmentOutcomes();
+			case 9 -> acknowledgeRejectedAppointments();
+			case 10 -> System.out.println("Logging out...");
+			default -> System.out.println("Invalid choice!");
 			}
 		} while (choice != 10);
 
@@ -97,9 +96,22 @@ public class PatientUI extends MainUI {
 		System.out.println("---------------------------------------");
 	}
 
-	System.out.println("Day: "+appointment.getAppointmentTime().getDayOfWeek()+", Time: "+appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))+", Location: "+appointment.getLocation()+", Doctor: "+doctorName);
-
-	}}
+	// 2. updatePatientContactInfo
+	public void updatePatientPrivateInfo(String patientId) {
+		System.out.println("\n--- Patient Personal Information for Patient ID: " + patientId + " ---");
+		boolean recordsFound = false;
+		for (Patient patient : PersonnelRepository.PATIENTS.values()) {
+			if (patient.getUID().equals(patientId)) {
+				recordsFound = true;
+				UpdatePatientParticularsUI updatePatientParticularsUI = new UpdatePatientParticularsUI(patient);
+				updatePatientParticularsUI.start();
+			}
+		}
+		if (!recordsFound) {
+			System.out.println("No Personal Information found for Patient ID: " + patientId);
+		}
+		System.out.println("---------------------------------------");
+	}
 
 	// 3. viewAvailableAppointmentSlots
 	public static void viewAvailableAppointmentSlots() {
