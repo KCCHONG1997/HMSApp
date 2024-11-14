@@ -87,7 +87,6 @@ public class RecordsController {
         return false;
     }
 
-    // FIXME
     private Boolean updateAppointmentRecord(String recordID, LocalDateTime updatedDate) {
         AppointmentRecord record = RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
         if (record != null) {

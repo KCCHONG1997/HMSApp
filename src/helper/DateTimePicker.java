@@ -15,7 +15,7 @@ public class DateTimePicker {
     }
 
     public static LocalDateTime pickDateTime(String title) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = Helper.sc;
         System.out.println(title);
 
         int year = 0, month = 0, day = 0, hour = 0, minute = 0;
@@ -72,6 +72,7 @@ public class DateTimePicker {
             try {
                 System.out.print("Enter minute (0-59): ");
                 minute = scanner.nextInt();
+                scanner.nextLine();
                 if (minute < 0 || minute > 59) throw new InputMismatchException("Minute must be between 0 and 59.");
                 break;
             } catch (InputMismatchException e) {
@@ -81,7 +82,6 @@ public class DateTimePicker {
         }
 
         LocalDateTime dateTime = LocalDateTime.of(year, month, day, hour, minute);
-        scanner.close();
         return dateTime;
     }
 }
