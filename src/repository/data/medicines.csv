@@ -1,1 +1,6 @@
+<<<<<<< Updated upstream
 M004D,kc,kc,1111-11-11T11:11,11,22,NULL,0001-01-01T00:00,0001-01-01T00:00
+=======
+M002,Ibuprofen,XYZ Pharma,2024-08-15T00:00,0,10,NULL,2023-11-20T00:00,0001-01-01T00:00
+M001,Paracetamol,ABC Pharmaceuticals,2025-06-30T00:00,100,20,NULL,2023-12-01T00:00,0001-01-01T00:00
+>>>>>>> Stashed changes

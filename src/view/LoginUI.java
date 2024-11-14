@@ -88,9 +88,16 @@ public class LoginUI extends MainUI {
                 changePassword(personnel);
             }
             System.out.println("Login Successful!");
+<<<<<<< Updated upstream
             // TODO: PharmacistUI.showPharmacistDashboard((Pharmacist) personnel);
+=======
+            // TODO: 
+            PharmacistUI pharUI = new PharmacistUI(); 
+            pharUI.showPharmacistDashboard();
+            
+>>>>>>> Stashed changes
         } else {
-            System.out.println("Login failed. Invalid username or password.");
+            //System.out.println("Login failed. Invalid username or password.");
         }
     }
 

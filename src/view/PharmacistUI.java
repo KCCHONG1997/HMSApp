@@ -20,6 +20,7 @@ public class PharmacistUI {
             printMenu();
             choice = sc.nextInt();
             switch(choice) {
+<<<<<<< Updated upstream
                 case 1: 
                     // Code for viewing appointment outcome record
                     break;
@@ -40,6 +41,33 @@ public class PharmacistUI {
                     System.out.println("Invalid choice!");
             }
         } while(choice != 5);
+=======
+          case 1:
+        	  // Call the method to view appointment outcome records
+        	  PharmacistController.viewAppointmentOutcomeRecords();
+        	  break;
+          case 2:
+        	  // Call the method to update prescription status
+        	  PharmacistController.updatePrescriptionStatus();
+        	  break;
+            case 3:
+                // Call the method to view medication inventory
+                PharmacistController.monitorInventory();
+                break;
+            case 4:
+                // Call the method to submit replenishment request
+                PharmacistController.submitReplenishmentRequests();
+                break;
+            case 5:
+                System.out.println("Logging out...");
+                HMSMain.main(null); // Return to the main application
+                break;
+            default:
+                System.out.println("Invalid choice! Please try again.");
+        }
+    } while(choice != 5);
+
+>>>>>>> Stashed changes
         
         sc.close(); // Close the Scanner
     }
