@@ -18,6 +18,7 @@ import controller.*;
 import enums.AppointmentOutcomeStatus;
 import enums.AppointmentStatus;
 import enums.PrescriptionStatus;
+import enums.RecordFileType;
 import helper.Helper;
 import model.*;
 import repository.AppointmentOutcomeRecordRepository;
@@ -25,7 +26,6 @@ import repository.DiagnosisRepository;
 import repository.PersonnelRepository;
 import repository.PrescribedMedicationRepository;
 import repository.PrescriptionRepository;
-import repository.RecordFileType;
 import repository.RecordsRepository;
 import repository.TreatmentPlansRepository;
 

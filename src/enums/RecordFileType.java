@@ -1,4 +1,4 @@
-package repository;
+package enums;
 
 public enum RecordFileType {
     MEDICAL_RECORDS("medicalRecords"),

@@ -7,12 +7,12 @@ import java.util.List;
 
 import controller.RecordsController;
 import enums.AppointmentStatus;
+import enums.RecordFileType;
 import helper.DateTimePicker;
 import helper.Helper;
 import model.AppointmentRecord;
 import model.Doctor;
 import model.RecordStatusType;
-import repository.RecordFileType;
 import repository.RecordsRepository;
 
 public class AppointmentAvailabilityUI extends MainUI {
