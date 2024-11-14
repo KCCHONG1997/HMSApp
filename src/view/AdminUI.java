@@ -292,7 +292,7 @@ public class AdminUI extends MainUI {
         String medicineID = Helper.readString("Enter Medicine ID: ");
         String name = Helper.readString("Enter Medicine Name: ");
         String manufacturer = Helper.readString("Enter Manufacturer: ");
-        LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter Expiry Date (YYYY-MM-DDTHH:MM:): ");
+        LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter Expiry Date: ");
         int inventoryStock = Helper.readInt("Enter Inventory Stock: ");
         int lowStockLevel = Helper.readInt("Enter Low Stock Level: ");
         System.out.print("Enter Replenish Status: ");
