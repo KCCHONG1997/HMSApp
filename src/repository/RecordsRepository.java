@@ -107,7 +107,7 @@ public class RecordsRepository extends Repository {
                     appRecord.getDoctorID(),
                     appRecord.getAppointmentTime().toString(),
                     appRecord.getLocation(),
-                    (outcome != null)?appRecord.getAppointmentStatus().toString() : "");
+                    appRecord.getAppointmentStatus().toString());
             // AppointmentOutcomeRecord appointmentOutcomeRecord,
         } else if (record instanceof PaymentRecord) {
             PaymentRecord payRecord = (PaymentRecord) record;
@@ -196,16 +196,6 @@ public class RecordsRepository extends Repository {
                     }
                 }
                 return type.cast(new AppointmentRecord(
-                        // fields[0], // recordID
-                        // fields[1], // patientID
-                        // LocalDateTime.parse(fields[2]), // createdDate
-                        // LocalDateTime.parse(fields[3]), // updatedDate
-                        // RecordStatusType.toEnumRecordStatusType(fields[4]), // recordStatus
-                        // LocalDateTime.parse(fields[5]), // appointmentTime
-                        // fields[6], // location
-                        // AppointmentStatus.toEnumAppointmentStatus(fields[7]), // appointmentStatus
-                        // rc.getAppointmentOutcomeRecordByPatientId(fields[1]) //
-                        // appointmentOutcomeRecord
                         fields[0], // recordID (MRID)
                         LocalDateTime.parse(fields[1]), // createdDate
                         LocalDateTime.parse(fields[2]), // updatedDate
