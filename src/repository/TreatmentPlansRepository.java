@@ -65,7 +65,7 @@ public class TreatmentPlansRepository extends Repository {
             System.out.println("Error saving treatment plans to CSV: " + e.getMessage());
         }
     }
-    
+
     public static boolean saveAlltoCSV() {
         TreatmentPlansRepository.saveTreatmentPlansToCSV(fileName, diagnosisToTreatmentPlansMap);
         return true;
@@ -160,38 +160,39 @@ public class TreatmentPlansRepository extends Repository {
     public static void setRepoLoaded(boolean isRepoLoaded) {
         TreatmentPlansRepository.isRepoLoaded = isRepoLoaded;
     }
-    
 
-//    public static TreatmentPlans getTreatmentPlansByDiagnosisID(String diagnosisID) {
-//        // Retrieve the treatment plan for the given diagnosisID
-//        TreatmentPlans treatmentPlan = diagnosisToTreatmentPlansMap.get(diagnosisID);
-//
-//        if (treatmentPlan != null) {
-//            return treatmentPlan;  // Return the treatment plan if found
-//        } else {
-//            System.out.println("No treatment plan found for Diagnosis ID: " + diagnosisID);
-//            return null;  // Return null if no treatment plan exists for the given diagnosis ID
-//        }
-//    }
+    // public static TreatmentPlans getTreatmentPlansByDiagnosisID(String
+    // diagnosisID) {
+    // // Retrieve the treatment plan for the given diagnosisID
+    // TreatmentPlans treatmentPlan = diagnosisToTreatmentPlansMap.get(diagnosisID);
+    //
+    // if (treatmentPlan != null) {
+    // return treatmentPlan; // Return the treatment plan if found
+    // } else {
+    // System.out.println("No treatment plan found for Diagnosis ID: " +
+    // diagnosisID);
+    // return null; // Return null if no treatment plan exists for the given
+    // diagnosis ID
+    // }
+    // }
 
     public static TreatmentPlans getTreatmentPlansByDiagnosisID(String diagnosisID) {
         // Retrieve the treatment plan for the given diagnosisID
         TreatmentPlans treatmentPlan = diagnosisToTreatmentPlansMap.get(diagnosisID);
 
         if (treatmentPlan != null) {
-            return treatmentPlan;  // Return the treatment plan if found
+            return treatmentPlan; // Return the treatment plan if found
         } else {
             System.out.println("No treatment plan found for Diagnosis ID: " + diagnosisID);
-            return null;  // Return null if no treatment plan exists for the given diagnosis ID
+            return null; // Return null if no treatment plan exists for the given diagnosis ID
         }
     }
-    
+
     public static void addTreatmentPlansRecord(TreatmentPlans treatmentplans) {
         // Add the record to the repository
-    	diagnosisToTreatmentPlansMap.put(treatmentplans.getDiagnosisID(), treatmentplans);
+        diagnosisToTreatmentPlansMap.put(treatmentplans.getDiagnosisID(), treatmentplans);
 
-    	//saveAlltoCSV();
+        // saveAlltoCSV();
     }
-
 
 }

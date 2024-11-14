@@ -19,6 +19,8 @@ import model.RecordStatusType;
 import repository.AppointmentOutcomeRecordRepository;
 import repository.RecordFileType;
 import repository.RecordsRepository;
+import repository.Repository;
+
 import java.util.Comparator;
 
 public class AppointmentController {
@@ -29,14 +31,14 @@ public class AppointmentController {
 		UUID uuid = UUID.randomUUID();
 		String uuidAsString = uuid.toString();
 		switch (recType) {
-		case APPOINTMENT_OUTCOME_RECORDS:
-			return "AO-" + uuidAsString;
-		case DIAGNOSIS_RECORDS:
-			return "DIAG-" + uuidAsString;
-		case MEDICINE_RECORDS:
-			return "MR-" + uuidAsString;
-		default:
-			return "R-" + uuidAsString;
+			case APPOINTMENT_OUTCOME_RECORDS:
+				return "AO-" + uuidAsString;
+			case DIAGNOSIS_RECORDS:
+				return "DIAG-" + uuidAsString;
+			case MEDICINE_RECORDS:
+				return "MR-" + uuidAsString;
+			default:
+				return "R-" + uuidAsString;
 		}
 	}
 
@@ -48,8 +50,9 @@ public class AppointmentController {
 		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
 			// Check if appointment matches both the doctorID and patientID, and has a
 			// CONFIRMED status
-			if (doctorID.equals(appointment.getDoctorID()) && patientID.equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() == status) {
+			if (doctorID.equals(appointment.getDoctorID()) &&
+					patientID.equals(appointment.getPatientID()) &&
+					appointment.getAppointmentStatus() == status) {
 
 				// Add to filtered list
 				filteredAppointments.add(appointment);
@@ -59,6 +62,28 @@ public class AppointmentController {
 		return filteredAppointments;
 
 		// If no appointments match the criteria
+	}
+
+	public static AppointmentOutcomeRecord getAppointmentOutcomeByDoctorAndPatient(String doctorID, String patientID,
+			LocalDateTime AppointmentTime) {
+		// Iterate through the values of the patientOutcomeRecords map
+		for (ArrayList<AppointmentOutcomeRecord> outcomeList : AppointmentOutcomeRecordRepository.patientOutcomeRecords
+				.values()) {
+			// Iterate through each AppointmentOutcomeRecord in the outcomeList
+			for (AppointmentOutcomeRecord outcome : outcomeList) {
+				// Check if appointment matches both the doctorID, patientID, and has the same
+				// appointment time
+				if (doctorID.equals(outcome.getDoctorID()) &&
+						patientID.equals(outcome.getPatientID()) &&
+						AppointmentTime.isEqual(outcome.getAppointmentTime())) {
+					// If a match is found, return the AppointmentOutcomeRecord
+					return outcome;
+				}
+			}
+		}
+
+		// If no appointments match the criteria, return null
+		return null;
 	}
 
 	public static AppointmentRecord getEarliestAppointment(ArrayList<AppointmentRecord> appointments) {
@@ -73,67 +98,14 @@ public class AppointmentController {
 		return appointments.get(0);
 	}
 
-	public static AppointmentRecord retrieveEarliestConfirmedAppointmentRecord(String doctorID, String patientID) {
+	public static AppointmentRecord retrieveEarliestPendingAppointmentRecord(String doctorID, String patientID) {
 		ArrayList<AppointmentRecord> pendingAppointments;
-		pendingAppointments = AppointmentController.getAppointmentsByDoctorAndPatient(doctorID, patientID,
-				AppointmentStatus.CONFIRMED);
+		pendingAppointments = AppointmentController.getAppointmentsByDoctorAndPatient(doctorID,
+				patientID,
+				AppointmentStatus.PENDING);
 
 		AppointmentRecord currentAppointmentRecord = AppointmentController.getEarliestAppointment(pendingAppointments);
 		return currentAppointmentRecord;
-	}
-
-	public static List<AppointmentRecord> getConfirmedAppointments(String patientID) {
-		List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patientID.equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
-				confirmedAppointments.add(appointment);
-			}
-		}
-		return confirmedAppointments;
-	}
-
-	public static List<AppointmentRecord> getAllAppointments(String patientID) {
-		List<AppointmentRecord> confirmedAppointments = new ArrayList<>();
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patientID.equals(appointment.getPatientID())) {
-				confirmedAppointments.add(appointment);
-			}
-		}
-		return confirmedAppointments;
-	}
-
-	public static List<AppointmentRecord> getAvailableAppointmentSlotsFromAllDoctor() {
-		List<AppointmentRecord> availableSlots = new ArrayList<>();
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (appointment.getAppointmentStatus() == AppointmentStatus.AVAILABLE) {
-				availableSlots.add(appointment);
-			}
-		}
-		return availableSlots;
-	}
-
-	public static List<AppointmentRecord> getCancelledAppointmentSlots(String patientID) {
-		List<AppointmentRecord> canceledSlots = new ArrayList<>();
-		for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
-			if (patientID.equals(appointment.getPatientID())
-					&& appointment.getAppointmentStatus() == AppointmentStatus.CANCELED) {
-				canceledSlots.add(appointment);
-			}
-		}
-		return canceledSlots;
-	}
-
-	public static boolean cancelAppointment(int choice, List<AppointmentRecord> confirmedAppointments) {
-		if (choice >= 1 && choice <= confirmedAppointments.size()) {
-			AppointmentRecord selectedAppointment = confirmedAppointments.get(choice - 1);
-			selectedAppointment.setAppointmentStatus(AppointmentStatus.AVAILABLE);
-			selectedAppointment.setPatientID(null);
-			RecordsRepository.saveAllRecordFiles();
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 }
