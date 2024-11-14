@@ -25,7 +25,7 @@ public class Admin extends HMSPersonnel {
     // Getter and Setter for dateOfCreation
     public LocalDateTime getDateOfCreation() {
         return dateOfCreation;
-    }
+    }// KC testing
 
     public void setDateOfCreation(LocalDateTime dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
