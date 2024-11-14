@@ -85,7 +85,6 @@ public class RecordsController {
         return false;
     }
 
-    //FIXME
     private Boolean updateAppointmentRecord(String recordID, LocalDateTime updatedDate) {
         AppointmentRecord record = RecordsRepository.APPOINTMENT_RECORDS.get(recordID);
         if (record != null) {
@@ -156,6 +155,7 @@ public class RecordsController {
     public MedicalRecord getMedicalRecordsByPatientID(String patientID) {
         if (RecordsRepository.isRepoLoad()) {
             for (MedicalRecord record : RecordsRepository.MEDICAL_RECORDS.values()) {
+            	System.out.println(record.getPatientID());
                 if (record.getPatientID().equals(patientID)) {
                     return record;
                 }

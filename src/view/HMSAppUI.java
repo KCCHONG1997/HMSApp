@@ -24,13 +24,13 @@ public class HMSAppUI extends MainUI {
 		printBreadCrumbs("HMS App UI");
 		System.out.println("Would you like to? :");
 		System.out.println("1. Login");
-		System.out.println("2. Close App");
+		System.out.println("2. Register an account");
+		System.out.println("3. Close App");
 	}
 
 	@Override
 	public void start() {
 		loadHMSRepository();
-
 		Scanner sc = new Scanner(System.in);
 
 		while (true) {
@@ -45,6 +45,10 @@ public class HMSAppUI extends MainUI {
 					loginUI.start();
 					break;
 				case 2:
+					RegisterUI registerUI = new RegisterUI();
+					registerUI.start();
+					break;
+				case 3:
 					System.exit(0);
 					break;
 				default:
@@ -62,13 +66,13 @@ public class HMSAppUI extends MainUI {
 	public void loadHMSRepository() {
 		// MUST BE LOADED IN THIS SEQUENCES RECORDS REPOSITORY LOADED LAST!
 		Repository.loadRepository(new PersonnelRepository());
-	       Repository.loadRepository(new PrescribedMedicationRepository());
-	       Repository.loadRepository(new TreatmentPlansRepository());
-	       Repository.loadRepository(new PrescriptionRepository());
-	       Repository.loadRepository(new DiagnosisRepository());
-	       Repository.loadRepository(new AppointmentOutcomeRecordRepository());
-	       Repository.loadRepository(new RecordsRepository());
-	       Repository.loadRepository(new MedicineRepository());
+		Repository.loadRepository(new PrescribedMedicationRepository());
+		Repository.loadRepository(new TreatmentPlansRepository());
+		Repository.loadRepository(new PrescriptionRepository());
+		Repository.loadRepository(new DiagnosisRepository());
+		Repository.loadRepository(new AppointmentOutcomeRecordRepository());
+		Repository.loadRepository(new RecordsRepository());
+		Repository.loadRepository(new MedicineRepository());
 	}
 
 	public Boolean isAllRepoLoaded() {

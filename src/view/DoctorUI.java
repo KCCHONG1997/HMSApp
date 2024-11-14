@@ -1,16 +1,16 @@
 package view;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import HMSApp.HMSMain;
 import controller.AuthenticationController;
 import controller.RecordsController;
-import HMSApp.HMSMain;
-import model.Diagnosis;
+import enums.AppointmentStatus;
+import model.AppointmentRecord;
 import model.Doctor;
 import model.MedicalRecord;
-import model.PrescribedMedication;
-import model.Prescription;
-import model.SessionCookie;
+import repository.RecordsRepository;
 
 public class DoctorUI extends MainUI {
     private Doctor doctor;
@@ -53,16 +53,16 @@ public class DoctorUI extends MainUI {
                     // Code for updating patient medical records
                     break;
                 case 3:
-                    // Code for viewing personal schedule
+                    viewPersonalSchedule();
                     break;
                 case 4:
-                    // Code for setting availability for appointments
+                    availabilityForAppointments(doctor);
                     break;
                 case 5:
                     // Code for accepting or declining appointment requests
                     break;
                 case 6:
-                    // Code for viewing upcoming appointments
+                    viewUpcomingAppointments();
                     break;
                 case 7:
                     // Code for recording appointment outcome
@@ -90,44 +90,64 @@ public class DoctorUI extends MainUI {
         }
 
         for (MedicalRecord record : records) {
-            displayMedicalRecordInBox(record);
+            MedicalRecordUI recordUI = new MedicalRecordUI(record); // Instantiate MedicalRecordUI
+            recordUI.displayMedicalRecordInBox(); // Display the medical record
         }
     }
 
-    private static void displayMedicalRecordInBox(MedicalRecord medicalRecord) {
-        String border = "+----------------------------------------+";
+    public static void availabilityForAppointments(Doctor doctor) {
+        // Code for setting availability for appointments
+    }
 
-        System.out.println(border);
-        System.out.printf("| %-58s |\n", "Medical Record");
-        System.out.println(border);
-        System.out.printf("| %-25s: %-35s |\n", "Doctor ID", medicalRecord.getDoctorID());
-        System.out.printf("| %-25s: %-35s |\n", "Patient ID", medicalRecord.getPatientID());
-        System.out.printf("| %-25s: %-35s |\n", "Blood Type", medicalRecord.getBloodType());
-        System.out.println(border);
+    public void viewPersonalSchedule() {
+        if (doctor == null) {
+            System.out.println("Doctor information is not available.");
+            return;
+        }
 
-        System.out.println("| Diagnoses:");
-        for (Diagnosis diagnosis : medicalRecord.getDiagnosis()) {
-            System.out.println(border);
-            System.out.printf("| %-25s: %-35s |\n", "Diagnosis ID", diagnosis.getDiagnosisID());
-            System.out.printf("| %-25s: %-35s |\n", "Description", diagnosis.getDiagnosisDescription());
+        System.out.println("\n--- Schedule for: " + doctor.getFullName() + " (UID: " + doctor.getUID() + ") ---");
 
-            Prescription prescription = diagnosis.getPrescription();
-            System.out.printf("| %-25s: %-35s |\n", "Prescription Date", prescription.getPrescriptionDate());
-
-            System.out.println("| Medications--------------------------");
-            for (PrescribedMedication medication : prescription.getMedications()) {
-                System.out.printf("| %-25s: %-35s |\n", "Medicine ID", medication.getMedicineID());
-                System.out.printf("| %-25s: %-35s |\n", "Quantity", medication.getMedicineQuantity());
-                System.out.printf("| %-25s: %-35s |\n", "Dosage", medication.getDosage());
-                System.out.printf("| %-25s: %-35s |\n", "Period (days)", medication.getPeriodDays());
-                System.out.printf("| %-25s: %-35s |\n", "Status", medication.getPrescriptionStatus());
-                System.out.println(border);
+        boolean found = false;
+        for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
+            if (appointment.getDoctorID().equals(doctor.getUID())) {
+                found = true;
+                System.out.println("Appointment Record:");
+                System.out.println("  - Appointment ID: " + appointment.getRecordID());
+                System.out.println("  - Day: " + appointment.getAppointmentTime().getDayOfWeek());
+                System.out.println("  - Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                System.out.println("  - Location: " + appointment.getlocation());
+                System.out.println("  - Status: " + appointment.getAppointmentStatus());
+                System.out.println("  - Patient ID: " + appointment.getPatientID());
+                System.out.println("  - Outcome Record: " + (appointment.getAppointmentOutcomeRecord() != null ? appointment.getAppointmentOutcomeRecord().toString() : "N/A"));
+                System.out.println("---------------------------------------");
             }
-
-            System.out.println(border);
         }
 
-        System.out.println();
+        if (!found) {
+            System.out.println("No appointments found for this doctor.");
+        }
+
+        System.out.println("---------------------------------------");
     }
 
+    public void viewUpcomingAppointments() {
+        System.out.println("\n--- Upcoming Appointments for: " + doctor.getFullName() + " (UID: " + doctor.getUID() + ") ---");
+
+        boolean found = false;
+        for (AppointmentRecord appointment : RecordsRepository.APPOINTMENT_RECORDS.values()) {
+            if (appointment.getDoctorID().equals(doctor.getUID()) && appointment.getAppointmentStatus() == AppointmentStatus.CONFIRMED) {
+                found = true;
+                System.out.println("Day: " + appointment.getAppointmentTime().getDayOfWeek() +
+                    ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) +
+                    ", Location: " + appointment.getlocation() + 
+                    ", Patient ID: " + appointment.getPatientID());
+            }
+        }
+
+        if (!found) {
+            System.out.println("No upcoming appointments found for this doctor.");
+        }
+
+        System.out.println("---------------------------------------");
+    }
 }

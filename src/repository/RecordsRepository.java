@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import helper.Helper;
 import controller.RecordsController;
 import enums.AppointmentStatus;
 
@@ -92,7 +93,9 @@ public class RecordsRepository extends Repository {
                     medRecord.getRecordStatus().toString(),
                     medRecord.getPatientID(),
                     medRecord.getDoctorID(),
-                    medRecord.getBloodType());
+                    medRecord.getBloodType()
+            // medRecord.getDiagnosis().toString() //my added
+            );
         } else if (record instanceof AppointmentRecord) {
             AppointmentRecord appRecord = (AppointmentRecord) record;
             AppointmentOutcomeRecord outcome = appRecord.getAppointmentOutcomeRecord();
@@ -120,6 +123,17 @@ public class RecordsRepository extends Repository {
             );
         }
         return "";
+    }
+
+    /**
+     * Load all record files from CSV format, or create them if they don't exist
+     */
+    public static void loadAllRecordFiles() {
+        if (!isRepoLoaded)
+            loadRecordsFromCSV("medical_records.csv", MEDICAL_RECORDS, MedicalRecord.class);
+        loadRecordsFromCSV("appointment_records.csv", APPOINTMENT_RECORDS, AppointmentRecord.class);
+        // loadRecordsFromCSV("payment_records.csv", PAYMENT_RECORDS,
+        // PaymentRecord.class);
     }
 
     /**
@@ -234,7 +248,6 @@ public class RecordsRepository extends Repository {
 
         return null;
     }
-
     /**
      * Clear all record data and save empty files
      */

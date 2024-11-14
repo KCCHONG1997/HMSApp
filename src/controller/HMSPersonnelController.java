@@ -190,5 +190,57 @@ public class HMSPersonnelController {
             System.out.println("No personnel found for type: " + type);
         }
     }
-}
 
+    // Retrieve a patient by UID
+    public static Patient getPatientById(String UID) {
+        if (UID == null || UID.isEmpty()) {
+            System.out.println("Error: Invalid UID.");
+            return null;
+        }
+
+        Patient patient = PersonnelRepository.PATIENTS.get(UID);
+        if (patient == null) {
+            System.out.println("Error: Patient not found with UID: " + UID);
+        }
+        return patient;
+    }
+
+    // Update a patient's particulars by UID
+    // Update a patient's particulars by UID
+    public static boolean updatePatientParticulars(String UID, Patient updatedPatient) {
+        if (UID == null || UID.isEmpty() || updatedPatient == null) {
+            System.out.println("Error: Invalid UID or patient data.");
+            return false;
+        }
+
+        // Retrieve the existing patient
+        Patient existingPatient = PersonnelRepository.PATIENTS.get(UID);
+
+        if (existingPatient == null) {
+            System.out.println("Error: Patient not found with UID: " + UID);
+            return false;
+        }
+
+        // Update fields from HMSPersonnel class
+        existingPatient.setFullName(updatedPatient.getFullName());
+        existingPatient.setIdCard(updatedPatient.getIdCard());
+        existingPatient.setUsername(updatedPatient.getUsername());
+        existingPatient.setEmail(updatedPatient.getEmail());
+        existingPatient.setPhoneNo(updatedPatient.getPhoneNo());
+        existingPatient.setPasswordHash(updatedPatient.getPasswordHash());
+        existingPatient.setDoB(updatedPatient.getDoB());
+        existingPatient.setGender(updatedPatient.getGender());
+
+        // Update fields specific to Patient class
+        existingPatient.setInsuranceInfo(updatedPatient.getInsuranceInfo());
+        existingPatient.setAllergies(updatedPatient.getAllergies());
+        existingPatient.setDateOfAdmission(updatedPatient.getDateOfAdmission());
+
+        // Save changes to repository
+        PersonnelRepository.PATIENTS.put(UID, existingPatient);
+        PersonnelRepository.saveAllPersonnelFiles();
+
+        System.out.println("Patient details updated successfully for UID: " + UID);
+        return true;
+    }
+}
