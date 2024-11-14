@@ -190,8 +190,8 @@ public class HMSPersonnelController {
             System.out.println("No personnel found for type: " + type);
         }
     }
-    
- // Retrieve a patient by UID
+
+    // Retrieve a patient by UID
     public static Patient getPatientById(String UID) {
         if (UID == null || UID.isEmpty()) {
             System.out.println("Error: Invalid UID.");
@@ -204,9 +204,9 @@ public class HMSPersonnelController {
         }
         return patient;
     }
-    
- // Update a patient's particulars by UID
- // Update a patient's particulars by UID
+
+    // Update a patient's particulars by UID
+    // Update a patient's particulars by UID
     public static boolean updatePatientParticulars(String UID, Patient updatedPatient) {
         if (UID == null || UID.isEmpty() || updatedPatient == null) {
             System.out.println("Error: Invalid UID or patient data.");

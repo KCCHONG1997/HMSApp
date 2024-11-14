@@ -1,4 +1,5 @@
 package repository;
+
 import model.Medicine;
 
 import java.io.*;
@@ -155,5 +156,13 @@ public class MedicineRepository extends Repository {
         saveAllMedicinesToCSV();
         isRepoLoaded = false;
         return true;
+    }
+
+    public static boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
+
+    public static void setRepoLoaded(boolean isRepoLoaded) {
+        MedicineRepository.isRepoLoaded = isRepoLoaded;
     }
 }

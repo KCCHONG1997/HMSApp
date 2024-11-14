@@ -5,8 +5,8 @@ package helper;
  * retrieved is not within the specified range.
  */
 public class OutOfRange extends Exception{
-
-    /**
+    
+    /** 
      * Constructor that initialises the error message
      */
     public OutOfRange(){

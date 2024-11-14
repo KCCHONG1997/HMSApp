@@ -4,7 +4,6 @@ import java.util.List;
 
 public class MedicalHistory {
 
-
     private List<MedicalRecord> medicalHistoryList;
     private Patient patient;
 
@@ -28,6 +27,5 @@ public class MedicalHistory {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
-
 
 }

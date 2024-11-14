@@ -18,21 +18,20 @@ public class AppointmentRecord extends HMSRecords {
 	private AppointmentStatus appointmentStatus;
 	private AppointmentOutcomeRecord appointmentOutcomeRecord;
 
-
-	 //Constructor when retrieving CSV to an object
-	 // delete kc constructor dy
+	// Constructor when retrieving CSV to an object
+	// delete kc constructor dy
 
 	public AppointmentRecord(String recordID,
-							 LocalDateTime createdDate,
-							 LocalDateTime updatedDate,
-							 RecordStatusType recordStatus,
-							 String appointmentOutcomeRecordID,
-							 String patientID,
-							 String doctorID,
-							 LocalDateTime appointmentTime,
-							 String location,
-							 AppointmentStatus appointmentStatus,
-							 AppointmentOutcomeRecord appointmentOutcomeRecord) {
+			LocalDateTime createdDate,
+			LocalDateTime updatedDate,
+			RecordStatusType recordStatus,
+			String appointmentOutcomeRecordID,
+			String patientID,
+			String doctorID,
+			LocalDateTime appointmentTime,
+			String location,
+			AppointmentStatus appointmentStatus,
+			AppointmentOutcomeRecord appointmentOutcomeRecord) {
 		super(recordID, createdDate, updatedDate, recordStatus);
 		this.appointmentOutcomeRecordID = appointmentOutcomeRecordID;
 		this.patientID = patientID;
@@ -42,6 +41,7 @@ public class AppointmentRecord extends HMSRecords {
 		this.appointmentStatus = appointmentStatus;
 		this.appointmentOutcomeRecord = appointmentOutcomeRecord;
 	}
+
 	public String getAppointmentOutcomeRecordID() {
 		return appointmentOutcomeRecordID;
 	}
@@ -100,4 +100,4 @@ public class AppointmentRecord extends HMSRecords {
 
 }
 
-	// Constructor when generating a new AppointmentRecord
+// Constructor when generating a new AppointmentRecord

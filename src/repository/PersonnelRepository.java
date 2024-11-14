@@ -18,7 +18,6 @@ public class PersonnelRepository extends Repository {
     private static final String pharmacistsFileName = "pharmacists.csv";
     private static final String adminsFileName = "admins.csv";
     private static Boolean isRepoLoaded = false;
-
     // Static data collections for personnel
     public static HashMap<String, Doctor> DOCTORS = new HashMap<>();
     public static HashMap<String, Patient> PATIENTS = new HashMap<>();

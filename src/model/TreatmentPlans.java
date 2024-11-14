@@ -13,7 +13,6 @@ public class TreatmentPlans {
     private LocalDateTime treatmentDate;
     private String treatmentDescription;
 
-
     public String getDiagnosisID() {
         return diagnosisID;
     }
@@ -39,4 +38,3 @@ public class TreatmentPlans {
     }
 
 }
-

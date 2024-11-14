@@ -103,14 +103,6 @@ public class MedicineController {
             System.out.println();
         }
     }
-
-//    public static void main(String[] args) {
-//        MedicineRepository mediRepository = new MedicineRepository();
-//        mediRepository.loadFromCSV();
-//        listAllMedicines();
-//    }
-
-
     /**
      * Retrieve a medicine from the repository by its name.
      */

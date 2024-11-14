@@ -50,7 +50,9 @@ public class MedicalRecordUI extends MainUI {
                     System.out.printf("| %-20s: %-20s |\n", "Diagnosis ID", diagnosisID);
                     System.out.printf("| %-20s: %-20s |\n", "Description", diagnosis.getDiagnosisDescription());
                     printedDiagnosisIDs.add(diagnosisID); // Mark as printed
-                }else{continue;}
+                } else {
+                    continue;
+                }
 
                 Prescription prescription = diagnosis.getPrescription();
                 if (prescription != null) {
@@ -67,7 +69,7 @@ public class MedicalRecordUI extends MainUI {
                                     medication.getDosage() + "_" +
                                     medication.getPeriodDays();
                             if (!printedMedicationKeys.contains(medicationKey)) {
-                                printedMedicationKeys.add(medicationKey);  // Mark as printed
+                                printedMedicationKeys.add(medicationKey); // Mark as printed
                                 System.out.printf("| %-20s: %-20s |\n", "Medicine ID", medication.getMedicineID());
                                 System.out.printf("| %-20s: %-20s |\n", "Quantity", medication.getMedicineQuantity());
                                 System.out.printf("| %-20s: %-20s |\n", "Dosage", medication.getDosage());
@@ -89,7 +91,6 @@ public class MedicalRecordUI extends MainUI {
         System.out.println(border);
     }
 
-
     // Method to print options for this UI
     @Override
     protected void printChoice() {
@@ -101,7 +102,7 @@ public class MedicalRecordUI extends MainUI {
     // Start method to display the medical record and provide a back option
     @Override
     public void start() {
-        displayMedicalRecordInBox();  // Display the medical record
+        displayMedicalRecordInBox(); // Display the medical record
 
         int choice = 0;
         do {
@@ -110,7 +111,7 @@ public class MedicalRecordUI extends MainUI {
             switch (choice) {
                 case 1:
                     System.out.println("Returning to previous menu...");
-                    return;  // Exits this UI and goes back to the previous one
+                    return; // Exits this UI and goes back to the previous one
                 default:
                     System.out.println("Invalid choice, please try again.");
             }

@@ -31,7 +31,6 @@ public class UpdatePatientParticularsUI {
                                 ? patient.getDoB().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) 
                                 : "N/A"));
         System.out.println("-------------------------------------\n");
-  
     }
 
     // Start the UI for updating patient particulars

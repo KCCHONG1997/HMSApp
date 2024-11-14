@@ -19,7 +19,5 @@ public class DoctorController {
 		Doctor doctor = getDoctorById(doctorId);
 		return doctor != null ? doctor.getFullName() : "Unknown Doctor";
 	}
-	
-	
 
 }

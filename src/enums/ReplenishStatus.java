@@ -1,6 +1,5 @@
 package enums;
 
 public enum ReplenishStatus {
-    PENDING,
-    SUCCESS
+    NULL, REQUESTED, APPROVED;
 }

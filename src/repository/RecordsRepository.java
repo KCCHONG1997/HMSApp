@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import helper.Helper;
 import controller.RecordsController;
 import enums.AppointmentStatus;
 
@@ -210,9 +211,9 @@ public class RecordsRepository extends Repository {
                         LocalDateTime.parse(fields[1]), // createdDate
                         LocalDateTime.parse(fields[2]), // updatedDate
                         RecordStatusType.toEnumRecordStatusType(fields[3]), // recordStatus
-                        fields[4], //appointmentOutcomeRecordID
-                        fields[5], //patientID
-                        fields[6], //doctorID
+                        fields[4], // appointmentOutcomeRecordID
+                        fields[5], // patientID
+                        fields[6], // doctorID
                         LocalDateTime.parse(fields[7]), // appointmentTime
                         fields[8],
                         AppointmentStatus.toEnumAppointmentStatus(fields[9]), // appointmentStatus
