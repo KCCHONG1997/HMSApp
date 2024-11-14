@@ -115,7 +115,7 @@ public class DoctorUI extends MainUI {
                 System.out.println("  - Appointment ID: " + appointment.getRecordID());
                 System.out.println("  - Day: " + appointment.getAppointmentTime().getDayOfWeek());
                 System.out.println("  - Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-                System.out.println("  - Location: " + appointment.getlocation());
+                System.out.println("  - Location: " + appointment.getLocation());
                 System.out.println("  - Status: " + appointment.getAppointmentStatus());
                 System.out.println("  - Patient ID: " + appointment.getPatientID());
                 System.out.println("  - Outcome Record: " + (appointment.getAppointmentOutcomeRecord() != null ? appointment.getAppointmentOutcomeRecord().toString() : "N/A"));
@@ -139,7 +139,7 @@ public class DoctorUI extends MainUI {
                 found = true;
                 System.out.println("Day: " + appointment.getAppointmentTime().getDayOfWeek() +
                     ", Time: " + appointment.getAppointmentTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) +
-                    ", Location: " + appointment.getlocation() + 
+                    ", Location: " + appointment.getLocation() + 
                     ", Patient ID: " + appointment.getPatientID());
             }
         }
