@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import repository.AppointmentOutcomeRecordRepository;
 import repository.DiagnosisRepository;
+import repository.MedicineRepository;
 import repository.PersonnelRepository;
 import repository.PrescribedMedicationRepository;
 import repository.PrescriptionRepository;
@@ -72,6 +73,7 @@ public class HMSAppUI extends MainUI {
 		Repository.loadRepository(new DiagnosisRepository());
 		Repository.loadRepository(new AppointmentOutcomeRecordRepository());
 		Repository.loadRepository(new RecordsRepository());
+		Repository.loadRepository(new MedicineRepository());
 	}
 
 	public Boolean isAllRepoLoaded() {
@@ -96,6 +98,8 @@ public class HMSAppUI extends MainUI {
 				(DiagnosisRepository.isRepoLoaded() ? loadedSymbol : notLoadedSymbol));
 		System.out.println("Appointment Outcome Record Repository: " +
 				(AppointmentOutcomeRecordRepository.isRepoLoaded() ? loadedSymbol : notLoadedSymbol));
+		System.out.println("Medicine Repository: " +
+				(MedicineRepository.isRepoLoaded() ? loadedSymbol : notLoadedSymbol));
 
 		// Return true if all repositories are loaded
 		return PersonnelRepository.isRepoLoaded() &&
@@ -104,7 +108,8 @@ public class HMSAppUI extends MainUI {
 				TreatmentPlansRepository.isRepoLoaded() &&
 				PrescriptionRepository.isRepoLoaded() &&
 				DiagnosisRepository.isRepoLoaded() &&
-				AppointmentOutcomeRecordRepository.isRepoLoaded();
+				AppointmentOutcomeRecordRepository.isRepoLoaded() &&
+				MedicineRepository.isRepoLoaded();
 	}
 
 }
