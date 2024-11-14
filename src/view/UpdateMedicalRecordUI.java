@@ -7,6 +7,7 @@ import java.util.Scanner;
 import enums.AppointmentOutcomeStatus;
 import enums.AppointmentStatus;
 import enums.PrescriptionStatus;
+import enums.RecordFileType;
 import model.*;
 import repository.*;
 import controller.AppointmentController;

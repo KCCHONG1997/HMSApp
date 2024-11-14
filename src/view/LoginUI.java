@@ -2,8 +2,8 @@ package view;
 
 import helper.Helper;
 import model.*;
-import repository.PersonnelFileType;
 import controller.*;
+import enums.PersonnelFileType;
 
 public class LoginUI extends MainUI {
 
