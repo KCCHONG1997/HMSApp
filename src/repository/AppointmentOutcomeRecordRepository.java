@@ -181,10 +181,7 @@ public class AppointmentOutcomeRecordRepository extends Repository {
         patientOutcomeRecords.put(patientID, records);
         saveAppointmentOutcomeRecordRepository();
     }
-//    public static void addOutcomeRecord(String patientID, AppointmentOutcomeRecord outcomeRecord) {
-//        // Add the record to the repository
-//    	patientOutcomeRecords.put(outcomeRecord.getAppointmentOutcomeRecordID(), outcomeRecord);
-//
-//    	saveAppointmentOutcomeRecordRepository();
-//    }
+    
+    
+
 }
