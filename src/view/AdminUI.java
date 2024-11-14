@@ -164,7 +164,7 @@ public class AdminUI extends MainUI {
         String email = Helper.readString();
         System.out.println("Enter Phone No: " );
         String phoneNo = Helper.readString();
-        System.out.println("Enter DOB (YYYY-MM-DD HH:MM): : " );
+        System.out.println("Enter DOB (YYYY-MM-DD HH:MM):" );
         LocalDateTime DoB = readDate();
         System.out.println("Enter Gender: " );
         String gender = Helper.readString();
@@ -177,7 +177,7 @@ public class AdminUI extends MainUI {
              LocalDateTime dateJoin = readDate();
              System.out.println("Enter Years of Experiences: " );
              int yearsOfExperiences = Helper.readInt("");
-             Doctor doctor = new Doctor(fullName,idCard, username, email, phoneNo, "defaultPassword", 
+             Doctor doctor = new Doctor(fullName,idCard, username, email, phoneNo, "default", 
             		 DoB, gender, specialty, medicalLicenseNumber, dateJoin, yearsOfExperiences);
              HMSPersonnel personnel = (HMSPersonnel) doctor;
              AdminController.addPersonnel(personnel);
@@ -199,8 +199,6 @@ public class AdminUI extends MainUI {
      * 
      * @param role The role of the personnel to be updated (Doctor or Pharmacist).
      */
-    
-
     public static void updatePersonnel(String role) {
         String UID = Helper.readString("Enter UID: ");
         Doctor doctor = (Doctor) HMSPersonnelController.getPersonnelByUID(UID, PersonnelFileType.DOCTORS);
@@ -292,7 +290,7 @@ public class AdminUI extends MainUI {
         String medicineID = Helper.readString("Enter Medicine ID: ");
         String name = Helper.readString("Enter Medicine Name: ");
         String manufacturer = Helper.readString("Enter Manufacturer: ");
-        LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter Expiry Date (YYYY-MM-DDTHH:MM:): ");
+        LocalDateTime expiryDate = DateTimePicker.pickDateTime("Enter Expiry Date: ");
         int inventoryStock = Helper.readInt("Enter Inventory Stock: ");
         int lowStockLevel = Helper.readInt("Enter Low Stock Level: ");
         System.out.print("Enter Replenish Status: ");
@@ -337,7 +335,13 @@ public class AdminUI extends MainUI {
 
         String medicineID = Helper.readString("Enter Medicine ID: ");
         Medicine medicine = MedicineController.getMedicineByUID(medicineID);
-
+        if(medicine == null) {
+        	return;
+        }
+        if(medicine.getReplenishStatus()!= ReplenishStatus.REQUESTED) {
+        	System.out.println("No Replenish Request For This Medicine!");
+        	return;
+        }
         String manufacturer = Helper.readString("Enter New Manufacturer: ");
         medicine.setManufacturer(manufacturer);
 
