@@ -8,16 +8,16 @@ public enum AppointmentStatus {
     @Override
     public String toString() {
         switch (this) {
-        	case PENDING:
-        		return "Pending";
+            case PENDING:
+                return "PENDING";
             case CONFIRMED:
-                return "Confirmed";
+                return "CONFIRMED";
             case CANCELED:
-                return "Canceled";
+                return "CANCELED";
             case COMPLETED:
-                return "Completed";
+                return "COMPLETED";
             case AVAILABLE:
-                return "Available";
+                return "AVAILABLE";
             default:
                 return "Unknown";
         }
@@ -25,15 +25,15 @@ public enum AppointmentStatus {
 
     public static AppointmentStatus toEnumAppointmentStatus(String status) {
         switch (status) {
-        	case "Pending":
-        		return PENDING;
-            case "Confirmed":
+            case "PENDING":
+                return PENDING;
+            case "CONFIRMED":
                 return CONFIRMED;
-            case "Canceled":
+            case "CANCELED":
                 return CANCELED;
-            case "Completed":
+            case "COMPLETED":
                 return COMPLETED;
-            case "Available":
+            case "AVAILABLE":
                 return AVAILABLE;
             default:
                 return null; // or throw an exception if you want to handle invalid inputs differently

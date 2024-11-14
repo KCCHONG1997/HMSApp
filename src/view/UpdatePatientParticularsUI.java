@@ -17,7 +17,7 @@ public class UpdatePatientParticularsUI {
     }
 
     // Display current personal particulars
-    private void displayCurrentParticulars() {
+    public void displayCurrentParticulars() {
         System.out.println("\n--- Current Personal Particulars ---");
         System.out.println("Full Name        : " + patient.getFullName());
         System.out.println("Phone Number     : " + patient.getPhoneNo());

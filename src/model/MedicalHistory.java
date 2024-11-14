@@ -11,7 +11,6 @@ public class MedicalHistory {
         this.medicalHistoryList = medicalHistoryList;
         this.patient = patient;
     }
-    // 0
 
     public List<MedicalRecord> getMedicalHistoryList() {
         return medicalHistoryList;

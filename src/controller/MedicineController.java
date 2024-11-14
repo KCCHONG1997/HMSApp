@@ -103,10 +103,25 @@ public class MedicineController {
             System.out.println();
         }
     }
+    /**
+     * Retrieve a medicine from the repository by its name.
+     */
+    //for doctor purpose ,ck
+    public static Medicine getMedicineByName(String medicineName) {
+        if (medicineName == null || medicineName.isEmpty()) {
+            System.out.println("Error: Invalid medicine name.");
+            return null;
+        }
 
-    public static void main(String[] args) {
-    	MedicineRepository mediRepository = new MedicineRepository();
-    	mediRepository.loadFromCSV();
-        listAllMedicines();
+        for (Medicine medicine : MedicineRepository.MEDICINES.values()) {
+            if (medicineName.equalsIgnoreCase(medicine.getName())) {
+                System.out.println("Medicine found: " + medicine.getName());
+                return medicine;
+            }
+        }
+
+        System.out.println("Error: Medicine not found with name: " + medicineName);
+        return null;
     }
+
 }

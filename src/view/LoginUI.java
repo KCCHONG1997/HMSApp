@@ -43,16 +43,14 @@ public class LoginUI extends MainUI {
         String username = Helper.readString("Please enter your username:");
         String passwordHash = Helper.readString("Please enter your password:");
 
+        // Call the controller to verify login
         HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.PATIENTS);
 
-        if (personnel instanceof Patient) {
-            if ("default".equals(passwordHash)) {
-                changePassword(personnel);
-            }
-            System.out.println("Login Successful!");
-            // TODO:
-            PatientUI patui = new PatientUI();
-            patui.showPatientDashboard();
+        if (personnel != null && personnel instanceof Patient) {
+            Patient retrievedPatient = (Patient) personnel; // Cast to Patient
+            PatientUI patUI = new PatientUI(retrievedPatient);
+            patUI.start();
+
         } else {
             System.out.println("Login failed. Invalid username or password.");
         }
@@ -76,24 +74,6 @@ public class LoginUI extends MainUI {
         }
     }
 
-    // // Login for Pharmacist
-    // public void pharmacistLogin(Scanner sc) {
-    // String username = enterUsername(sc);
-    // String passwordHash = enterPassword(sc);
-
-    // HMSPersonnel personnel = AuthenticationController.login(username,
-    // passwordHash, PersonnelFileType.PHARMACISTS);
-
-    // if (personnel != null && personnel instanceof Pharmacist) {
-    // Pharmacist retrievedPharmacist = (Pharmacist) personnel; // Cast to
-    // Pharmacist
-    // PharmacistUI pharmacistUI = new PharmacistUI(retrievedPharmacist);
-    // pharmacistUI.start();
-    // } else {
-    // System.out.println("Login failed. Invalid username or password.");
-    // }
-    // }
-
     public void pharmacistLogin() {
         String username = Helper.readString("Please enter your username:");
         String passwordHash = Helper.readString("Please enter your password:");
@@ -105,10 +85,10 @@ public class LoginUI extends MainUI {
                 changePassword(personnel);
             }
             System.out.println("Login Successful!");
-            // TODO: 
-            PharmacistUI patUI = new PharmacistUI(); 
+            // TODO:
+            PharmacistUI patUI = new PharmacistUI();
             patUI.showPharmacistDashboard();
-            
+
         } else {
             System.out.println("Login failed. Invalid username or password.");
         }

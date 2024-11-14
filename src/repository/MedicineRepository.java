@@ -157,12 +157,12 @@ public class MedicineRepository extends Repository {
         isRepoLoaded = false;
         return true;
     }
-    
-	public static boolean isRepoLoaded() {
-		return isRepoLoaded;
-	}
 
-	public static void setRepoLoaded(boolean isRepoLoaded) {
-		MedicineRepository.isRepoLoaded = isRepoLoaded;
-	}
+    public static boolean isRepoLoaded() {
+        return isRepoLoaded;
+    }
+
+    public static void setRepoLoaded(boolean isRepoLoaded) {
+        MedicineRepository.isRepoLoaded = isRepoLoaded;
+    }
 }
