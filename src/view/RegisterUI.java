@@ -11,7 +11,9 @@ import enums.RecordFileType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
+/**
+ * Handles the user interface for registering various types of users in the system.
+ */
 public class RegisterUI extends MainUI {
 	
 //  public static void main (String[]args) {
@@ -19,7 +21,9 @@ public class RegisterUI extends MainUI {
 //	  RegisterUI testing = new RegisterUI();
 //	  testing.start();
 //}
-
+    /**
+     * Displays the menu options for user registration.
+     */
     @Override
     protected void printChoice() {
         printBreadCrumbs("HMS App UI > Register Page");
@@ -30,7 +34,9 @@ public class RegisterUI extends MainUI {
         System.out.println("4. Administrator");
         System.out.println("5. Back to Main Menu");
     }
-
+    /**
+     * Starts the registration UI and handles the user input for registration choices.
+     */
     @Override
     public void start() {
         while (true) {
@@ -50,7 +56,9 @@ public class RegisterUI extends MainUI {
             }
         }
     }
-
+    /**
+     * Handles patient registration input and logic, including creating a new patient record.
+     */
  // Registration for Patient
     public void patientRegister() {
         String fullName = Helper.readString("Enter full name:");
@@ -103,7 +111,9 @@ public class RegisterUI extends MainUI {
             System.out.println("Registration failed. Username may already exist.");
         }
     }
-
+    /**
+     * Handles doctor registration input and logic, including creating a new doctor record.
+     */
     // Registration for Doctor
     public void doctorRegister() {
         String fullName = Helper.readString("Enter full name:");
@@ -128,7 +138,9 @@ public class RegisterUI extends MainUI {
         boolean success = AuthenticationController.registerDoctor(fullName, idCard, username, email, phoneNo, password, DoB, gender, specialty, medicalLicenseNumber, dateJoin, yearsOfExperience);
         System.out.println(success ? "Doctor registered successfully!" : "Registration failed. Username may already exist.");
     }
-
+    /**
+     * Handles pharmacist registration input and logic.
+     */
     // Registration for Pharmacist
     public void pharmacistRegister() {
         String fullName = Helper.readString("Enter full name:");
@@ -151,7 +163,9 @@ public class RegisterUI extends MainUI {
         boolean success = AuthenticationController.registerPharmacist(fullName, idCard, username, email, phoneNo, password, DoB, gender, pharmacistLicenseNumber, dateOfEmployment);
         System.out.println(success ? "Pharmacist registered successfully!" : "Registration failed. Username may already exist.");
     }
-
+    /**
+     * Handles administrator registration input and logic.
+     */
     // Registration for Admin
     public void adminRegister() {
     	String fullName = Helper.readString("Enter full name:");
