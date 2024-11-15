@@ -7,6 +7,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import controller.HMSPersonnelController;
@@ -15,6 +16,7 @@ import model.MedicalRecord;
 import model.Patient;
 import model.Diagnosis;
 import model.Prescription;
+import model.TreatmentPlans;
 import model.PrescribedMedication;
 
 public class MedicalRecordUI extends MainUI {
@@ -96,6 +98,16 @@ public class MedicalRecordUI extends MainUI {
                     } else {
                         System.out.println("| No prescribed medications found |");
                     }
+                    
+                    TreatmentPlans treatmentPlan = diagnosis.getTreatmentPlans(); // Assuming single TreatmentPlan
+                    if (treatmentPlan != null) {
+                        System.out.println("| Treatment Plan:");
+                        System.out.printf("| %-20s: %-20s |\n", "Treatment Date", treatmentPlan.getTreatmentDate());
+                        System.out.printf("| %-20s: %-20s |\n", "Treatment Description", treatmentPlan.getTreatmentDescription());
+                    } else {
+                        System.out.println("| No treatment plan found |");
+                    }
+                
                 } else {
                     System.out.println("| No prescription found |");
                 }
@@ -103,6 +115,7 @@ public class MedicalRecordUI extends MainUI {
         } else {
             System.out.println("| No diagnosis records found |");
         }
+
         System.out.println(border);
     }
 

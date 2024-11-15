@@ -3,8 +3,10 @@ package view;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import HMSApp.HMSMain;
 import controller.AppointmentController;
@@ -23,6 +25,7 @@ import model.Doctor;
 import model.MedicalRecord;
 import model.Patient;
 import model.PrescribedMedication;
+import model.Prescription;
 import model.TreatmentPlans;
 import repository.DiagnosisRepository;
 import repository.PersonnelRepository;
@@ -236,7 +239,7 @@ public class PatientUI extends MainUI {
 	public static void viewScheduledAppointments() {
 		System.out.println("\n--- Scheduled Appointments ---");
 
-		List<AppointmentRecord> scheduledSlots = AppointmentController.getAllAppointments(patient.getUID());
+		List<AppointmentRecord> scheduledSlots = AppointmentController.getConfirmedAppointments(patient.getUID());
 
 		if (scheduledSlots.isEmpty()) {
 			System.out.println("No appointments found");
@@ -263,8 +266,84 @@ public class PatientUI extends MainUI {
      */
 	// 8. viewPastAppointmentOutcomes
 	public void viewPastAppointmentOutcomes() {
+	    ArrayList<AppointmentOutcomeRecord> appointmentOutcomeRecords = RecordsController.getAppointmentOutcomeRecordByPatientId(patient.getUID());
 
+	    if (appointmentOutcomeRecords == null || appointmentOutcomeRecords.isEmpty()) {
+	        System.out.println("---------------------------------------");
+	        System.out.println("No past appointment outcomes found for patient ID: " + patient.getUID());
+	        System.out.println("---------------------------------------");
+	        return;
+	    }
+
+	    System.out.println("=== Past Appointment Outcomes for Patient ID: " + patient.getUID() + " ===");
+
+	    for (AppointmentOutcomeRecord outcomeRecord : appointmentOutcomeRecords) {
+	        if (outcomeRecord.getAppointmentOutcomeStatus() == AppointmentOutcomeStatus.COMPLETED) {
+	            System.out.println("---------------------------------------");
+	            System.out.println("Appointment Outcome Record ID: " + outcomeRecord.getAppointmentOutcomeRecordID());
+	            System.out.println("Patient ID: " + outcomeRecord.getPatientID());
+	            System.out.println("Doctor ID: " + outcomeRecord.getDoctorID());
+	            System.out.println("Diagnosis ID: " + outcomeRecord.getDiagnosisID());
+	            System.out.println("Appointment Time: " + outcomeRecord.getAppointmentTime());
+	            System.out.println("Type of Service: " + outcomeRecord.getTypeOfService());
+	            System.out.println("Consultation Notes: " + outcomeRecord.getConsultationNotes());
+	            System.out.println("Appointment Outcome Status: " + outcomeRecord.getAppointmentOutcomeStatus());
+//	            System.out.println(outcomeRecord.getPrescription().getMedications());
+	            System.out.println("---------------------------------------");
+	            
+	            Prescription prescription = outcomeRecord.getPrescription();
+	            // Medication Section with Duplicate Check
+                if (prescription.getMedications() != null && !prescription.getMedications().isEmpty()) {
+                    Set<String> printedMedicationKeys = new HashSet<>();
+                    for (PrescribedMedication medication : prescription.getMedications()) {
+                        // Create a unique key for each medication
+                        String medicationKey = medication.getMedicineID() + "_" +
+                                medication.getMedicineQuantity() + "_" +
+                                medication.getDosage() + "_" +
+                                medication.getPeriodDays();
+                        if (!printedMedicationKeys.contains(medicationKey)) {
+                            printedMedicationKeys.add(medicationKey); // Mark as printed
+                            System.out.printf("| %-20s: %-20s |\n", "Medicine ID", medication.getMedicineID());
+                            System.out.printf("| %-20s: %-20s |\n", "Quantity", medication.getMedicineQuantity());
+                            System.out.printf("| %-20s: %-20s |\n", "Dosage", medication.getDosage());
+                            System.out.printf("| %-20s: %-20s |\n", "Period (days)", medication.getPeriodDays());
+                            System.out.printf("| %-20s: %-20s |\n", "Status", medication.getPrescriptionStatus());
+            	            System.out.println("---------------------------------------");
+
+                        }
+                    }
+                } else {
+                    System.out.println("| No prescribed medications found |");
+                }
+
+//	            boolean recordFound = false;
+//	            for (MedicalRecord medicalRecord : RecordsRepository.MEDICAL_RECORDS.values()) {
+//	                if (medicalRecord.getPatientID().equals(outcomeRecord.getPatientID())) {
+//	                    recordFound = true;
+//	                    MedicalRecordUI medicalRecordUI = new MedicalRecordUI(medicalRecord);
+//	                    medicalRecordUI.displayMedicalRecordInBox();
+//	                    break; 
+//	                }
+//	            }
+//
+//	            if (!recordFound) {
+//	                System.out.println("No medical record found for Patient ID: " + outcomeRecord.getPatientID());
+//	            }
+
+	            System.out.println("---------------------------------------");
+	        }
+	    }
+
+	    System.out.println("========================================");
 	}
+
+
+
+
+
+
+
+
 	 /**
      * Allows the patient to acknowledge rejected appointment slots.
      */

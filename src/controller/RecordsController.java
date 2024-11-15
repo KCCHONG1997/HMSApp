@@ -273,7 +273,7 @@ public class RecordsController {
      * @param patientID the ID of the patient whose appointment outcome records are to be retrieved
      * @return an ArrayList of AppointmentOutcomeRecord objects associated with the given patient ID, or an empty list if no records are found
      */
-    public ArrayList<AppointmentOutcomeRecord> getAppointmentOutcomeRecordByPatientId(String patientID) {
+    public static ArrayList<AppointmentOutcomeRecord> getAppointmentOutcomeRecordByPatientId(String patientID) {
         // Retrieve the list of records for the given patientID, or an empty list if
         // none exists
         return AppointmentOutcomeRecordRepository.patientOutcomeRecords.getOrDefault(patientID, new ArrayList<>());
