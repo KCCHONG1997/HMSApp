@@ -19,6 +19,11 @@ import model.Prescription;
 import model.TreatmentPlans;
 import model.PrescribedMedication;
 
+/**
+ * A user interface class for displaying a patient's medical record in a formatted view.
+ * This class allows the user to view detailed information about a patient's diagnoses,
+ * prescriptions, medications, and treatment plans.
+ */
 public class MedicalRecordUI extends MainUI {
 
     /**

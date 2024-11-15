@@ -1,7 +1,10 @@
 /**
- * User interface for managing a doctor's activities within the Hospital Management System.
- * Allows the doctor to view and update patient medical records, manage appointments,
- * set availability, and record appointment outcomes.
+ * User interface for managing a doctor's activities within the Hospital Management System (HMS).
+ * This UI enables a doctor to perform the following tasks:
+ * - View and update patient medical records.
+ * - Manage appointments, including setting availability and responding to requests.
+ * - View personal schedules and upcoming appointments.
+ * - Record appointment outcomes.
  */
 package view;
 
@@ -276,6 +279,13 @@ public class DoctorUI extends MainUI {
 		System.out.println("---------------------------------------");
 	}
 
+    /**
+     * Updates the status of a specific appointment record.
+     *
+     * @param AppointmentRecordID the ID of the appointment record
+     * @param status              the new status to set
+     * @return true if the status update was successful, false otherwise
+     */
 	public boolean setAppointmentRecordStatus(String AppointmentRecordID, String status) {
 		boolean flag = false;
 		AppointmentRecord appointmentRecord = RecordsRepository.APPOINTMENT_RECORDS.get(AppointmentRecordID);
