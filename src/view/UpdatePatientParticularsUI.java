@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import controller.HMSPersonnelController;
+import helper.Helper;
 import model.Patient;
 /**
  * This class provides a user interface to view and update the particulars of a Patient.
@@ -46,7 +47,7 @@ public class UpdatePatientParticularsUI {
      */
     // Start the UI for updating patient particulars
     public void start() {
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         int choice;
         boolean keepUpdating = true;
 
@@ -65,49 +66,49 @@ public class UpdatePatientParticularsUI {
             System.out.println("8. Finish and Save");
             System.out.print("Enter your choice: ");
 
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            choice = Helper.readInt("");
+//            scanner.nextLine(); // Consume newline
 
             switch (choice) {
                 case 1:
                     System.out.print("Enter new full name: ");
-                    String fullName = scanner.nextLine();
+                    String fullName = Helper.readString();
                     patient.setFullName(fullName);
                     System.out.println("Full name updated.");
                     break;
                 case 2:
                     System.out.print("Enter new phone number: ");
-                    String phoneNumber = scanner.nextLine();
+                    String phoneNumber = Helper.readString();
                     patient.setPhoneNo(phoneNumber);
                     System.out.println("Phone number updated.");
                     break;
                 case 3:
-                    System.out.print("Enter new email: ");
-                    String email = scanner.nextLine();
+//                    System.out.print("");
+                    String email = Helper.readEmail("Enter new email: ");
                     patient.setEmail(email);
                     System.out.println("Email updated.");
                     break;
                 case 4:
                     System.out.print("Enter new insurance information: ");
-                    String insuranceInfo = scanner.nextLine();
+                    String insuranceInfo = Helper.readString();
                     patient.setInsuranceInfo(insuranceInfo);
                     System.out.println("Insurance information updated.");
                     break;
                 case 5:
                     System.out.print("Enter new allergies information: ");
-                    String allergies = scanner.nextLine();
+                    String allergies = Helper.readString();
                     patient.setAllergies(allergies);
                     System.out.println("Allergies updated.");
                     break;
                 case 6:
                     System.out.print("Enter new date of admission (yyyy-MM-dd HH:mm): ");
-                    String dateOfAdmission = scanner.nextLine();
+                    String dateOfAdmission = Helper.readString();
                     patient.setDateOfAdmission(LocalDateTime.parse(dateOfAdmission, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                     System.out.println("Date of admission updated.");
                     break;
                 case 7:
                     System.out.print("Enter new date of birth (yyyy-MM-dd HH:mm): ");
-                    String dob = scanner.nextLine();
+                    String dob = Helper.readString();
                     patient.setDoB(LocalDateTime.parse(dob, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
                     System.out.println("Date of birth updated.");
                     break;

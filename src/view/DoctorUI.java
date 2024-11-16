@@ -85,11 +85,11 @@ public class DoctorUI extends MainUI {
      */
 
 	public void showDoctorDashboard() {
-		Scanner sc = new Scanner(System.in);
+//		Scanner sc = new Scanner(System.in);
 		int choice;
 		do {
 			printChoice();
-			choice = sc.nextInt();
+			choice = Helper.readInt("");
 			switch (choice) {
 				case 1 : viewPatientMedicalRecord(doctor.getUID());break;
 				case 2 : selectAndUpdateMedicalRecord();break;
@@ -103,7 +103,7 @@ public class DoctorUI extends MainUI {
 			}
 		} while (choice != 8);
 
-		sc.close(); // Close the Scanner
+//		sc.close(); // Close the Scanner
 	}
 
     /**
