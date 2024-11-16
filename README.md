@@ -1,6 +1,7 @@
 # Hospital Management System (HMS)
 
 [HMS-Application Link](https://github.com/KCCHONG1997/HMSApp)
+
 This project is a group assignment for Nanyang Technological University's (NTU) SC2002 module on Object-Oriented Programming. The HMS application aims to automate various hospital operations, including patient management, appointment scheduling, staff management, and billing.
 
 ## Table of Contents
