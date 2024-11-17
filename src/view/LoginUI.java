@@ -62,6 +62,9 @@ public class LoginUI extends MainUI {
         HMSPersonnel personnel = AuthenticationController.login(username, passwordHash, PersonnelFileType.PATIENTS);
 
         if (personnel != null && personnel instanceof Patient) {
+            if ("default".equals(passwordHash)) {
+                changePassword(personnel);
+            }
             Patient retrievedPatient = (Patient) personnel; // Cast to Patient
             PatientUI patUI = new PatientUI(retrievedPatient);
             patUI.start();
