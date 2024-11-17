@@ -18,20 +18,9 @@ import controller.RecordsController;
 import enums.AppointmentOutcomeStatus;
 import enums.AppointmentStatus;
 import helper.Helper;
-import model.AppointmentOutcomeRecord;
-import model.AppointmentRecord;
-import model.Diagnosis;
-import model.Doctor;
-import model.MedicalRecord;
-import model.Patient;
-import model.PrescribedMedication;
-import model.Prescription;
-import model.TreatmentPlans;
-import repository.DiagnosisRepository;
-import repository.PersonnelRepository;
-import repository.PrescribedMedicationRepository;
-import repository.RecordsRepository;
-import repository.TreatmentPlansRepository;
+import model.*;
+import repository.*;
+
 /**
  * PatientUI class represents the user interface for a patient in the HMS system.
  * This class handles patient-specific interactions such as viewing medical records,
@@ -303,7 +292,9 @@ public class PatientUI extends MainUI {
                                 medication.getPeriodDays();
                         if (!printedMedicationKeys.contains(medicationKey)) {
                             printedMedicationKeys.add(medicationKey); // Mark as printed
+							Medicine medicine = MedicineRepository.MEDICINES.get(medication.getMedicineID());
                             System.out.printf("| %-20s: %-20s |\n", "Medicine ID", medication.getMedicineID());
+							System.out.printf("| %-20s: %-20s |\n", "Medicine Name", medicine.getName());
                             System.out.printf("| %-20s: %-20s |\n", "Quantity", medication.getMedicineQuantity());
                             System.out.printf("| %-20s: %-20s |\n", "Dosage", medication.getDosage());
                             System.out.printf("| %-20s: %-20s |\n", "Period (days)", medication.getPeriodDays());

@@ -154,7 +154,7 @@ public class DoctorUI extends MainUI {
 
 
 		if (currentAppointmentRecord == null) {
-			System.out.println("Error: There are no pending appointments for the current patient.");
+			System.out.println("Error: There are no confirmed appointments for the current patient.");
 			System.out.println("You cannot update the medical record");
 			return;
 		}

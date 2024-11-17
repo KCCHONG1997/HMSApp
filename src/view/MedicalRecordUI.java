@@ -5,19 +5,12 @@
  */
 package view;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import controller.HMSPersonnelController;
 import helper.Helper;
-import model.MedicalRecord;
-import model.Patient;
-import model.Diagnosis;
-import model.Prescription;
-import model.TreatmentPlans;
-import model.PrescribedMedication;
+import model.*;
+import repository.MedicineRepository;
 
 /**
  * A user interface class for displaying a patient's medical record in a formatted view.
@@ -71,6 +64,7 @@ public class MedicalRecordUI extends MainUI {
                     System.out.println(border);
                     System.out.printf("| %-20s: %-20s |\n", "Diagnosis ID", diagnosisID);
                     System.out.printf("| %-20s: %-20s |\n", "Description", diagnosis.getDiagnosisDescription());
+                    System.out.println(border);
                     printedDiagnosisIDs.add(diagnosisID); // Mark as printed
                 } else {
                     continue;
@@ -80,10 +74,12 @@ public class MedicalRecordUI extends MainUI {
                 if (prescription != null) {
                     System.out.printf("| %-20s: %-20s |\n", "Prescription Date", prescription.getPrescriptionDate());
                     System.out.println("| Medications:");
+                    System.out.println(border);
 
                     // Medication Section with Duplicate Check
                     if (prescription.getMedications() != null && !prescription.getMedications().isEmpty()) {
                         Set<String> printedMedicationKeys = new HashSet<>();
+
                         for (PrescribedMedication medication : prescription.getMedications()) {
                             // Create a unique key for each medication
                             String medicationKey = medication.getMedicineID() + "_" +
@@ -92,7 +88,9 @@ public class MedicalRecordUI extends MainUI {
                                     medication.getPeriodDays();
                             if (!printedMedicationKeys.contains(medicationKey)) {
                                 printedMedicationKeys.add(medicationKey); // Mark as printed
-                                System.out.printf("| %-20s: %-20s |\n", "Medicine ID", medication.getMedicineID());
+                                Medicine medicine = MedicineRepository.MEDICINES.get(medication.getMedicineID());
+                                System.out.printf("| %-20s: %-20s |\n", "Medicine ID",medication.getMedicineID());
+                                System.out.printf("| %-20s: %-20s |\n", "Medicine Name",medicine.getName());
                                 System.out.printf("| %-20s: %-20s |\n", "Quantity", medication.getMedicineQuantity());
                                 System.out.printf("| %-20s: %-20s |\n", "Dosage", medication.getDosage());
                                 System.out.printf("| %-20s: %-20s |\n", "Period (days)", medication.getPeriodDays());
