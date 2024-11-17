@@ -199,22 +199,50 @@ public class AdminController extends HMSPersonnelController {
      * @param gender The gender of personnel to list.
      */
     public static void listPersonnelByGender(String gender) {
+        // Normalize the input gender to a standard format ("M" or "F")
+        String normalizedInputGender = gender.trim().toLowerCase();
+        if (normalizedInputGender.equals("male")) {
+            normalizedInputGender = "m";
+        } else if (normalizedInputGender.equals("female")) {
+            normalizedInputGender = "f";
+        }
+
         System.out.println("\nListing staff filtered by gender: " + gender);
         System.out.println("===========================================");
-        
+
         for (Doctor doctor : PersonnelRepository.DOCTORS.values()) {
-            if (doctor.getGender().equalsIgnoreCase(gender)) {
+            // Normalize the stored gender for comparison
+            String normalizedDoctorGender = doctor.getGender().trim().toLowerCase();
+            if (normalizedDoctorGender.equals("male")) {
+                normalizedDoctorGender = "m";
+            } else if (normalizedDoctorGender.equals("female")) {
+                normalizedDoctorGender = "f";
+            }
+
+            // Compare normalized genders
+            if (normalizedDoctorGender.equals(normalizedInputGender)) {
                 printDoctorDetails(doctor);
             }
         }
-        
+
         for (Pharmacist pharmacist : PersonnelRepository.PHARMACISTS.values()) {
-            if (pharmacist.getGender().equalsIgnoreCase(gender)) {
+            // Normalize the stored gender for comparison
+            String normalizedPharmacistGender = pharmacist.getGender().trim().toLowerCase();
+            if (normalizedPharmacistGender.equals("male")) {
+                normalizedPharmacistGender = "m";
+            } else if (normalizedPharmacistGender.equals("female")) {
+                normalizedPharmacistGender = "f";
+            }
+
+            // Compare normalized genders
+            if (normalizedPharmacistGender.equals(normalizedInputGender)) {
                 printPharmacistDetails(pharmacist);
             }
         }
+
         System.out.println("===========================================\n");
     }
+
     
    
     /**
