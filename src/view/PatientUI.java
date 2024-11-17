@@ -228,7 +228,7 @@ public class PatientUI extends MainUI {
 	public static void viewScheduledAppointments() {
 		System.out.println("\n--- Scheduled Appointments ---");
 
-		List<AppointmentRecord> scheduledSlots = AppointmentController.getConfirmedAppointments(patient.getUID());
+		List<AppointmentRecord> scheduledSlots = AppointmentController.getAllAppointments(patient.getUID());
 
 		if (scheduledSlots.isEmpty()) {
 			System.out.println("No appointments found");
